@@ -23,7 +23,7 @@
         "symfony/intl": "5.1.*",
         "symfony/mailer": "5.1.*",
         "symfony/mime": "5.1.*",
-        "symfony/monolog-bundle": "^3.1",
+        "symfony/monolog-bundle": "^3.5",
         "symfony/notifier": "5.1.*",
         "symfony/process": "5.1.*",
         "symfony/property-access": "5.1.*",
@@ -35,6 +35,7 @@
         "symfony/twig-bundle": "5.1.*",
         "symfony/validator": "5.1.*",
         "symfony/web-link": "5.1.*",
+        "symfony/webpack-encore-bundle": "^1.7",
         "symfony/yaml": "5.1.*",
         "twig/extra-bundle": "^2.12|^3.0",
         "twig/twig": "^2.12|^3.0"
@@ -43,9 +44,11 @@
         "symfony/browser-kit": "^5.1",
         "symfony/css-selector": "^5.1",
         "symfony/debug-bundle": "^5.1",
-        "symfony/maker-bundle": "^1.0",
+        "symfony/maker-bundle": "^1.21",
         "symfony/phpunit-bridge": "^5.1",
-        "symfony/var-dumper": "^5.1"
+        "symfony/stopwatch": "^5.1",
+        "symfony/var-dumper": "^5.1",
+        "symfony/web-profiler-bundle": "^5.1"
     },
     "config": {
         "optimize-autoloader": true,
