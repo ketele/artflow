@@ -5,15 +5,15 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-class DoodlesController extends AbstractController
+class DoodleController extends AbstractController
 {
     /**
-     * @Route("/doodles", name="doodles")
+     * @Route("/doodle", name="doodle")
      */
     public function index()
     {
-        return $this->render('doodles/index.html.twig', [
-            'controller_name' => 'DoodlesController',
+        return $this->render('doodle/index.html.twig', [
+            'controller_name' => 'DoodleController',
         ]);
     }
 }

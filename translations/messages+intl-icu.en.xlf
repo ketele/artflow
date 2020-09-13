@@ -13,9 +13,17 @@
         <source>Blog</source>
         <target>Blog</target>
       </trans-unit>
-      <trans-unit id="RUMmHsa" resname="welcome_text">
+      <trans-unit id="q9qRrg4" resname="welcome_text">
         <source>welcome_text</source>
         <target>Welcome to {page_name} your online art gym</target>
+      </trans-unit>
+      <trans-unit id="aXUvIxO" resname="News">
+        <source>News</source>
+        <target>News</target>
+      </trans-unit>
+      <trans-unit id="pP5lJk7" resname="Language">
+        <source>Language</source>
+        <target>Language</target>
       </trans-unit>
     </body>
   </file>
