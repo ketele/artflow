@@ -20,6 +20,8 @@ class HomePageController extends AbstractController
      */
     public function index()
     {
+        //$parameterValue = $this->getParameter('app.supported_locales');
+
         return $this->render('home_page/index.html.twig', [
             'controller_name' => 'HomePageController',
         ]);
