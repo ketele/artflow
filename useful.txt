@@ -1,0 +1,34 @@
+symfony new artflow --full
+php bin/console make:docker:database
+symfony check:requirements
+symfony composer req profiler --dev
+symfony composer req logger
+symfony composer req debug --dev
+SET APP_ENV=dev
+docker exec -it artflow_database_1 bash -l
+symfony composer req maker --dev
+symfony check:security
+symfony console make:controller BlogController
+symfony composer req "almasaeed2010/adminlte=~3.0"
+? composer require symfony/asset
+? symfony console assets:install
+symfony composer req encore
+yarn add node-sass "sass-loader@^7.0.1" --dev
+symfony run yarn encore dev
+yarn add bootstrap jquery popper.js bs-custom-file-input --dev
+symfony composer req twig/string-extra
+symfony composer req translation
+symfony console translation:update en --force --domain=messages
+symfony composer req "almasaeed2010/adminlte=~3.0"
+symfony composer req security
+symfony console make:user Admin
+symfony composer req orm
+symfony var:export
+symfony console make:migration
+symfony console doctrine:migrations:migrate -n
+docker exec -it artflow_database_1 mysql -uroot -p
+use main
+show tables;
+symfony console security:encode-password
+INSERT INTO admin (username, roles, password) VALUES ('admin', '[\"ROLE_ADMIN\"]', '$argon2id$v=19$m=65536,t=4,p=1$qWH3fep1R88kZbeDkd7zQQ$ZikHIAAp4s+lCxyebYO0lOi5Ym1kb9mvauodCdDNnPE');
+symfony console make:auth

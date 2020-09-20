@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        <title>{% block title %}{{ page_name }}{% endblock %}</title>
+        <title>{% block title %}{{ controller_name|trans }} &#x2027; {{ page_name }}{% endblock %}</title>
 
         {% block stylesheets %}
             <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,500,500i,600,600i&display=swap" rel="stylesheet" />
@@ -22,13 +22,13 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto">
-                        <li class="nav-item active">
+                        <li class="nav-item {% if app.request.get('_route') == 'home' %}active{% endif %}">
                             <a class="nav-link" href="{{ path('home') }}">{{ 'Home'|trans }} <span class="sr-only">(current)</span></a>
                         </li>
-                        <!--li class="nav-item">
+                        <!--li class="nav-item {% if app.request.get('_route') == 'news' %}active{% endif %}">
                             <a class="nav-link" href="{{ path('news') }}">{{ 'News'|trans }}</a>
                         </li-->
-                        <li class="nav-item">
+                        <li class="nav-item {% if app.request.get('_route') == 'doodle' %}active{% endif %}">
                             <a class="nav-link" href="{{ path('doodle') }}">{{ 'Doodle'|trans }}</a>
                         </li>
                         <li class="nav-item dropdown">
@@ -36,14 +36,13 @@
                                 {{ 'Language'|trans }}
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{{ path('home', {_locale: 'en'}) }}">&#127482; English</a>
-                                <a class="dropdown-item" href="{{ path('home', {_locale: 'pl'}) }}">&#127477; Polski</a>
+                                <a class="dropdown-item" href="{{ path('home', {_locale: 'en'}) }}"> English</a>
+                                <a class="dropdown-item" href="{{ path('home', {_locale: 'pl'}) }}"> Polski</a>
                             </div>
                         </li>
                     </ul>
                 </div>
             </nav>
-
         </header>
 
         <main role="main" class="flex-shrink-0">
@@ -59,6 +58,8 @@
 
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}
+        {% endblock %}
+        {% block pagejavascripts %}
         {% endblock %}
     </body>
 </html>

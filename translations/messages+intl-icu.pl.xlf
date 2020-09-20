@@ -17,6 +17,26 @@
         <source>welcome_text</source>
         <target>__welcome_text</target>
       </trans-unit>
+      <trans-unit id="aXUvIxO" resname="News">
+        <source>News</source>
+        <target>__News</target>
+      </trans-unit>
+      <trans-unit id="mwxjO_G" resname="Doodle">
+        <source>Doodle</source>
+        <target>__Doodle</target>
+      </trans-unit>
+      <trans-unit id="pP5lJk7" resname="Language">
+        <source>Language</source>
+        <target>__Language</target>
+      </trans-unit>
+      <trans-unit id="o6Arljd" resname="DoodleController">
+        <source>DoodleController</source>
+        <target>Doodle</target>
+      </trans-unit>
+      <trans-unit id="v0Vl2mn" resname="HomePageController">
+        <source>HomePageController</source>
+        <target>Home Page</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

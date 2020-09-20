@@ -1,3 +1,6 @@
+@import 'utils/_variables';
 @import 'vendors/_bootstrap';
-@import 'layout/_container';
+@import 'base/_base';
 @import 'layout/_footer';
+@import 'components/_buttons';
+@import 'components/_canvas';

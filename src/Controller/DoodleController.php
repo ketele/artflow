@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class DoodleController extends AbstractController
 {
     /**
-     * @Route("/doodle", name="doodle")
+     * @Route("/{_locale<%app.supported_locales%>}/doodle", name="doodle")
      */
     public function index()
     {
