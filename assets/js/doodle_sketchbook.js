@@ -26,8 +26,14 @@ class DoodleSketchbook {
 
         this.doodle = new Doodle( this.canvas.offsetWidth/2, this.canvas.offsetHeight/2, this.canvas.offsetHeight/4 );
 
+        this.imageData = this.ctx.getImageData(0, 0, this.canvas.offsetWidth, this.canvas.offsetHeight);
+        this.data = this.imageData.data;
+        this.imageData.data.fill(255);
+        this.ctx.putImageData(this.imageData, 0, 0);
         this.doodle.generateUnbalancedNodes();
         this.doodle.draw(this.ctx);
+        this.imageData = this.ctx.getImageData(0, 0, this.canvas.offsetWidth, this.canvas.offsetHeight);
+        this.data = this.imageData.data;
     }
 
     loadSketchbook(){
@@ -53,7 +59,7 @@ window.addEventListener('load', e => {
     } );
 
     document.getElementById('download-image').addEventListener('click', e => {
-       doodle_sketchbook.workspace.putImage();
+       doodle_sketchbook.workspace.putImage([doodle_sketchbook.data]);
     } );
 
     document.getElementById('pencil').addEventListener('click', e => {
