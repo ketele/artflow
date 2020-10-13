@@ -1,5 +1,5 @@
-import {Curve} from "./Curve";
-import {Utils} from "./Utils";
+import {Curve} from "./curve";
+import {Utils} from "../utils";
 
 /**
  *

@@ -1,4 +1,4 @@
-import {Utils} from "./Utils";
+import {Utils} from "../utils";
 
 export class Curve {
     constructor(cp1x = null, cp1y = null, cp2x = null, cp2y = null, x = null, y = null, angle = null){

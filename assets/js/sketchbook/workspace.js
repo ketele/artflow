@@ -26,7 +26,7 @@ export class Workspace {
         this.toolLayer = new Array( this.width * this.height * 4 ).fill(0);
 
         this.toolSize = 1;
-        this.lineColor = { r: 0, g: 0, b:0, a: 125};
+        this.lineColor = { r: 0, g: 0, b:0, a: 255};
         this.tool = 'pencil';
     }
 
@@ -211,57 +211,10 @@ export class Workspace {
         this.lineColor.a = parseInt(tool_opacity);
     }
 
-    putCurrentImage(){
+    putWorkspaceImage(){
         let image = this.canvas.toDataURL("image/png");//.replace("image/png", "image/octet-stream");
 
         window.location.href = image;
     }
 
-    putImage(img_data_array = []){
-        let temp_canvas = document.createElement("canvas");
-        temp_canvas.width  = this.width;
-        temp_canvas.height = this.height;
-        let ctx = temp_canvas.getContext('2d');
-
-        let imageData = ctx.getImageData(0, 0, this.width, this.height);
-        let data = imageData.data;
-
-        const flatten_canvases = new Promise((resolve, reject) => {
-            img_data_array.forEach((img_data) => {
-                data.forEach((d, i) => {
-                    data[i] = d + img_data[i];
-                });
-            });
-
-            resolve(data);
-        });
-
-        flatten_canvases.then( (flatten_data) => {
-            for( let i = 0; i < flatten_data.length * 4; i += 4 ) {
-                if( this.data[i + 3] === 255 ) {
-                    flatten_data[i] = this.data[i];
-                    flatten_data[i + 1] = this.data[i + 1];
-                    flatten_data[i + 2] = this.data[i + 2];
-                    flatten_data[i + 3] = this.data[i + 3];
-                }else if ( this.data[i + 3] === 0 ){
-
-                } else {
-                    let max_opacity = ( flatten_data[i + 3] + this.data[i + 3] <= 255 ) ? flatten_data[i + 3] + this.data[i + 3] : 255;
-                    let top_wage = ( this.data[i + 3] / max_opacity );
-                    let base_wage = 1 - top_wage;
-                    flatten_data[i] =       (( base_wage * flatten_data[i] )     + ( top_wage * this.data[i] ));
-                    flatten_data[i + 1] =   (( base_wage * flatten_data[i + 1] ) + ( top_wage * this.data[i + 1]));
-                    flatten_data[i + 2] =   (( base_wage * flatten_data[i + 2] ) + ( top_wage * this.data[i + 2]));
-                    flatten_data[i + 3] =   flatten_data[i + 3] + this.data[i + 3];
-                }
-            }
-
-            ctx.putImageData(imageData, 0, 0);
-
-            let image = temp_canvas.toDataURL("image/png");
-
-            window.location.href = image;
-
-        });
-    }
 }

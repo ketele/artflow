@@ -1,5 +1,6 @@
-import {Doodle} from "./doodle/Doodle";
-import {Workspace} from "./sketchbook/Workspace";
+import {Doodle} from "./doodle/doodle";
+import {Workspace} from "./sketchbook/workspace";
+import {Utils} from "./utils";
 
 CanvasRenderingContext2D.prototype.drawCircle = function( centerX, centerY, angle_begin = 0, angle_end = 2 * Math.PI, radius = 50 ){
     this.radius = radius;
@@ -42,6 +43,105 @@ class DoodleSketchbook {
         this.workspace.run();
 
     }
+
+    getImageFile(img_data_array = []){
+        let temp_canvas = document.createElement("canvas");
+        temp_canvas.width  = this.workspace.width;
+        temp_canvas.height = this.workspace.height;
+        let ctx = temp_canvas.getContext('2d');
+
+        let imageData = ctx.getImageData(0, 0, this.workspace.width, this.workspace.height);
+        let data = imageData.data;
+
+        const flatten_canvases = new Promise((resolve, reject) => {
+            img_data_array.forEach((img_data) => {
+                data.forEach((d, i) => {
+                    data[i] = d + img_data[i];
+                });
+            });
+
+            resolve(data);
+        });
+
+        return flatten_canvases.then( (flatten_data) => {
+            for( let i = 0; i < flatten_data.length * 4; i += 4 ) {
+                if( this.workspace.data[i + 3] === 255 ) {
+                    flatten_data[i] = this.workspace.data[i];
+                    flatten_data[i + 1] = this.workspace.data[i + 1];
+                    flatten_data[i + 2] = this.workspace.data[i + 2];
+                    flatten_data[i + 3] = this.workspace.data[i + 3];
+                }else if ( this.workspace.data[i + 3] === 0 ){
+
+                } else {
+                    let max_opacity = ( flatten_data[i + 3] + this.workspace.data[i + 3] <= 255 )
+                        ? flatten_data[i + 3] + this.workspace.data[i + 3] : 255;
+                    let top_wage = ( this.workspace.data[i + 3] / max_opacity );
+                    let base_wage = 1 - top_wage;
+                    flatten_data[i] =       (( base_wage * flatten_data[i] )     + ( top_wage * this.workspace.data[i] ));
+                    flatten_data[i + 1] =   (( base_wage * flatten_data[i + 1] ) + ( top_wage * this.workspace.data[i + 1]));
+                    flatten_data[i + 2] =   (( base_wage * flatten_data[i + 2] ) + ( top_wage * this.workspace.data[i + 2]));
+                    flatten_data[i + 3] =   flatten_data[i + 3] + this.workspace.data[i + 3];
+                }
+            }
+
+            ctx.putImageData(imageData, 0, 0);
+
+            return temp_canvas.toDataURL("image/png");
+        });
+    }
+
+    putImage(){
+        const get_image_file = new Promise((resolve, reject) => {
+            let image = this.getImageFile([this.data]);
+            resolve(image);
+        });
+
+        get_image_file.then((image)=>{
+            window.location.href = image;
+        });
+    }
+
+    saveImageToTemp(){
+        let source_doodle = JSON.stringify({
+            'size': this.size,
+            'doodle': this.doodle.curves
+        });
+
+        source_doodle = encodeURIComponent(source_doodle);
+        //console.log(source_doodle);
+
+        Utils.showLoadingOverlay();
+        const get_image_file = new Promise((resolve, reject) => {
+            let image = this.getImageFile([this.data]);
+            resolve(image);
+        });
+
+        get_image_file.then((image)=>{
+            const xhr = new XMLHttpRequest();
+
+            xhr.onreadystatechange = e => {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    let response = JSON.parse(xhr.response);
+
+                    const temp_form = document.createElement('form');
+                    temp_form.method = "POST";
+                    temp_form.action = "/" + Utils.getUrlParam(0) + "/add_doodle";
+                    temp_form.setAttribute('name', 'doodle');
+                    temp_form.innerHTML = `
+<input type="text" name="temp_dir" value="${response.temp_dir}" />
+<input type="text" name="source_doodle" value="${source_doodle}" />
+`;
+                    document.body.appendChild(temp_form);
+                    temp_form.submit();
+                    Utils.hideLoadingOverlay();
+                }
+            };
+            xhr.open("POST", "/store_doodle_temp_ajax", true);
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            xhr.send('imgBase64=' + image);
+        });
+    }
 }
 
 window.addEventListener('load', e => {
@@ -58,8 +158,12 @@ window.addEventListener('load', e => {
        doodle_sketchbook.workspace.clearCanvas();
     } );
 
-    document.getElementById('download-image').addEventListener('click', e => {
-       doodle_sketchbook.workspace.putImage([doodle_sketchbook.data]);
+    /*document.getElementById('download-image').addEventListener('click', e => {
+       doodle_sketchbook.putImage();
+    } );*/
+
+    document.getElementById('save-image').addEventListener('click', e => {
+       doodle_sketchbook.saveImageToTemp();
     } );
 
     document.getElementById('pencil').addEventListener('click', e => {

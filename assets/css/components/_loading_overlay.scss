@@ -1,0 +1,19 @@
+.is-loading-overlay-visible {
+  .loading-overlay {
+    display: flex;
+  }
+}
+
+.loading-overlay {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+
+  display: none;
+  justify-content: center;
+  align-items: center;
+
+  background: $loading-overlay-bg;
+
+  z-index: 9999;
+}
