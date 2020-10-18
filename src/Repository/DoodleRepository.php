@@ -19,6 +19,11 @@ class DoodleRepository extends ServiceEntityRepository
         parent::__construct($registry, Doodle::class);
     }
 
+    /**
+     * @param $value
+     * @return Doodle|null
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
     public function findOne($value): ?Doodle
     {
         return $this->createQueryBuilder('d')
@@ -26,6 +31,18 @@ class DoodleRepository extends ServiceEntityRepository
             ->setParameter('val', $value)
             ->getQuery()
             ->getOneOrNullResult()
+            ;
+    }
+
+    public function findByStatus($value)
+    {
+        return $this->createQueryBuilder('d')
+            ->andWhere('d.status = :val')
+            ->setParameter('val', $value)
+            ->orderBy('d.createdAt', 'DESC')
+            ->setMaxResults(3)
+            ->getQuery()
+            ->getResult()
             ;
     }
 

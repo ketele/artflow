@@ -28,7 +28,7 @@ class Glide
         }
     }
 
-    public function generateUrl(string $path, string $img, array $data){
+    public function generateUrl(string $path, string $img, array $data = [] ){
         $urlBuilder = UrlBuilderFactory::create($path, $this->signKey);
 
         // Generate a URL

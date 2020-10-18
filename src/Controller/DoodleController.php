@@ -3,11 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\Doodle;
+use App\Entity\DoodleStatus;
 use App\Repository\DoodleRepository;
 use App\Security\Glide;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Filesystem\Filesystem;
@@ -23,14 +26,21 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use League\Glide\ServerFactory;
 use League\Glide\Responses\SymfonyResponseFactory;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class DoodleController extends AbstractController
 {
+    private $translator;
+
+    public function __construct(TranslatorInterface $translator)
+    {
+        $this->translator = $translator;
+    }
+
     /**
      * @Route("/{_locale<%app.supported_locales%>}/doodle", name="doodle")
      */
-    public function index()
-    {
+    public function index() {
         return $this->render('doodle/index.html.twig', [
             'controller_name' => 'DoodleController',
         ]);
@@ -81,6 +91,7 @@ class DoodleController extends AbstractController
      * @param string $doodleFolder
      * @param DoodleRepository $doodleRepository
      * @return Response
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function view(int $id, string $doodleFolder, DoodleRepository $doodleRepository)
     {
@@ -90,6 +101,10 @@ class DoodleController extends AbstractController
 
         return $this->render('doodle/view.html.twig', [
             'controller_name' => 'DoodleController',
+            'description' => $doodle->getDescription(),
+            'user_name' => $doodle->getUserName(),
+            'status_rejected' => $doodle->getStatus()->getId() == DoodleStatus::STATUS_REJECTED,
+            'status_new' => $doodle->getStatus()->getId() == DoodleStatus::STATUS_NEW,
             'file_url' => $glide->generateUrl($doodleFolder . $id, $file_name, []),
         ]);
     }
@@ -105,23 +120,55 @@ class DoodleController extends AbstractController
      */
     public function add_doodle(Request $request, NotifierInterface $notifier, EntityManagerInterface $entityManager, string $doodleDir, string $doodleFolder)
     {
-        $temp_dir = $request->get('temp_dir');
-        $source_doodle = $request->get('source_doodle');
+        $tempDir = $request->get('temp_dir');
+        $sourceDoodle = $request->get('source_doodle');
 
         $filesystem = new Filesystem();
         $finder = new Finder();
-        $file_name = null;
+        $fileName = null;
         $doodle = new Doodle();
         $glide = new Glide();
 
-        $defaultData['temp_dir'] = $temp_dir;
-        $defaultData['source_doodle'] = $source_doodle;
+        $defaultData['tempDir'] = $tempDir;
+        $defaultData['sourceDoodle'] = $sourceDoodle;
+
+        //https://about.deviantart.com/policy/submission/
+        //https://about.deviantart.com/policy/service/
 
         $form = $this->createFormBuilder($defaultData)
-            ->add('user_name', TextType::class)
-            ->add('temp_dir', HiddenType::class)
-            ->add('source_doodle', HiddenType::class)
-            ->add('save', SubmitType::class, [
+            ->add('userName', TextType::class)
+            ->add('description', TextareaType::class)
+            ->add('tempDir', HiddenType::class)
+            ->add('sourceDoodle', HiddenType::class)
+            /*->add('agreeSubmissionPolicy', CheckboxType::class,
+                [
+                    'label'  => $this->translator->trans('I have read and agree to the Submission Policy',
+                        [
+                            'submission_policy_link' => '<a href="' . $this->generateUrl('submission_policy') . '" target="_blank">
+                            ' . $this->translator->trans('Submission Policy') . '
+                            </a>'
+                        ]
+                    ),
+                    'label_html' => true,
+                    'required' => true,
+                    'mapped' => false
+                ]
+            )*/
+            ->add('agreeTermsOfService', CheckboxType::class,
+                [
+                    'label'  => $this->translator->trans('I have read and agree to the Terms of Service',
+                        [
+                            'terms_of_service_link' => '<a href="' . $this->generateUrl('terms_of_service') . '" target="_blank">
+                            ' . $this->translator->trans('Terms of Service') . '
+                            </a>'
+                        ]
+                    ),
+                    'label_html' => true,
+                    'required' => true,
+                    'mapped' => false
+                ]
+            )
+            ->add('submit', SubmitType::class, [
                 'attr' => ['class' => 'btn-artflow'],
             ])
             ->getForm();
@@ -129,27 +176,28 @@ class DoodleController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $form_data = $request->get('form');
-            $temp_path = sys_get_temp_dir() . '/' . $form_data['temp_dir'] . '/';
-            $finder->files()->in($temp_path);
-            $source_doodle = json_decode(urldecode($form_data['source_doodle']), true);
+            $tempPath = sys_get_temp_dir() . '/' . $form_data['tempDir'] . '/';
+            $finder->files()->in($tempPath);
+            $sourceDoodle = json_decode(urldecode($form_data['sourceDoodle']), true);
 
             if ($finder->hasResults()) {
                 $iterator = $finder->getIterator();
                 $iterator->rewind();
                 $firstFile = $iterator->current();
-                $file_name = $firstFile->getRelativePathname();
+                $fileName = $firstFile->getRelativePathname();
             }
 
             $metadata = $entityManager->getClassMetadata(get_class($doodle));
-            $doodle->setFileName($file_name);
-            $doodle->setUserName($form_data['user_name']);
-            $doodle->setCoordinates($source_doodle);
+            $doodle->setFileName($fileName);
+            $doodle->setUserName($form_data['userName']);
+            $doodle->setDescription($form_data['description']);
+            $doodle->setCoordinates($sourceDoodle);
             $metadata->setIdGeneratorType(ClassMetadata::GENERATOR_TYPE_AUTO);
             $entityManager->persist($doodle);
             $entityManager->flush();
-            $doodle_path = $doodleDir . '/' . $doodleFolder . $doodle->getId();
+            $doodlePath = $doodleDir . '/' . $doodleFolder . $doodle->getId();
             try {
-                $filesystem->mirror($temp_path, $doodle_path);
+                $filesystem->mirror($tempPath, $doodlePath);
             } catch (FileException $e) {
                 // unable to upload the photo, give up
             }
@@ -159,25 +207,25 @@ class DoodleController extends AbstractController
             return $this->redirectToRoute('doodle_view',
                 ['id' => $doodle->getId()]);
         } else {
-            if (empty($temp_dir))
+            if (empty($tempDir))
                 return new Response('Doodle data is empty');
 
-            $temp_path = sys_get_temp_dir() . '/' . $temp_dir . '/';
-            $finder->files()->in($temp_path);
+            $tempPath = sys_get_temp_dir() . '/' . $tempDir . '/';
+            $finder->files()->in($tempPath);
 
             if ($finder->hasResults()) {
                 $iterator = $finder->getIterator();
                 $iterator->rewind();
                 $firstFile = $iterator->current();
-                $file_name = $firstFile->getRelativePathname();
+                $fileName = $firstFile->getRelativePathname();
             }
 
             return $this->render('doodle/add.html.twig', [
                 'controller_name' => 'DoodleController',
                 'form' => $form->createView(),
-                'temp_dir' => $temp_dir,
-                'file_name' => $file_name,
-                'file_url' => $glide->generateUrl($temp_dir, $file_name, []),
+                'tempDir' => $tempDir,
+                'file_name' => $fileName,
+                'file_url' => $glide->generateUrl($tempDir, $fileName, []),
             ]);
         }
     }

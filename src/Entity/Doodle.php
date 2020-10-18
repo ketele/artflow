@@ -51,6 +51,13 @@ class Doodle
      */
     private $sourceDoodleId;
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $description;
+
+    private $url;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -124,11 +131,23 @@ class Doodle
         $this->setStatus($status);
     }
 
+    public function getStatus(): ?DoodleStatus
+    {
+        return $this->status;
+    }
+
+    /**
+     * @return array|null
+     */
     public function getCoordinates(): ?array
     {
         return $this->coordinates;
     }
 
+    /**
+     * @param array|null $coordinates
+     * @return Doodle
+     */
     public function setCoordinates(?array $coordinates): self
     {
         $this->coordinates = $coordinates;
@@ -136,14 +155,52 @@ class Doodle
         return $this;
     }
 
+    /**
+     * @return int|null
+     */
     public function getSourceDoodleId(): ?int
     {
         return $this->sourceDoodleId;
     }
 
+    /**
+     * @param int|null $sourceDoodleId
+     * @return Doodle
+     */
     public function setSourceDoodleId(?int $sourceDoodleId): self
     {
         $this->sourceDoodleId = $sourceDoodleId;
+
+        return $this;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param null|string $description
+     * @return Doodle
+     */
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function getUrl(): ?string
+    {
+        return $this->url;
+    }
+
+    public function setUrl(?string $url): self
+    {
+        $this->url = $url;
 
         return $this;
     }

@@ -6,6 +6,25 @@
         <div class="col-sm">
             <img src="/img/doodle{{ file_url }}">
         </div>
+        <div class="col-sm">
+            {% if status_rejected %}
+            <div class="alert alert-danger" role="alert">
+                {{ 'This doodle was rejected'|trans }}
+            </div>
+            {% elseif status_new %}
+            <div class="alert alert-warning" role="alert">
+                {{ 'This doodle has not been accepted yet'|trans }}
+            </div>
+            {% endif %}
+            <dl class="row">
+                <dt class="col-sm-3">{{ 'User name'|trans }}</dt>
+                <dd class="col-sm-9">{{ user_name }}</dd>
+                <dt class="col-sm-3">{{ 'Description'|trans }}</dt>
+                <dd class="col-sm-9">
+                    <p>{{ description|nl2br  }}</p>
+                </dd>
+            </dl>
+        </div>
     </div>
 </div>
 {% endblock %}

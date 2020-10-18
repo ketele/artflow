@@ -20,6 +20,8 @@ class DoodleStatus
     private $id;
 
     const STATUS_NEW = 2;
+    const STATUS_REJECTED = 3;
+    const STATUS_PUBLISHED = 1;
 
     /**
      * @ORM\Column(type="string", length=255)
