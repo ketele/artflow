@@ -29,7 +29,7 @@ class DoodleStatus
     private $name;
 
     /**
-     * @ORM\Column(type="boolean", options={"default": "true"})
+     * @ORM\Column(type="boolean", options={"default": "1"})
      */
     private $isActive = true;
 

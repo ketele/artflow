@@ -24,7 +24,7 @@ class HomePageController extends AbstractController
     public function index(DoodleRepository $doodleRepository, string $doodleDir, string $doodleFolder)
     {
         $glide = new Glide();
-        $doodles = $doodleRepository->findByStatus(DoodleStatus::STATUS_PUBLISHED);
+        $doodles = $doodleRepository->findByStatusTheMostPopular(DoodleStatus::STATUS_PUBLISHED);
         foreach($doodles AS $doodles_key => $doodle) {
             $doodle->setUrl($glide->generateUrl($doodleFolder . $doodle->getId(), $doodle->getFileName()));
         }

@@ -93,11 +93,15 @@ class DoodleController extends AbstractController
      * @return Response
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function view(int $id, string $doodleFolder, DoodleRepository $doodleRepository)
+    public function view(int $id, string $doodleFolder, DoodleRepository $doodleRepository, EntityManagerInterface $entityManager)
     {
         $glide = new Glide();
         $doodle = $doodleRepository->findOne($id);
         $file_name = $doodle->getFileName();
+
+        $doodle->setViews($doodle->getViews() + 1);
+        $entityManager->persist($doodle);
+        $entityManager->flush();
 
         return $this->render('doodle/view.html.twig', [
             'controller_name' => 'DoodleController',

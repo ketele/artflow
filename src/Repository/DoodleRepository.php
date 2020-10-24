@@ -46,6 +46,18 @@ class DoodleRepository extends ServiceEntityRepository
             ;
     }
 
+    public function findByStatusTheMostPopular($value)
+    {
+        return $this->createQueryBuilder('d')
+            ->andWhere('d.status = :val')
+            ->setParameter('val', $value)
+            ->orderBy('d.popularity', 'DESC')
+            ->setMaxResults(3)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
     // /**
     //  * @return Doodle[] Returns an array of Doodle objects
     //  */

@@ -58,6 +58,16 @@ class Doodle
 
     private $url;
 
+    /**
+     * @ORM\Column(type="integer", options={"default": "0"})
+     */
+    private $popularity = 0;
+
+    /**
+     * @ORM\Column(type="integer", options={"default": "0"})
+     */
+    private $views = 0;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -201,6 +211,30 @@ class Doodle
     public function setUrl(?string $url): self
     {
         $this->url = $url;
+
+        return $this;
+    }
+
+    public function getPopularity(): ?int
+    {
+        return $this->popularity;
+    }
+
+    public function setPopularity(int $popularity): self
+    {
+        $this->popularity = $popularity;
+
+        return $this;
+    }
+
+    public function getViews(): ?int
+    {
+        return $this->views;
+    }
+
+    public function setViews(int $views): self
+    {
+        $this->views = $views;
 
         return $this;
     }
