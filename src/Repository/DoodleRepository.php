@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Doodle;
+use App\Entity\DoodleStatus;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -56,6 +57,33 @@ class DoodleRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult()
             ;
+    }
+
+    public function getDoodles($params = false){
+        $opt = [
+            'where' => ['d.status = ' . DoodleStatus::STATUS_PUBLISHED],
+            'order' => [['d.popularity', 'DESC']],
+            'max_results' => 3,
+        ];
+
+        if (!empty($params))
+            $opt = array_merge($opt,$params);
+
+        extract($opt);
+
+        $queryBuilder = $this->createQueryBuilder('d');
+        if( !empty($where) )
+            foreach( $where AS $w )
+                $queryBuilder->andWhere($w);
+
+        if( !empty($order) )
+            foreach( $order AS $o )
+                $queryBuilder->orderBy($o[0], $o[1]);
+
+            $queryBuilder->setMaxResults($max_results);
+        $query =    $queryBuilder->getQuery();
+
+        return $query->getResult();
     }
 
     // /**

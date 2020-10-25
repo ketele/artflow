@@ -24,14 +24,21 @@ class HomePageController extends AbstractController
     public function index(DoodleRepository $doodleRepository, string $doodleDir, string $doodleFolder)
     {
         $glide = new Glide();
-        $doodles = $doodleRepository->findByStatusTheMostPopular(DoodleStatus::STATUS_PUBLISHED);
+        $doodles = $doodleRepository->getDoodles();
         foreach($doodles AS $doodles_key => $doodle) {
+            $doodle->setUrl($glide->generateUrl($doodleFolder . $doodle->getId(), $doodle->getFileName()));
+        }
+        $new_doodles = $doodleRepository->getDoodles([
+            'order' => [['d.createdAt', 'DESC']],
+        ]);
+        foreach($new_doodles AS $doodles_key => $doodle) {
             $doodle->setUrl($glide->generateUrl($doodleFolder . $doodle->getId(), $doodle->getFileName()));
         }
 
         return $this->render('home_page/index.html.twig', [
             'controller_name' => 'HomePageController',
             'doodles' => $doodles,
+            'new_doodles' => $new_doodles,
             'doodleDir' => $doodleDir,
             'doodleFolder' => $doodleFolder,
             'glide' => $glide,

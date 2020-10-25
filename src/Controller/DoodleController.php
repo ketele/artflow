@@ -114,6 +114,27 @@ class DoodleController extends AbstractController
     }
 
     /**
+     * @Route("/{_locale<%app.supported_locales%>}/doodle/gallery/{order<createdAt,popularity>}", name="doodle_gallery", defaults={"order": "popularity"})
+     */
+    public function gallery(string $order, DoodleRepository $doodleRepository, string $doodleFolder){
+        $glide = new Glide();
+
+        $doodles = $doodleRepository->getDoodles([
+            'order' => [['d.' . $order, 'DESC']],
+            'max_results' => 50,
+        ]);
+
+        foreach($doodles AS $doodles_key => $doodle) {
+            $doodle->setUrl($glide->generateUrl($doodleFolder . $doodle->getId(), $doodle->getFileName()));
+        }
+
+        return $this->render('doodle/gallery.html.twig', [
+            'controller_name' => 'DoodleController',
+            'doodles' => $doodles,
+        ]);
+    }
+
+    /**
      * @Route("/{_locale<%app.supported_locales%>}/add_doodle", methods={"POST","GET"})
      * @param Request $request
      * @param NotifierInterface $notifier

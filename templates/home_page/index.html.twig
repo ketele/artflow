@@ -7,10 +7,35 @@
             <h1>{{ 'welcome_text'|trans({page_name: page_name}) }}</h1>
         </div>
     </div>
-    <div class="row">
+    <div class="row mt-4">
+        <h6>{{ 'Most popular'|trans }}</h6>
+    </div>
+    <div class="row mt-4">
         <div class="col-sm">
             <div class="card-deck">
     {% for doodle in doodles %}
+        <div class="card">
+            <img src="/img/doodle{{ doodle.url }}" class="card-img-top" alt="{{ doodle.userName }}">
+            <div class="card-body">
+                <h5 class="card-title">{{ doodle.userName }}</h5>
+                <p class="card-text">{{ doodle.description|slice(0, 200) }}</p>
+            </div>
+            <div class="card-footer">
+                <small class="text-muted">{{ doodle.createdAt|date('Y-m-d') }}</small>
+                <a href="{{ path('doodle_view', {id: doodle.id}) }}" class="btn btn-secondary float-right">{{ 'Details'|trans }}</a>
+            </div>
+        </div>
+    {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <h6>{{ 'Latest'|trans }}</h6>
+    </div>
+    <div class="row mt-4 mb-4">
+        <div class="col-sm">
+            <div class="card-deck">
+    {% for doodle in new_doodles %}
         <div class="card">
             <img src="/img/doodle{{ doodle.url }}" class="card-img-top" alt="{{ doodle.userName }}">
             <div class="card-body">

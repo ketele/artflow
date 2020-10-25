@@ -40,6 +40,9 @@
                         <li class="nav-item {% if app.request.get('_route') == 'doodle' %}active{% endif %}">
                             <a class="nav-link" href="{{ path('doodle') }}">{{ 'Doodle'|trans }}</a>
                         </li>
+                        <li class="nav-item {% if app.request.get('_route') == 'doodle_gallery' %}active{% endif %}">
+                            <a class="nav-link" href="{{ path('doodle_gallery') }}">{{ 'Gallery'|trans }}</a>
+                        </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 {{ 'Language'|trans }}
