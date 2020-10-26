@@ -201,7 +201,7 @@ export class Workspace {
 
         this.canvas.addEventListener('touchmove', evt => this.toucheDrag(evt), false);
         this.canvas.addEventListener('touchstart', evt => this.toucheDragStart(evt), false);
-        this.canvas.addEventListener('touchend', evt => this.dragStop(evt), false);
+        document.addEventListener('touchend', evt => this.dragStop(evt), false);
     }
 
     loop(){
