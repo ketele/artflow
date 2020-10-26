@@ -173,13 +173,13 @@ export class Workspace {
     run(){
         this.loop();
 
-        this.canvas.addEventListener('pointermove', evt => this.drag(evt), false);
-        this.canvas.addEventListener('pointerdown', evt => this.dragStart(evt), false);
-        document.addEventListener('pointerup', evt => this.dragStop(evt), false);
-
         this.canvas.addEventListener('touchmove', evt => evt.preventDefault(), false);
         this.canvas.addEventListener('touchstart', evt => evt.preventDefault(), false);
         this.canvas.addEventListener('touchend', evt => evt.preventDefault(), false);
+
+        this.canvas.addEventListener('pointermove', evt => this.drag(evt), false);
+        this.canvas.addEventListener('pointerdown', evt => this.dragStart(evt), false);
+        document.addEventListener('pointerup', evt => this.dragStop(evt), false);
     }
 
     loop(){
