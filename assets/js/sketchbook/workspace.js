@@ -147,16 +147,38 @@ export class Workspace {
         };
     }
 
+    getTouchePos(evt) {
+        let rect = this.canvas.getBoundingClientRect();
+        return {
+            x: evt.touches[0].clientX - rect.left,
+            y: evt.touches[0].clientY - rect.top
+        };
+    }
+
     drag(evt) {
         evt.stopPropagation();
         evt.stopImmediatePropagation();
         this.mousePos1 = this.getMousePos(evt);
     }
 
+    toucheDrag(evt) {
+        evt.stopPropagation();
+        evt.stopImmediatePropagation();
+        this.mousePos1 = this.getTouchePos(evt);
+    }
+
     dragStart(evt) {
         evt.stopPropagation();
         evt.stopImmediatePropagation();
         this.mousePos1 = this.getMousePos(evt);
+        this.mousePos2 = this.mousePos1;
+        this.draw = true;
+    }
+
+    toucheDragStart(evt) {
+        evt.stopPropagation();
+        evt.stopImmediatePropagation();
+        this.mousePos1 = this.getTouchePos(evt);
         this.mousePos2 = this.mousePos1;
         this.draw = true;
     }
@@ -177,8 +199,8 @@ export class Workspace {
         this.canvas.addEventListener('mousedown', evt => this.dragStart(evt), false);
         document.addEventListener('mouseup', evt => this.dragStop(evt), false);
 
-        this.canvas.addEventListener('touchmove', evt => this.drag(evt), false);
-        this.canvas.addEventListener('touchstart', evt => this.dragStart(evt), false);
+        this.canvas.addEventListener('touchmove', evt => this.toucheDrag(evt), false);
+        this.canvas.addEventListener('touchstart', evt => this.toucheDragStart(evt), false);
         this.canvas.addEventListener('touchend', evt => this.dragStop(evt), false);
     }
 
