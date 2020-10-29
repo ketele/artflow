@@ -1,3 +1,5 @@
+import {Utils} from "../utils";
+
 export class Workspace {
     constructor (canvas) {
 
@@ -195,13 +197,24 @@ export class Workspace {
     run(){
         this.loop();
 
-        this.canvas.addEventListener('mousemove', evt => this.drag(evt), false);
-        this.canvas.addEventListener('mousedown', evt => this.dragStart(evt), false);
-        document.addEventListener('mouseup', evt => this.dragStop(evt), false);
+        if( Utils.iOS() ){
+            this.canvas.addEventListener('mousemove', evt => this.drag(evt), false);
+            this.canvas.addEventListener('mousedown', evt => this.dragStart(evt), false);
+            document.addEventListener('mouseup', evt => this.dragStop(evt), false);
 
-        this.canvas.addEventListener('touchmove', evt => this.toucheDrag(evt), false);
-        this.canvas.addEventListener('touchstart', evt => this.toucheDragStart(evt), false);
-        document.addEventListener('touchend', evt => this.dragStop(evt), false);
+            this.canvas.addEventListener('touchmove', evt => this.toucheDrag(evt), false);
+            this.canvas.addEventListener('touchstart', evt => this.toucheDragStart(evt), false);
+            document.addEventListener('touchend', evt => this.dragStop(evt), false);
+        }else{
+            this.canvas.addEventListener('touchcancel', evt => evt.preventDefault(), false);
+            this.canvas.addEventListener('touchmove', evt => evt.preventDefault(), false);
+            this.canvas.addEventListener('touchstart', evt => evt.preventDefault(), false);
+            this.canvas.addEventListener('touchend', evt => evt.preventDefault(), false);
+
+            this.canvas.addEventListener('pointermove', evt => this.drag(evt), false);
+            this.canvas.addEventListener('pointerdown', evt => this.dragStart(evt), false);
+            document.addEventListener('pointerup', evt => this.dragStop(evt), false);
+        }
     }
 
     loop(){

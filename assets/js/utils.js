@@ -33,4 +33,17 @@ export class Utils {
         let body = document.body;
         body.classList.add("is-loading-overlay-visible");
     }
+
+    static iOS(){
+        return [
+                'iPad Simulator',
+                'iPhone Simulator',
+                'iPod Simulator',
+                'iPad',
+                'iPhone',
+                'iPod'
+            ].includes(navigator.platform)
+            // iPad on iOS 13 detection
+            || (navigator.userAgent.includes("Mac") && "ontouchend" in document)
+    }
 }
