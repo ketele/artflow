@@ -114,7 +114,11 @@ class DoodleController extends AbstractController
     }
 
     /**
-     * @Route("/{_locale<%app.supported_locales%>}/doodle/gallery/{order<createdAt,popularity>}", name="doodle_gallery", defaults={"order": "popularity"})
+     * @Route(
+     *     "/{_locale<%app.supported_locales%>}/doodle/gallery/{order<createdAt|popularity>}",
+     *     name="doodle_gallery",
+     *     defaults={"order": "popularity"}
+     * )
      */
     public function gallery(string $order, DoodleRepository $doodleRepository, string $doodleFolder){
         $glide = new Glide();
