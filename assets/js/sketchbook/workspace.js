@@ -7,6 +7,7 @@ export class Workspace {
         this.mousePos2 = { x: 0, y: 0};
         this.draw = false;
         this.canvas = canvas;
+        this.isIOS = Utils.iOS();
 
         this.ctx = this.canvas.getContext('2d');
 
@@ -67,8 +68,10 @@ export class Workspace {
             dy = y1 - y2;
         }
 
-        let index = (y * this.width + x) * 4;
-        this.updateLine(index);
+        if( x < 0 || x >= this.width )
+            return null;
+
+        this.updateLine(x, y);
 
         if (dx > dy) {
             ai = (dy - dx) * 2;
@@ -85,8 +88,10 @@ export class Workspace {
                     x += xi;
                 }
 
-                index = (y * this.width + x) * 4;
-                this.updateLine(index);
+                if( x < 0 || x >= this.width )
+                    return null;
+
+                this.updateLine(x, y);
             }
         }
 
@@ -106,8 +111,11 @@ export class Workspace {
                     d += bi;
                     y += yi;
                 }
-                index = (y * this.width + x) * 4;
-                this.updateLine(index);
+
+                if( x < 0 || x >= this.width )
+                    return null;
+
+                this.updateLine(x, y);
             }
         }
 
@@ -122,17 +130,23 @@ export class Workspace {
         }
     }
 
-    updateLine(index){
-            if( this.toolSize > 1 ){
-                for(let x = 0; x < this.toolSize * 4; x+=4)
-                for(let y = 0; y < this.toolSize; y++)
-                {
-                    let tool_index =  index + ( ( y - Math.floor(this.toolSize / 2) ) * this.width * 4 ) + x - ( Math.floor(this.toolSize / 2) * 4);
-                    this.toolLayer[tool_index] = this.lineColor.r;
-                    this.toolLayer[tool_index + 1] = this.lineColor.g;
-                    this.toolLayer[tool_index + 2] = this.lineColor.b;
-                    this.toolLayer[tool_index + 3] = this.lineColor.a;
-                }
+    updateLine(x, y){
+        let index = (y * this.width + x) * 4;
+        let tool_x = 0;
+        let tool_index = 0;
+
+        if( this.toolSize > 1 ){
+                for(let tx = 0; tx < this.toolSize * 4; tx+=4)
+                    for(let ty = 0; ty < this.toolSize; ty++)
+                    {
+                        tool_x = tx - ( Math.floor(this.toolSize / 2) * 4);
+                        tool_index =  index + ( ( ty - Math.floor(this.toolSize / 2) ) * this.width * 4 ) + tool_x;
+                        //this.toolLayer[tool_index] = this.lineColor.r;
+                        //this.toolLayer[tool_index + 1] = this.lineColor.g;
+                        //this.toolLayer[tool_index + 2] = this.lineColor.b;
+                        if( x + tool_x > 0 && x + tool_x < this.width )
+                            this.toolLayer[tool_index + 3] = this.lineColor.a;
+                    }
             }else{
                 //this.toolLayer[index] = this.lineColor.r;
                 //this.toolLayer[index + 1] = this.lineColor.g;
@@ -197,7 +211,7 @@ export class Workspace {
     run(){
         this.loop();
 
-        if( Utils.iOS() ){
+        if( this.isIOS ){
             this.canvas.addEventListener('mousemove', evt => this.drag(evt), false);
             this.canvas.addEventListener('mousedown', evt => this.dragStart(evt), false);
             document.addEventListener('mouseup', evt => this.dragStop(evt), false);
@@ -211,8 +225,8 @@ export class Workspace {
             this.canvas.addEventListener('touchstart', evt => evt.preventDefault(), false);
             this.canvas.addEventListener('touchend', evt => evt.preventDefault(), false);
 
-            this.canvas.addEventListener('pointermove', evt => this.drag(evt), false);
-            this.canvas.addEventListener('pointerdown', evt => this.dragStart(evt), false);
+            document.addEventListener('pointermove', evt => this.drag(evt), false);
+            document.addEventListener('pointerdown', evt => this.dragStart(evt), false);
             document.addEventListener('pointerup', evt => this.dragStop(evt), false);
         }
     }
@@ -221,7 +235,10 @@ export class Workspace {
         if(this.draw){
             this.BresenhamLine(parseInt(this.mousePos2.x),parseInt(this.mousePos2.y),parseInt(this.mousePos1.x),parseInt(this.mousePos1.y) );
             this.ctx.putImageData(this.imageData, 0, 0);
+            //this.ctx.fillStyle = 'red';
+            //this.ctx.fillText(this.mousePos2.x + " , " + this.mousePos2.y,this.mousePos2.x,this.mousePos2.y);
         }
+
 
         this.mousePos2 = this.mousePos1;
 
