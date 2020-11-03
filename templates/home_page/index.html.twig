@@ -15,15 +15,17 @@
             <div class="card-deck">
     {% for doodle in doodles %}
         <div class="card">
+            <a href="{{ path('doodle_view', {id: doodle.id}) }}">
             <img src="/img/doodle{{ doodle.url }}" class="card-img-top" alt="{{ doodle.userName }}">
-            <div class="card-body">
+            </a>
+            <!--div class="card-body">
                 <h5 class="card-title">{{ doodle.userName }}</h5>
                 <p class="card-text">{{ doodle.description|slice(0, 200) }}</p>
             </div>
             <div class="card-footer">
                 <small class="text-muted">{{ doodle.createdAt|date('Y-m-d') }}</small>
                 <a href="{{ path('doodle_view', {id: doodle.id}) }}" class="btn btn-secondary float-right">{{ 'Details'|trans }}</a>
-            </div>
+            </div-->
         </div>
     {% endfor %}
             </div>
@@ -37,15 +39,17 @@
             <div class="card-deck">
     {% for doodle in new_doodles %}
         <div class="card">
+            <a href="{{ path('doodle_view', {id: doodle.id}) }}">
             <img src="/img/doodle{{ doodle.url }}" class="card-img-top" alt="{{ doodle.userName }}">
-            <div class="card-body">
+            </a>
+            <!--div class="card-body">
                 <h5 class="card-title">{{ doodle.userName }}</h5>
                 <p class="card-text">{{ doodle.description|slice(0, 200) }}</p>
             </div>
             <div class="card-footer">
                 <small class="text-muted">{{ doodle.createdAt|date('Y-m-d') }}</small>
                 <a href="{{ path('doodle_view', {id: doodle.id}) }}" class="btn btn-secondary float-right">{{ 'Details'|trans }}</a>
-            </div>
+            </div-->
         </div>
     {% endfor %}
             </div>

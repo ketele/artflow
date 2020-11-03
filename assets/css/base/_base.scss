@@ -2,3 +2,11 @@ body {
   background-color: $artflow-light-color;
   color: #456666;
 }
+
+a {
+  color: $contrast-color;
+}
+
+a:hover {
+  color: $light-contrast-color;
+}
