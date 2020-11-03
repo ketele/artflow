@@ -13,7 +13,14 @@ CanvasRenderingContext2D.prototype.drawCircle = function( centerX, centerY, angl
 };
 
 class DoodleSketchbook {
-    loadDoodle(){
+    loadDoodle(type, coordinates){
+        if( typeof type === "undefined" || type === null ){
+            if( typeof coordinates !== "undefined" && coordinates !== null && coordinates !== "" )
+                type = 'definedNodes';
+            else
+                type = 'unbalancedNodes';
+        }
+
         this.canvas = document.getElementById('doodle-sketchbook');
         this.ctx = this.canvas.getContext('2d');
 
@@ -31,7 +38,14 @@ class DoodleSketchbook {
         this.data = this.imageData.data;
         this.imageData.data.fill(255);
         this.ctx.putImageData(this.imageData, 0, 0);
-        this.doodle.generateUnbalancedNodes();
+
+        if( type === "definedNodes" )
+            this.doodle.setNodes( coordinates );
+        else if ( type === "symmetricalNodes" )
+            this.doodle.generateSymmetricalNodes();
+        else
+            this.doodle.generateUnbalancedNodes();
+
         this.doodle.draw(this.ctx);
         this.imageData = this.ctx.getImageData(0, 0, this.canvas.offsetWidth, this.canvas.offsetHeight);
         this.data = this.imageData.data;
@@ -102,6 +116,7 @@ class DoodleSketchbook {
     }
 
     saveImageToTemp(){
+        let source_doodle_id = document.getElementById('id').value;
         let source_doodle = JSON.stringify({
             'size': this.size,
             'doodle': this.doodle.curves
@@ -130,6 +145,7 @@ class DoodleSketchbook {
                     temp_form.innerHTML = `
 <input type="text" name="temp_dir" value="${response.temp_dir}" />
 <input type="text" name="source_doodle" value="${source_doodle}" />
+<input type="text" name="source_doodle_id" value="${source_doodle_id}" />
 `;
                     document.body.appendChild(temp_form);
                     temp_form.submit();
@@ -145,13 +161,17 @@ class DoodleSketchbook {
 }
 
 window.addEventListener('load', e => {
+    let coordinatesJson = JSON.parse(document.getElementById('coordinates').value);
+
     let doodle_sketchbook = new DoodleSketchbook();
-    doodle_sketchbook.loadDoodle();
+    doodle_sketchbook.loadDoodle(null, coordinatesJson);
     doodle_sketchbook.loadSketchbook();
 
     document.getElementById('refresh-doodle').addEventListener('click', e => {
-       doodle_sketchbook.doodle.clearCanvas(doodle_sketchbook.ctx);
-        doodle_sketchbook.loadDoodle();
+        document.getElementById('coordinates').value = "";
+        document.getElementById('id').value = "";
+        doodle_sketchbook.doodle.clearCanvas(doodle_sketchbook.ctx);
+        doodle_sketchbook.loadDoodle("unbalancedNodes");
     } );
 
     document.getElementById('clear-sketchbook').addEventListener('click', e => {

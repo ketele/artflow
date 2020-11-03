@@ -24,6 +24,11 @@
                     <p>{{ description|nl2br  }}</p>
                 </dd>
             </dl>
+            <div class="row">
+                <div class="col-sm">
+                    <a href="{{ path('doodle', {id : id}) }}" class="btn btn-secondary">{{ 'Use doodle'|trans }}</a>
+                </div>
+            </div>
         </div>
     </div>
 </div>

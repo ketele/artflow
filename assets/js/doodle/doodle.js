@@ -44,6 +44,24 @@ export class Doodle {
         }
     }
 
+    setNodes( coordinates ){
+        for( let i = 0; i < coordinates.doodle.length; i++ )
+        {
+            this.curves.push(
+                new Curve(
+                    coordinates.doodle[i].cp1X,
+                    coordinates.doodle[i].cp1Y,
+                    coordinates.doodle[i].cp2X,
+                    coordinates.doodle[i].cp2Y,
+                    coordinates.doodle[i].x,
+                    coordinates.doodle[i].y,
+                    coordinates.doodle[i].angle
+                )
+            );
+        }
+        this.length = coordinates.doodle.length;
+    }
+
     generateSymmetricalNodes(){
         this.generateNodes( Math.PI );
         this.generateCoordinates();

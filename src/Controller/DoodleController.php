@@ -38,11 +38,28 @@ class DoodleController extends AbstractController
     }
 
     /**
-     * @Route("/{_locale<%app.supported_locales%>}/doodle", name="doodle")
+     * @Route(
+     *     "/{_locale<%app.supported_locales%>}/doodle/{id<\d+>}",
+     *     name="doodle",
+     *     defaults={"id": null}
+     * )
      */
-    public function index() {
+    public function index(?int $id, DoodleRepository $doodleRepository) {
+        $doodle_coordinates = array();
+        $doodle_coordinates_json = '';
+
+        if( is_numeric($id) ){
+            $doodle = $doodleRepository->findOne($id);
+            if($doodle) {
+                $doodle_coordinates = $doodle->getCoordinates();
+                $doodle_coordinates_json = json_encode($doodle_coordinates);
+            }
+        }
+
         return $this->render('doodle/index.html.twig', [
             'controller_name' => 'DoodleController',
+            'doodle_coordinates_json' => $doodle_coordinates_json,
+            'id' => $id
         ]);
     }
 
@@ -86,7 +103,10 @@ class DoodleController extends AbstractController
     }
 
     /**
-     * @Route("/{_locale<%app.supported_locales%>}/doodle/view/{id}", name="doodle_view")
+     * @Route(
+     *     "/{_locale<%app.supported_locales%>}/doodle/view/{id}",
+     *     name="doodle_view"
+     * )
      * @param int $id
      * @param string $doodleFolder
      * @param DoodleRepository $doodleRepository
@@ -110,6 +130,7 @@ class DoodleController extends AbstractController
             'status_rejected' => $doodle->getStatus()->getId() == DoodleStatus::STATUS_REJECTED,
             'status_new' => $doodle->getStatus()->getId() == DoodleStatus::STATUS_NEW,
             'file_url' => $glide->generateUrl($doodleFolder . $id, $file_name, []),
+            'id' => $id,
         ]);
     }
 
@@ -151,6 +172,7 @@ class DoodleController extends AbstractController
     {
         $tempDir = $request->get('temp_dir');
         $sourceDoodle = $request->get('source_doodle');
+        $sourceDoodleId = $request->get('source_doodle_id');
 
         $filesystem = new Filesystem();
         $finder = new Finder();
@@ -160,29 +182,14 @@ class DoodleController extends AbstractController
 
         $defaultData['tempDir'] = $tempDir;
         $defaultData['sourceDoodle'] = $sourceDoodle;
-
-        //https://about.deviantart.com/policy/submission/
-        //https://about.deviantart.com/policy/service/
+        $defaultData['sourceDoodleId'] = $sourceDoodleId;
 
         $form = $this->createFormBuilder($defaultData)
             ->add('userName', TextType::class)
             ->add('description', TextareaType::class)
             ->add('tempDir', HiddenType::class)
             ->add('sourceDoodle', HiddenType::class)
-            /*->add('agreeSubmissionPolicy', CheckboxType::class,
-                [
-                    'label'  => $this->translator->trans('I have read and agree to the Submission Policy',
-                        [
-                            'submission_policy_link' => '<a href="' . $this->generateUrl('submission_policy') . '" target="_blank">
-                            ' . $this->translator->trans('Submission Policy') . '
-                            </a>'
-                        ]
-                    ),
-                    'label_html' => true,
-                    'required' => true,
-                    'mapped' => false
-                ]
-            )*/
+            ->add('sourceDoodleId', HiddenType::class)
             ->add('agreeTermsOfService', CheckboxType::class,
                 [
                     'label'  => $this->translator->trans('I have read and agree to the Terms of Service',
@@ -208,6 +215,7 @@ class DoodleController extends AbstractController
             $tempPath = sys_get_temp_dir() . '/' . $form_data['tempDir'] . '/';
             $finder->files()->in($tempPath);
             $sourceDoodle = json_decode(urldecode($form_data['sourceDoodle']), true);
+            $sourceDoodleId = $form_data['sourceDoodleId'];
 
             if ($finder->hasResults()) {
                 $iterator = $finder->getIterator();
@@ -220,6 +228,8 @@ class DoodleController extends AbstractController
             $doodle->setFileName($fileName);
             $doodle->setUserName($form_data['userName']);
             $doodle->setDescription($form_data['description']);
+            if( is_numeric( $sourceDoodleId ) )
+                $doodle->setSourceDoodleId($sourceDoodleId);
             $doodle->setCoordinates($sourceDoodle);
             $metadata->setIdGeneratorType(ClassMetadata::GENERATOR_TYPE_AUTO);
             $entityManager->persist($doodle);
