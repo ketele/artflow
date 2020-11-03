@@ -33,6 +33,8 @@ class DoodleSketchbook {
         this.ctx.canvas.height = this.size;
 
         this.doodle = new Doodle( this.canvas.offsetWidth/2, this.canvas.offsetHeight/2, this.canvas.offsetHeight/4 );
+        this.doodle.setwWidth(this.size);
+        this.doodle.setwHeight(this.size);
 
         this.imageData = this.ctx.getImageData(0, 0, this.canvas.offsetWidth, this.canvas.offsetHeight);
         this.data = this.imageData.data;

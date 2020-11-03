@@ -15,6 +15,16 @@ export class Doodle {
         this.radius = radius;
         this.curves = [];
         this.length = 0;
+        this.width = 0;
+        this.height = 0;
+    }
+
+    setwWidth( width ){
+        this.width = width;
+    }
+
+    setwHeight( height ){
+        this.height = height;
     }
 
     /**
@@ -45,16 +55,24 @@ export class Doodle {
     }
 
     setNodes( coordinates ){
+        let transformationFactorX = 1;
+        let transformationFactorY = 1;
+
+        if( coordinates.size !== this.width ) {
+            transformationFactorX = this.width / coordinates.size;
+            transformationFactorY = this.height / coordinates.size;
+        }
+
         for( let i = 0; i < coordinates.doodle.length; i++ )
         {
             this.curves.push(
                 new Curve(
-                    coordinates.doodle[i].cp1X,
-                    coordinates.doodle[i].cp1Y,
-                    coordinates.doodle[i].cp2X,
-                    coordinates.doodle[i].cp2Y,
-                    coordinates.doodle[i].x,
-                    coordinates.doodle[i].y,
+                    coordinates.doodle[i].cp1X * transformationFactorX,
+                    coordinates.doodle[i].cp1Y * transformationFactorY,
+                    coordinates.doodle[i].cp2X * transformationFactorX,
+                    coordinates.doodle[i].cp2Y * transformationFactorY,
+                    coordinates.doodle[i].x * transformationFactorX,
+                    coordinates.doodle[i].y * transformationFactorY,
                     coordinates.doodle[i].angle
                 )
             );
