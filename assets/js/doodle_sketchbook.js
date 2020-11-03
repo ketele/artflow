@@ -161,7 +161,8 @@ class DoodleSketchbook {
 }
 
 window.addEventListener('load', e => {
-    let coordinatesJson = JSON.parse(document.getElementById('coordinates').value);
+    let coordinatesJson = document.getElementById('coordinates').value;
+    coordinatesJson = ( typeof coordinatesJson !== "undefined" && coordinatesJson !== "" ) ? JSON.parse(coordinatesJson) : null;
 
     let doodle_sketchbook = new DoodleSketchbook();
     doodle_sketchbook.loadDoodle(null, coordinatesJson);
