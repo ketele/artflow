@@ -39,18 +39,26 @@
             <div class="col-sm">
                 <div class="card-deck">
                         {% endif %}
-                        <div class="card">
+                        <div class="card image-card">
                             <a href="{{ path('doodle_view', {id: doodle.id}) }}" class="">
-                            <img src="/img/doodle{{ doodle.url }}" class="card-img-top" alt="{{ doodle.userName }}">
+                                <img src="/img/doodle{{ doodle.url }}" class="card-img-top" alt="{{ doodle.userName }}">
                             </a>
-                            <!--div class="card-body">
-                                <h5 class="card-title">{{ doodle.userName }}</h5>
-                                <p class="card-text">{{ doodle.description|slice(0, 200) }}</p>
+                            <div class="image-card-info">
+                                <div class="opacity-0 image-card-overlay">
+                                </div>
+                                <div class="opacity-0 image-card-description">
+                                    <p>
+                                        <a href="{{ path('doodle_view', {id: doodle.id}) }}" class="">
+                                            {{ doodle.description|slice(0, 200) }}
+                                        </a>
+                                    </p>
+                                    <p>
+                                        <a href="{{ path('doodle_view', {id: doodle.id}) }}" class="">
+                                            <b>{{ doodle.userName }}</b>
+                                        </a>
+                                    </p>
+                                </div>
                             </div>
-                            <div class="card-footer">
-                                <small class="text-muted">{{ doodle.createdAt|date('Y-m-d') }}</small>
-                                <a href="{{ path('doodle_view', {id: doodle.id}) }}" class="btn btn-secondary float-right">{{ 'Details'|trans }}</a>
-                            </div-->
                         </div>
                     {% endfor %}
                     {% if (doodles|length) % 3 == 1 %}
