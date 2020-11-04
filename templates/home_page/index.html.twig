@@ -7,8 +7,11 @@
             <h1>{{ 'welcome_text'|trans({page_name: page_name}) }}</h1>
         </div>
     </div>
+    <hr/>
     <div class="row mt-4">
-        <h6>{{ 'Most popular'|trans }}</h6>
+        <div class="col-sm">
+            <h6>{{ 'Most popular'|trans|upper }}</h6>
+        </div>
     </div>
     <div class="row mt-4">
         <div class="col-sm">
@@ -31,8 +34,11 @@
             </div>
         </div>
     </div>
+    <hr/>
     <div class="row mt-4">
-        <h6>{{ 'Latest'|trans }}</h6>
+        <div class="col-sm">
+            <h6>{{ 'Latest'|trans|upper }}</h6>
+        </div>
     </div>
     <div class="row mt-4 mb-4">
         <div class="col-sm">

@@ -1,3 +1,20 @@
 .bd-sidebar{
   background-color: $artflow-light2-color;
 }
+
+.bd-toc {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 4rem;
+  height: calc(100vh - 4rem);
+  overflow-y: auto;
+  background-color: $artflow-light2-color;
+}
+
+.bd-toc {
+  -ms-flex-order: 2;
+  order: 2;
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+  font-size: .875rem;
+}
