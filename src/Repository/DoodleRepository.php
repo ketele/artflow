@@ -5,6 +5,8 @@ namespace App\Repository;
 use App\Entity\Doodle;
 use App\Entity\DoodleStatus;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -15,8 +17,14 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class DoodleRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    /**
+     * @var EntityManagerInterface
+     */
+    private $entityManager;
+
+    public function __construct(ManagerRegistry $registry, EntityManagerInterface $entityManager)
     {
+        $this->entityManager = $entityManager;
         parent::__construct($registry, Doodle::class);
     }
 
@@ -84,6 +92,20 @@ class DoodleRepository extends ServiceEntityRepository
         $query =    $queryBuilder->getQuery();
 
         return $query->getResult();
+    }
+
+    public function save(Doodle $doodle)
+    {
+        $metadata = $this->entityManager->getClassMetadata(get_class($doodle));
+        $metadata->setIdGeneratorType(ClassMetadata::GENERATOR_TYPE_AUTO);
+        $this->entityManager->persist($doodle);
+        $this->entityManager->flush();
+    }
+
+    public function repairIpTree(){
+
+
+        return true;
     }
 
     // /**

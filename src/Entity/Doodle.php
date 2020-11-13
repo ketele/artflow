@@ -68,6 +68,16 @@ class Doodle
      */
     private $views = 0;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $parent;
+
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $ip_tree = '';
+
     public function getId(): ?int
     {
         return $this->id;
@@ -235,6 +245,46 @@ class Doodle
     public function setViews(int $views): self
     {
         $this->views = $views;
+
+        return $this;
+    }
+
+    //@ORM\PostPersist
+    //@ORM\PostRemove
+
+    /**
+     * @ORM\PostUpdate
+     */
+
+    public function updateIpTree(LifecycleEventArgs $args)
+    {
+        $objectManager = $args->getObjectManager();
+
+        //$status = $objectManager->getRepository(DoodleStatus::class)->find(DoodleStatus::STATUS_NEW);
+
+        return null;
+    }
+
+    public function getParent(): ?int
+    {
+        return $this->parent;
+    }
+
+    public function setParent(?int $parent): self
+    {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    public function getIpTree(): ?string
+    {
+        return $this->ip_tree;
+    }
+
+    public function setIpTree(string $ip_tree): self
+    {
+        $this->ip_tree = $ip_tree;
 
         return $this;
     }

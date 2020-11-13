@@ -7,7 +7,6 @@ use App\Entity\DoodleStatus;
 use App\Repository\DoodleRepository;
 use App\Security\Glide;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Mapping\ClassMetadata;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -120,8 +119,7 @@ class DoodleController extends AbstractController
         $file_name = $doodle->getFileName();
 
         $doodle->setViews($doodle->getViews() + 1);
-        $entityManager->persist($doodle);
-        $entityManager->flush();
+        $doodleRepository->save($doodle);
 
         return $this->render('doodle/view.html.twig', [
             'controller_name' => 'DoodleController',
@@ -163,12 +161,11 @@ class DoodleController extends AbstractController
      * @Route("/{_locale<%app.supported_locales%>}/add_doodle", methods={"POST","GET"})
      * @param Request $request
      * @param NotifierInterface $notifier
-     * @param EntityManagerInterface $entityManager
      * @param string $doodleDir
      * @param string $doodleFolder
      * @return Response
      */
-    public function add_doodle(Request $request, NotifierInterface $notifier, EntityManagerInterface $entityManager, string $doodleDir, string $doodleFolder)
+    public function add_doodle(Request $request, NotifierInterface $notifier, string $doodleDir, string $doodleFolder, DoodleRepository $doodleRepository)
     {
         $tempDir = $request->get('temp_dir');
         $sourceDoodle = $request->get('source_doodle');
@@ -224,16 +221,13 @@ class DoodleController extends AbstractController
                 $fileName = $firstFile->getRelativePathname();
             }
 
-            $metadata = $entityManager->getClassMetadata(get_class($doodle));
             $doodle->setFileName($fileName);
             $doodle->setUserName($form_data['userName']);
             $doodle->setDescription($form_data['description']);
             if( is_numeric( $sourceDoodleId ) )
                 $doodle->setSourceDoodleId($sourceDoodleId);
             $doodle->setCoordinates($sourceDoodle);
-            $metadata->setIdGeneratorType(ClassMetadata::GENERATOR_TYPE_AUTO);
-            $entityManager->persist($doodle);
-            $entityManager->flush();
+            $doodleRepository->save($doodle);
             $doodlePath = $doodleDir . '/' . $doodleFolder . $doodle->getId();
             try {
                 $filesystem->mirror($tempPath, $doodlePath);
