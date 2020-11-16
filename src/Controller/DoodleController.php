@@ -116,10 +116,47 @@ class DoodleController extends AbstractController
     {
         $glide = new Glide();
         $doodle = $doodleRepository->findOne($id);
-        $file_name = $doodle->getFileName();
+        $fileName = $doodle->getFileName();
 
+        $otherDoodlesCount = 3;
         $doodle->setViews($doodle->getViews() + 1);
         $doodleRepository->save($doodle);
+
+        $doodles = $doodleRepository->getDoodles([
+            'where' => [
+                'd.id != :parentDoodle',
+                '( d.ipTree LIKE :parentDoodleIpTreeBegin OR d.ipTree LIKE :parentDoodleIpTree )',
+                'd.status = 1',
+            ],
+            'parameters' => [
+                'parentDoodle' => '' . $id . '',
+                'parentDoodleIpTreeBegin' => '%.' . $id . '.%',
+                'parentDoodleIpTree' => '' . $id . '.%',
+            ],
+            'maxResults' => $otherDoodlesCount,
+        ]);
+
+        if(count($doodles) < $otherDoodlesCount) {
+            $doodles2 = $doodleRepository->getDoodles([
+                'select' => 'd, DATE_DIFF( d.createdAt, :parentCreatedAt ) AS HIDDEN score',
+                'where' => [
+                    'd.id NOT IN(:doodles)',
+                    'd.status = 1',
+                ],
+                'parameters' => [
+                    'doodles' => '' . $id . ( count($doodles) > 0 ? ',' . implode( array_map( function( $v ){ return $v->getId(); } , $doodles ) ) : '' ) . '',
+                    'parentCreatedAt' => $doodle->getCreatedAt(),
+                ],
+                'maxResults' => $otherDoodlesCount - count($doodles),
+                'order' => [['score','ASC']],
+            ]);
+
+            $doodles = array_merge($doodles, $doodles2);
+        }
+
+        foreach($doodles AS $doodles_key => $doodle) {
+            $doodle->setUrl($glide->generateUrl($doodleFolder . $doodle->getId(), $doodle->getFileName()));
+        }
 
         return $this->render('doodle/view.html.twig', [
             'controller_name' => 'DoodleController',
@@ -127,8 +164,9 @@ class DoodleController extends AbstractController
             'user_name' => $doodle->getUserName(),
             'status_rejected' => $doodle->getStatus()->getId() == DoodleStatus::STATUS_REJECTED,
             'status_new' => $doodle->getStatus()->getId() == DoodleStatus::STATUS_NEW,
-            'file_url' => $glide->generateUrl($doodleFolder . $id, $file_name, []),
+            'file_url' => $glide->generateUrl($doodleFolder . $id, $fileName, []),
             'id' => $id,
+            'doodles' => $doodles,
         ]);
     }
 
@@ -144,7 +182,7 @@ class DoodleController extends AbstractController
 
         $doodles = $doodleRepository->getDoodles([
             'order' => [['d.' . $order, 'DESC']],
-            'max_results' => 50,
+            'maxResults' => 50,
         ]);
 
         foreach($doodles AS $doodles_key => $doodle) {

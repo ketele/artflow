@@ -70,10 +70,14 @@ class DoodleRepository extends ServiceEntityRepository
     }
 
     public function getDoodles($params = false){
+        $queryBuilder = $this->createQueryBuilder('d');
+
         $opt = [
+            'select' => 'd', //, ' . $queryBuilder->expr()->in('d.id', [30] ),
             'where' => ['d.status = ' . DoodleStatus::STATUS_PUBLISHED],
+            'parameters' => ['d.status = ' . DoodleStatus::STATUS_PUBLISHED],
             'order' => [['d.popularity', 'DESC']],
-            'max_results' => 3,
+            'maxResults' => 3,
         ];
 
         if (!empty($params))
@@ -81,17 +85,26 @@ class DoodleRepository extends ServiceEntityRepository
 
         extract($opt);
 
-        $queryBuilder = $this->createQueryBuilder('d');
+        $queryBuilder->select($select);
+
         if( !empty($where) )
             foreach( $where AS $w )
                 $queryBuilder->andWhere($w);
+
+        if( !empty($parameters) )
+            foreach( $parameters AS $p_key => $p )
+                $queryBuilder->setParameter($p_key, $p);
+
+        //$queryBuilder->andWhere('REGEXP(d.ip_tree, :regexp) = true')
+        //    ->setParameter('regexp', '[[:digit:]]{3}');
 
         if( !empty($order) )
             foreach( $order AS $o )
                 $queryBuilder->orderBy($o[0], $o[1]);
 
-            $queryBuilder->setMaxResults($max_results);
+            $queryBuilder->setMaxResults($maxResults);
         $query =    $queryBuilder->getQuery();
+        //$query =    $queryBuilder->getDQL();
 
         return $query->getResult();
     }
@@ -152,8 +165,8 @@ class DoodleRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param $doodleId
-     * @return array|int
+     * @param int $doodleId
+     * @return array
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function generateDoodleIpTree( int $doodleId )
