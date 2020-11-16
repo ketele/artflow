@@ -75,7 +75,7 @@ class DoodleRepository extends ServiceEntityRepository
         $opt = [
             'select' => 'd', //, ' . $queryBuilder->expr()->in('d.id', [30] ),
             'where' => ['d.status = ' . DoodleStatus::STATUS_PUBLISHED],
-            'parameters' => ['d.status = ' . DoodleStatus::STATUS_PUBLISHED],
+            'parameters' => [],
             'order' => [['d.popularity', 'DESC']],
             'maxResults' => 3,
         ];
