@@ -172,17 +172,35 @@ class DoodleController extends AbstractController
 
     /**
      * @Route(
-     *     "/{_locale<%app.supported_locales%>}/doodle/gallery/{order<createdAt|popularity>}",
+     *     "/{_locale<%app.supported_locales%>}/doodle/gallery/{order<createdAt|popularity>}/{id<\d+>}",
      *     name="doodle_gallery",
-     *     defaults={"order": "popularity"}
+     *     defaults={"order": "popularity","id": null}
      * )
+     * @param string $order
+     * @param int|null $id
+     * @param DoodleRepository $doodleRepository
+     * @param string $doodleFolder
+     * @return Response
      */
-    public function gallery(string $order, DoodleRepository $doodleRepository, string $doodleFolder){
+    public function gallery(string $order, ?int $id, DoodleRepository $doodleRepository, string $doodleFolder){
         $glide = new Glide();
+
+        $where = [];
+        $parameters = [];
+
+        if( is_numeric($id) ) {
+            $where[] = '( d.id = :doodleId OR d.ipTree LIKE :doodleIdBegin OR d.ipTree LIKE :doodleIdInner OR d.ipTree LIKE :doodleIdEnd)';
+            $parameters['doodleId'] = $id;
+            $parameters['doodleIdBegin'] = $id . '.%';
+            $parameters['doodleIdInner'] = '%.' . $id . '.%';
+            $parameters['doodleIdEnd'] = '%.' . $id;
+        }
 
         $doodles = $doodleRepository->getDoodles([
             'order' => [['d.' . $order, 'DESC']],
             'maxResults' => 50,
+            'where' => $where,
+            'parameters' => $parameters,
         ]);
 
         foreach($doodles AS $doodles_key => $doodle) {
@@ -192,6 +210,7 @@ class DoodleController extends AbstractController
         return $this->render('doodle/gallery.html.twig', [
             'controller_name' => 'DoodleController',
             'doodles' => $doodles,
+            'id' => $id,
         ]);
     }
 

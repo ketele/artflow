@@ -6,12 +6,12 @@
         {{ 'Order by'|trans }}
         <ul class="nav flex-column">
             <li class="nav-item">
-                <a class="nav-link {% if app.request.get('order') == 'popularity' %}active{% endif %}" href="{{ path('doodle_gallery', {order: 'popularity'}) }}">
+                <a class="nav-link {% if app.request.get('order') == 'popularity' %}active{% endif %}" href="{{ path('doodle_gallery', {order: 'popularity',id : id}) }}">
                     {{ 'Popularity'|trans }}
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {% if app.request.get('order') == 'createdAt' %}active{% endif %}" href="{{ path('doodle_gallery', {order: 'createdAt'}) }}">
+                <a class="nav-link {% if app.request.get('order') == 'createdAt' %}active{% endif %}" href="{{ path('doodle_gallery', {order: 'createdAt',id : id}) }}">
                     {{ 'Add date'|trans }}
                 </a>
             </li>
