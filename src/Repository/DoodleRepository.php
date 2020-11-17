@@ -73,7 +73,7 @@ class DoodleRepository extends ServiceEntityRepository
         $queryBuilder = $this->createQueryBuilder('d');
 
         $opt = [
-            'select' => 'd', //, ' . $queryBuilder->expr()->in('d.id', [30] ),
+            'select' => 'd',
             'where' => ['d.status = ' . DoodleStatus::STATUS_PUBLISHED],
             'parameters' => [],
             'order' => [['d.popularity', 'DESC']],
@@ -95,16 +95,12 @@ class DoodleRepository extends ServiceEntityRepository
             foreach( $parameters AS $p_key => $p )
                 $queryBuilder->setParameter($p_key, $p);
 
-        //$queryBuilder->andWhere('REGEXP(d.ip_tree, :regexp) = true')
-        //    ->setParameter('regexp', '[[:digit:]]{3}');
-
         if( !empty($order) )
             foreach( $order AS $o )
                 $queryBuilder->orderBy($o[0], $o[1]);
 
             $queryBuilder->setMaxResults($maxResults);
         $query =    $queryBuilder->getQuery();
-        //$query =    $queryBuilder->getDQL();
 
         return $query->getResult();
     }

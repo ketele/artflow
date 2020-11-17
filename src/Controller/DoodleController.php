@@ -138,7 +138,7 @@ class DoodleController extends AbstractController
 
         if(count($doodles) < $otherDoodlesCount) {
             $doodles2 = $doodleRepository->getDoodles([
-                'select' => 'd, DATE_DIFF( d.createdAt, :parentCreatedAt ) AS HIDDEN score',
+                'select' => 'd, ABS(DATE_DIFF( d.createdAt, :parentCreatedAt )) AS HIDDEN score',
                 'where' => [
                     'd.id NOT IN(:doodles)',
                     'd.status = 1',
