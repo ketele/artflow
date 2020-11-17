@@ -154,8 +154,8 @@ class DoodleController extends AbstractController
             $doodles = array_merge($doodles, $doodles2);
         }
 
-        foreach($doodles AS $doodles_key => $doodle) {
-            $doodle->setUrl($glide->generateUrl($doodleFolder . $doodle->getId(), $doodle->getFileName()));
+        foreach($doodles AS $doodles_key => $d) {
+            $d->setUrl($glide->generateUrl($doodleFolder . $d->getId(), $d->getFileName()));
         }
 
         return $this->render('doodle/view.html.twig', [
