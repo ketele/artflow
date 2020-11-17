@@ -189,11 +189,14 @@ class DoodleController extends AbstractController
         $parameters = [];
 
         if( is_numeric($id) ) {
+            $rootDoodle = $doodleRepository->findOne($id);
+            $ipTree = $rootDoodle->getIpTree();
+            $rootId = explode('.', $ipTree)[0];
             $where[] = '( d.id = :doodleId OR d.ipTree LIKE :doodleIdBegin OR d.ipTree LIKE :doodleIdInner OR d.ipTree LIKE :doodleIdEnd)';
-            $parameters['doodleId'] = $id;
-            $parameters['doodleIdBegin'] = $id . '.%';
-            $parameters['doodleIdInner'] = '%.' . $id . '.%';
-            $parameters['doodleIdEnd'] = '%.' . $id;
+            $parameters['doodleId'] = $rootId;
+            $parameters['doodleIdBegin'] = $rootId . '.%';
+            $parameters['doodleIdInner'] = '%.' . $rootId . '.%';
+            $parameters['doodleIdEnd'] = '%.' . $rootId;
         }
 
         $doodles = $doodleRepository->getDoodles([
@@ -203,8 +206,8 @@ class DoodleController extends AbstractController
             'parameters' => $parameters,
         ]);
 
-        foreach($doodles AS $doodles_key => $doodle) {
-            $doodle->setUrl($glide->generateUrl($doodleFolder . $doodle->getId(), $doodle->getFileName()));
+        foreach($doodles AS $doodles_key => $d) {
+            $d->setUrl($glide->generateUrl($doodleFolder . $d->getId(), $d->getFileName()));
         }
 
         return $this->render('doodle/gallery.html.twig', [
