@@ -185,7 +185,7 @@ class DoodleController extends AbstractController
     public function gallery(string $order, ?int $id, DoodleRepository $doodleRepository, string $doodleFolder){
         $glide = new Glide();
 
-        $where = [];
+        $where = ['d.status = ' . DoodleStatus::STATUS_PUBLISHED];
         $parameters = [];
 
         if( is_numeric($id) ) {
