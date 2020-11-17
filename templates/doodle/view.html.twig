@@ -55,7 +55,9 @@
             </dl>
             <div class="row">
                 <div class="col-sm">
+                    {% if id != 2 %}
                     <a href="{{ path('doodle', {id : id}) }}" class="btn btn-secondary">{{ 'Use doodle'|trans }}</a>
+                    {% endif %}
                 </div>
             </div>
         </div>
