@@ -33,6 +33,7 @@ export class Doodle {
      */
 
     generateNodes( angleMax = 2 * Math.PI ){
+        this.resetCurves();
         let x, y;
         let startX = this.centerX + Utils.getRandomInt(-this.radius,this.radius), startY = this.centerY + Utils.getRandomInt(-this.radius,this.radius);
         let newX = startX, newY = startY;
@@ -218,14 +219,13 @@ export class Doodle {
             this.length++;
         }
 
-        while( this.curves.length < 1 )
+        this.length = this.curves.length;
+        //this.updateCoordinates();
+
+        if( this.curves.length < 3 )
         {
-            //console.log('generateSymmetricalNodes');
             this.generateSymmetricalNodes();
         }
-
-        this.length = this.curves.length;
-        this.updateCoordinates();
     }
 
     generateUnbalancedNodes(){
@@ -245,8 +245,15 @@ export class Doodle {
     }
 
     updateCoordinates(ctx){
-        for(var i = 0; i < this.length; i++)
-            this.curves[i].checkLineIntersection( this.curves[ (i + this.length - 1) % this.length ] );
+        for(var i = 0; i < this.curves.length; i++)
+            this.curves[i].checkLineIntersection( this.curves[ (i + this.curves.length - 1) % this.curves.length ] );
+    }
+
+    resetCurves(){
+        //this.curves = [];
+        this.angle = Utils.getRandomFloat( this.angleMin, this.angleMax );
+        this.curves.splice(0,this.curves.length);
+        this.length = 0;
     }
 
     drawInfo(ctx){
