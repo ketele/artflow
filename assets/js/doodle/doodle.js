@@ -253,14 +253,14 @@ export class Doodle {
         ctx.beginPath();
         ctx.moveTo( this.curves[ this.length - 1 ].x, this.curves[ this.length - 1 ].y );
         for(var i = 0; i < this.length; i++){
-            //ctx.lineTo(this.curves[i].cp1X,this.curves[i].cp1Y);
-            //ctx.lineTo(this.curves[i].cp2X,this.curves[i].cp2Y);
+            ctx.lineTo(this.curves[i].cp1X,this.curves[i].cp1Y);
+            ctx.lineTo(this.curves[i].cp2X,this.curves[i].cp2Y);
             ctx.lineTo(this.curves[i].x,this.curves[i].y);
             ctx.fillStyle = "#8899ff";
             ctx.font = "15px Arial";
-            /*ctx.fillText( "cp1: " + i + 1 + ". ("+Math.round(this.curves[i].cp1X)+","+Math.round(this.curves[i].cp1Y)+")",this.curves[i].cp1X,this.curves[i].cp1Y);
+            ctx.fillText( "cp1: " + i + 1 + ". ("+Math.round(this.curves[i].cp1X)+","+Math.round(this.curves[i].cp1Y)+")",this.curves[i].cp1X,this.curves[i].cp1Y);
             ctx.fillStyle = "#00cc22";
-            ctx.fillText( "cp2: " + i + 2 + ". ("+Math.round(this.curves[i].cp2X)+","+Math.round(this.curves[i].cp2Y)+")",this.curves[i].cp2X,this.curves[i].cp2Y);*/
+            ctx.fillText( "cp2: " + i + 2 + ". ("+Math.round(this.curves[i].cp2X)+","+Math.round(this.curves[i].cp2Y)+")",this.curves[i].cp2X,this.curves[i].cp2Y);
             ctx.fillStyle = "#ff8899";
             ctx.fillText(
                 "xy: " + parseInt(i)
