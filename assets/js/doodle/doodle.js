@@ -84,30 +84,148 @@ export class Doodle {
         this.generateNodes( Math.PI );
         this.generateCoordinates();
         this.updateCoordinates();
-        let length = this.length;
-        /*let y;
-        let cp1Y;
-        let cp2Y;
 
-        for(let i = 0; i < length; i++){
-            y = this.centerY -( this.curves[i].y - this.centerY );
-            cp1Y = this.centerY -( this.curves[i].cp1Y - this.centerY );
-            cp2Y = this.centerY -( this.curves[i].cp2Y - this.centerY );
-            this.curves.push( new Curve( this.curves[i].cp1X, cp1Y, this.curves[i].cp2X, cp2Y, this.curves[i].x, y, this.curves[i].angle ) );
-            this.length++;
-        }/**/
-
-        let x;
         let cp1X;
+        let cp1Y;
         let cp2X;
+        let cp2Y;
+        let x;
+        let y;
+        let angle;
 
-        for(let i = 0; i < length; i++){
-            x = this.centerX -( this.curves[i].x - this.centerX );
-            cp1X = this.centerX -( this.curves[i].cp1X - this.centerX );
-            cp2X = this.centerX -( this.curves[i].cp2X - this.centerX );
-            this.curves.push( new Curve( cp1X, this.curves[i].cp1Y, cp2X, this.curves[i].cp2Y, x, this.curves[i].y, this.curves[i].angle ) );
+        let tempCp1X;
+        let tempCp1Y;
+        let tempCp2X;
+        let tempCp2Y;
+
+        //console.log([...this.curves]);
+
+        let addedNodes = false;
+        let isFirstRound = true;
+
+        let i = 0;
+        while( i < this.curves.length)
+        {
+            if( typeof this.curves[i] === "undefined" || this.curves[i].x <= this.centerX || !isFirstRound )
+            {
+                if( addedNodes && typeof this.curves[i] !== "undefined" ) {
+                    isFirstRound = false;
+
+                    tempCp1X = this.curves[i].cp1X;
+                    tempCp1Y = this.curves[i].cp1Y;
+                    tempCp2X = this.centerX - (this.curves[i].cp1X - this.centerX);
+                    tempCp2Y = tempCp1Y;
+                    //tempCp2X = this.curves[i].cp1X;
+                    //tempCp2Y = this.curves[i].cp1Y;
+
+                    //console.log(
+                    //    "isFirstRound: " +
+                    //    tempCp1X + ", " +
+                    //    tempCp1Y + ", " +
+                    //    tempCp2X + ", " +
+                    //    tempCp2Y + ", "
+                    //);
+                }
+
+                //console.log(
+                //    "delete: " +
+                //    ( ( typeof this.curves[i] !== "undefined") ? this.curves[i].cp1X + ", " +
+                //        this.curves[i].cp1Y + ", " +
+                //        this.curves[i].cp2X + ", " +
+                //        this.curves[i].cp2Y + ", " +
+                //        this.curves[i].x + ", " +
+                //        this.curves[i].y + ", "
+                //        : '' )
+                //);
+
+                this.curves.splice(i, 1);
+                this.length--;
+            } else {
+                if( addedNodes === false ){
+                    this.curves[i].cp1X = this.centerX - (this.curves[i].cp2X - this.centerX);
+                    this.curves[i].cp1Y = this.curves[i].cp2Y;
+                    //this.curves[i].cp2X = this.centerX - (this.curves[i].cp1X - this.centerX);
+                    //this.curves[i].cp2Y = this.curves[i].cp1Y;
+                }
+
+                //console.log(
+                //    "leave: " +
+                //    ( (typeof this.curves[i] !== "undefined") ? this.curves[i].cp1X + ", " +
+                //    this.curves[i].cp1Y + ", " +
+                //    this.curves[i].cp2X + ", " +
+                //    this.curves[i].cp2Y + ", " +
+                //        this.curves[i].x + ", " +
+                //        this.curves[i].y + ", "  : '' )
+                //);
+
+                addedNodes = true;
+                i++;
+            }
+        }
+
+        length = this.curves.length;
+
+        if( isFirstRound && typeof tempCp1X === "undefined" && this.curves.length > 0 ){
+            tempCp1X = this.curves[length - 1].cp1X;
+            tempCp1Y = this.curves[length - 1].cp1Y;
+            tempCp2X = this.centerX - (this.curves[length - 1].cp1X - this.centerX);
+            tempCp2Y = tempCp1Y;
+            //console.log(
+            //    "isFirstRound error: " +
+            //    tempCp1X + ", " +
+            //    tempCp1Y + ", " +
+            //    tempCp2X + ", " +
+            //    tempCp2Y + ", "
+            //);
+        }
+
+        //for(let i = length - 1; i >= 0; i--)
+        for(let i = 0; i < length; i++)
+        {
+            let opposedI = length - i - 1;
+            x = this.centerX - (this.curves[opposedI].x - this.centerX);
+            y = this.curves[opposedI].y;
+            if( i === 0 ) {
+                cp1X = tempCp1X;
+                cp1Y = tempCp1Y;
+                cp2X = tempCp2X;
+                cp2Y = tempCp2Y;
+                //console.log(
+                //    "i === 0: " +
+                //    cp1X + ", " +
+                //    cp1Y + ", " +
+                //    cp2X + ", " +
+                //    cp2Y + ", "
+                //);
+            }else{
+                cp2X = this.centerX - (this.curves[opposedI + 1].cp1X - this.centerX);
+                cp2Y = this.curves[opposedI + 1].cp1Y;
+                cp1X = this.centerX - (this.curves[opposedI + 1].cp2X - this.centerX);
+                cp1Y = this.curves[opposedI + 1].cp2Y;
+                //console.log(
+                //    "else: " +
+                //    cp1X + ", " +
+                //    cp1Y + ", " +
+                //    cp2X + ", " +
+                //    cp2Y + ", "
+                //);
+            }
+            angle = this.curves[opposedI].angle;
+
+            this.curves.push(new Curve(cp1X, cp1Y, cp2X, cp2Y, x, y, angle));
+            //this.curves.push(new Curve(cp1X, this.curves[i].cp1Y, cp2X, this.curves[i].cp2Y, x, this.curves[i].y, this.curves[i].angle));
+            //unshift
             this.length++;
-        }/**/
+        }
+
+        while( this.curves.length < 1 )
+        {
+            //console.log('generateSymmetricalNodes');
+            this.generateSymmetricalNodes();
+        }
+
+        this.length = this.curves.length;
+        this.updateCoordinates();
     }
 
     generateUnbalancedNodes(){
@@ -135,15 +253,22 @@ export class Doodle {
         ctx.beginPath();
         ctx.moveTo( this.curves[ this.length - 1 ].x, this.curves[ this.length - 1 ].y );
         for(var i = 0; i < this.length; i++){
-            ctx.lineTo(this.curves[i].cp1X,this.curves[i].cp1Y);
-            ctx.lineTo(this.curves[i].cp2X,this.curves[i].cp2Y);
+            //ctx.lineTo(this.curves[i].cp1X,this.curves[i].cp1Y);
+            //ctx.lineTo(this.curves[i].cp2X,this.curves[i].cp2Y);
             ctx.lineTo(this.curves[i].x,this.curves[i].y);
             ctx.fillStyle = "#8899ff";
-            ctx.fillText( i + 1 + ". ("+Math.round(this.curves[i].cp1X)+","+Math.round(this.curves[i].cp1Y)+")",this.curves[i].cp1X,this.curves[i].cp1Y);
+            ctx.font = "15px Arial";
+            /*ctx.fillText( "cp1: " + i + 1 + ". ("+Math.round(this.curves[i].cp1X)+","+Math.round(this.curves[i].cp1Y)+")",this.curves[i].cp1X,this.curves[i].cp1Y);
             ctx.fillStyle = "#00cc22";
-            ctx.fillText( i + 2 + ". ("+Math.round(this.curves[i].cp2X)+","+Math.round(this.curves[i].cp2Y)+")",this.curves[i].cp2X,this.curves[i].cp2Y);
+            ctx.fillText( "cp2: " + i + 2 + ". ("+Math.round(this.curves[i].cp2X)+","+Math.round(this.curves[i].cp2Y)+")",this.curves[i].cp2X,this.curves[i].cp2Y);*/
             ctx.fillStyle = "#ff8899";
-            ctx.fillText( i + 3 + ". ("+Math.round(this.curves[i].x)+","+Math.round(this.curves[i].y)+")",this.curves[i].x,this.curves[i].y);
+            ctx.fillText(
+                "xy: " + parseInt(i)
+                + ". ("+Math.round(this.curves[i].x)
+                + ","
+                + Math.round(this.curves[i].y)
+                + ")",this.curves[i].x, ((this.curves[i].x <= this.centerX)?this.curves[i].y + 10 : this.curves[i].y)
+            );
         }
         ctx.strokeStyle = '#8899ff';
         ctx.stroke();
@@ -172,15 +297,36 @@ export class Doodle {
 
         ctx.fillStyle = "#bbd2d2";
         ctx.strokeStyle = "#bbd2d2";
-        ctx.mozFillRule = 'nonzero';
-        ctx.fillRule = 'nonzero';
+        //ctx.mozFillRule = 'nonzero';
+        //ctx.fillRule = 'nonzero';
         ctx.stroke();
         ctx.fill('nonzero');
+        //ctx.fill('evenodd');
+
+        //this.drawInfo(ctx);
+
+        //console.log({
+        //    'length': this.length,
+        //    'centerX': this.centerX,
+        //    'centerY': this.centerY,
+        //    'curves': this.curves
+        //});
     }
 
     prinCurvesParam(){
-        for(let i=0; i < this.length; i++){
-            console.log( 'test: ' + ' cp1x:' + this.curves[i].cp1X + ', cp1y:' + this.curves[i].cp1Y + ' cp2x:' + this.curves[i].cp2X + ', cp2y:' + this.curves[i].cp2Y + ',  x:' + this.curves[i].x + ', y:' + this.curves[i].y + ', angle: ' + this.curves[i].angle);
+        for(let i=0; i < this.length; i++)
+        {
+            console.log(
+                'test: '
+                + ' cp1x:' + this.curves[i].cp1X
+                + ', cp1y:' + this.curves[i].cp1Y
+                + ' cp2x:' + this.curves[i].cp2X
+                + ', cp2y:' + this.curves[i].cp2Y
+                + ',  x:' + this.curves[i].x
+                + ', y:' + this.curves[i].y
+                + ', angle: '
+                + this.curves[i].angle
+            );
         }
     }
 

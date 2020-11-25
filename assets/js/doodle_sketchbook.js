@@ -177,6 +177,13 @@ window.addEventListener('load', e => {
         doodle_sketchbook.loadDoodle("unbalancedNodes");
     } );
 
+    document.getElementById('refresh-symmetrical-doodle').addEventListener('click', e => {
+        document.getElementById('coordinates').value = "";
+        document.getElementById('id').value = "";
+        doodle_sketchbook.doodle.clearCanvas(doodle_sketchbook.ctx);
+        doodle_sketchbook.loadDoodle("symmetricalNodes");
+    } );
+
     document.getElementById('clear-sketchbook').addEventListener('click', e => {
        doodle_sketchbook.workspace.clearCanvas();
     } );
