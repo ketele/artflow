@@ -35,7 +35,7 @@ class TempFilesController extends AbstractController
             $month = date('m');
         }
 
-        $finder->files()->name(['*.png', '*.jpg', '*.jpeg'])->sortByModifiedTime()->reverseSorting()->in($tempPath);
+        $finder->files()->name(['*.png', '*.jpg', '*.jpeg'])->sortByModifiedTime()->in($tempPath);
 
         if ( $finder->hasResults() ) {
             $iterator = $finder->getIterator();
