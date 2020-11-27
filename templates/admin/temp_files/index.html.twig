@@ -7,7 +7,8 @@
             <ul class="nav flex-column">
                 {% for month in months %}
                 <li class="nav-item">
-                    <a class="nav-link {% if app.request.get('year') == 'popularity' %}active{% endif %}" href="{{ path('temp_files', {year: month|date("Y"),month : month|date("m")}) }}">
+                    <a class="nav-link {% if app.request.get('year') == month|date("Y") and app.request.get('month') == month|date("m") %}active{% endif %}"
+                       href="{{ path('temp_files', {year: month|date("Y"),month : month|date("m")}) }}">
                         {{ month }}
                     </a>
                 </li>
@@ -51,7 +52,7 @@
                                 </p>
                                 <p>
                                     <a href="#" class="">
-                                        {{ file.addDate|date("Y-m-d") }}
+                                        {{ file.modifiedDate|date("Y-m-d") }}
                                     </a>
                                 </p>
                             </div>

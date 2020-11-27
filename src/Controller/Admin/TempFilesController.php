@@ -34,13 +34,16 @@ class TempFilesController extends AbstractController
             $month = date('m');
         }
 
-        $finder->files()->name(['*.png', '*.jpg', '*.jpeg'])->sortByModifiedTime()->in($tempPath);
+        $finder->files()
+            ->name(['*.png', '*.jpg', '*.jpeg'])
+            ->sortByModifiedTime()
+            ->in($tempPath);
 
         if ( $finder->hasResults() ) {
             $iterator = $finder->getIterator();
             $iterator->rewind();
             $firstFile = $iterator->current();
-            $firstFileDate = date('Y-m-d', $firstFile->getATime());
+            $firstFileDate = date('Y-m-d', $firstFile->getMTime());
         }
 
         $finder = new Finder();
@@ -65,11 +68,13 @@ class TempFilesController extends AbstractController
             foreach( $finder as $file ) {
                 $relativePath = $file->getRelativePath();
                 $addDate = $file->getATime();
+                $modifiedDate = $file->getMTime();
                 $files[] = [
                     'url' => $glide->generateUrl($relativePath, $file->getFileName()),
                     'relativePath' => $relativePath,
                     'firstFileDate' => $firstFileDate,
                     'addDate' => $addDate,
+                    'modifiedDate' => $modifiedDate,
                 ];
             }
         }
