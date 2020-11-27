@@ -18,7 +18,6 @@ class TempFilesController extends AbstractController
     public function index(Request $request): Response
     {
         $glide = new Glide();
-        $filesystem = new Filesystem();
         $finder = new Finder();
 
         $files = [];
@@ -54,7 +53,13 @@ class TempFilesController extends AbstractController
             $tempDate = date('Y-m-d', strtotime(date('Y-m-t', strtotime($tempDate)) . ' +1 DAY'));
         }
 
-        $finder->files()->date('>= ' . $year . '-' . $month . '-01')->date('<= ' . date('Y-m-t', strtotime($year . '-' . $month . '-30')))->name(['*.png', '*.jpg', '*.jpeg'])->sortByModifiedTime()->in($tempPath);
+        $finder->files()
+            ->date('>= ' . $year . '-' . $month . '-01')
+            ->date('<= ' . date('Y-m-t', strtotime($year . '-' . $month . '-30')))
+            ->name(['*.png', '*.jpg', '*.jpeg'])
+            ->sortByModifiedTime()
+            ->reverseSorting()
+            ->in($tempPath);
 
         if ( $finder->hasResults() ) {
             foreach( $finder as $file ) {
