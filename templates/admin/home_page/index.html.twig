@@ -1,0 +1,12 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-sm">
+            <h1>{{ 'welcome_text'|trans({page_name: page_name}) }}</h1>
+        </div>
+    </div>
+    <hr/>
+</div>
+{% endblock %}

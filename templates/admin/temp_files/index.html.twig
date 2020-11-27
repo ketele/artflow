@@ -1,0 +1,74 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block leftmenu %}
+    <ul class="nav flex-column">
+        <li class="nav-item">
+            {{ 'Order by'|trans }}
+            <ul class="nav flex-column">
+                {% for month in months %}
+                <li class="nav-item">
+                    <a class="nav-link {% if app.request.get('year') == 'popularity' %}active{% endif %}" href="{{ path('temp_files', {year: month|date("Y"),month : month|date("m")}) }}">
+                        {{ month }}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </li>
+    </ul>
+{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <div class="row mt-4">
+            <div class="col-sm">
+                <h6>{{ 'Gallery'|trans|upper }}</h6>
+            </div>
+        </div>
+        <div class="row mt-4 mb-4">
+            <div class="col-sm">
+                <div class="card-deck">
+                    {% for file in files %}
+                    {% if (loop.index - 1) % 3 == 0 %}
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4 mb-4">
+            <div class="col-sm">
+                <div class="card-deck">
+                    {% endif %}
+                    <div class="card image-card">
+                        <a href="#" class="">
+                            <img src="/temp_img/doodle{{ file.url }}" class="card-img-top" alt="{{ file.url }}">
+                        </a>
+                        <div class="image-card-info">
+                            <div class="opacity-0 image-card-overlay">
+                            </div>
+                            <div class="opacity-0 image-card-description">
+                                <p>
+                                    <a href="#" class="">
+                                        {{ file.url }}
+                                    </a>
+                                </p>
+                                <p>
+                                    <a href="#" class="">
+                                        {{ file.addDate|date("Y-m-d") }}
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% if (files|length) % 3 == 1 %}
+                        <div class="card">
+                        </div>
+                        <div class="card">
+                        </div>
+                    {% elseif (files|length) % 3 == 2 %}
+                        <div class="card">
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

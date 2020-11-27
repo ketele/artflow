@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en" class="h-100">
+    <head>
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-SXKFF6NS26"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-SXKFF6NS26');
+        </script>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <title>{% block title %}{{ controller_name|trans }} &#x2027; {{ page_name }}{% endblock %}</title>
+
+        {% block stylesheets %}
+            <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,500,500i,600,600i&display=swap" rel="stylesheet" />
+            {{ encore_entry_link_tags('app') }}
+        {% endblock %}
+    </head>
+    <body class="d-flex flex-column h-100">
+        <header class="header">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light bg-white border-bottom shadow-sm">
+                <h5 class="my-0 mr-md-auto font-weight-normal">
+                    &#9999; <a href="{{ path('home') }}" class="navbar-brand">ART<strong>FLOW</strong></a>
+                </h5>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item {% if app.request.get('_route') == 'admin' %}active{% endif %}">
+                            <a class="nav-link" href="{{ path('admin') }}">{{ 'Home'|trans }} <span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item {% if app.request.get('_route') == 'temp_files' %}active{% endif %}">
+                            <a class="nav-link" href="{{ path('temp_files') }}">{{ 'Temp files'|trans }}</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+
+        <div class="container-fluid">
+            <div class="row flex-xl-nowrap">
+                <div class="col-md-2 col-xl-2 bd-sidebar pt-5">
+                        {% block leftmenu %}{% endblock %}
+                </div>
+                <nav class="d-none d-xl-block col-xl-2 bd-toc" aria-label="Secondary navigation">
+                    {% block rightmenu %}{% endblock %}
+                </nav>
+                <main role="main" class="col-md-8 col-xl-8">
+                    {% block body %}{% endblock %}
+                </main>
+            </div>
+        </div>
+
+        <footer class="footer mt-auto py-3">
+            <div class="container">
+                <a href="{{ path('home') }}">
+                    <span class="text-muted">ART<strong>FLOW</strong></span>
+                </a>
+            </div>
+        </footer>
+
+        <div class="loading-overlay">
+            <div class="d-flex justify-content-center">
+                <div class="spinner-border text-light" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+        </div>
+
+        {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
+        {% endblock %}
+        {% block pagejavascripts %}
+        {% endblock %}
+    </body>
+</html>
