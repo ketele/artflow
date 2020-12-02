@@ -1,4 +1,6 @@
 var Encore = require('@symfony/webpack-encore');
+// this loads jquery, but does *not* set a global $ or jQuery variable
+const $ = require('jquery');
 
 // Manually configure the runtime environment if not already configured yet by the "encore" command.
 // It's useful when you use tools that rely on webpack.config.js file.
@@ -25,6 +27,8 @@ Encore
      */
     .addEntry('app', './assets/js/app.js')
     .addEntry('doodle_sketchbook', './assets/js/doodle_sketchbook.js')
+    .addEntry('temp_files', './assets/js/temp_files.js')
+    //.addEntry('main', './assets/main.ts')
     //.addEntry('page2', './assets/js/page2.js')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
@@ -58,13 +62,14 @@ Encore
 
     // uncomment if you use TypeScript
     //.enableTypeScriptLoader()
+    //.enableForkedTypeScriptTypesChecking()
 
     // uncomment to get integrity="..." attributes on your script & link tags
     // requires WebpackEncoreBundle 1.4 or higher
     //.enableIntegrityHashes(Encore.isProduction())
 
     // uncomment if you're having problems with a jQuery plugin
-    //.autoProvidejQuery()
+    .autoProvidejQuery()
 
     // uncomment if you use API Platform Admin (composer req api-admin)
     //.enableReactPreset()

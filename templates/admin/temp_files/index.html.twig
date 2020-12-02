@@ -5,11 +5,11 @@
         <li class="nav-item">
             {{ 'Month' }}
             <ul class="nav flex-column">
-                {% for month in months %}
+                {% for m_val in months %}
                 <li class="nav-item">
-                    <a class="nav-link {% if app.request.get('year') == month|date("Y") and app.request.get('month') == month|date("m") %}active{% endif %}"
-                       href="{{ path('temp_files', {year: month|date("Y"),month : month|date("m")}) }}">
-                        {{ month }}
+                    <a class="nav-link {% if app.request.get('year') == m_val|date("Y") and app.request.get('month') == m_val|date("m") %}active{% endif %}"
+                       href="{{ path('temp_files', {year: m_val|date("Y"),month : m_val|date("m")}) }}">
+                        {{ m_val|date("Y") }}-{{ m_val|date("m") }}
                     </a>
                 </li>
                 {% endfor %}
@@ -22,7 +22,12 @@
     <div class="container mt-5">
         <div class="row mt-4">
             <div class="col-sm">
-                <h6>{{ 'Gallery'|trans|upper }}</h6>
+                <h6>{{ 'Gallery'|upper }}</h6>
+                <button class="btn btn-danger float-right"
+                   data-toggle="modal"
+                   data-target="#delete-temp-files-modal">
+                    {{ "Delete temp files from" }} {{ year }}-{{ month }}
+                </button>
             </div>
         </div>
         <div class="row mt-4 mb-4">
@@ -72,4 +77,33 @@
             </div>
         </div>
     </div>
+    <!-- Modal -->
+    <div class="modal fade" id="delete-temp-files-modal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="delete-temp-files-modal-title">Delete</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="delete-temp-files-modal-error" class="alert alert-danger d-none" role="alert">
+                        A simple danger alert—check it out!
+                    </div>
+                    Are you sure you want to delete temp files from month {{ year }}-{{ month }}?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <a class="btn btn-primary" id="delete-temp-files" data-year="{{ year }}" data-month="{{ month }}">
+                        Yes
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block pagejavascripts %}
+    {{ encore_entry_script_tags('temp_files') }}
 {% endblock %}
