@@ -116,15 +116,6 @@ class TempFilesController extends AbstractController
             if ( $finder->hasResults() ) {
                 foreach( $finder as $file ) {
                     $relativePath = $file->getRelativePath();
-                    $addDate = $file->getATime();
-                    $modifiedDate = $file->getMTime();
-                    $files[] = [
-                        //'url' => $glide->generateUrl($relativePath, $file->getFileName()),
-                        'relativePath' => $relativePath,
-                        //'firstFileDate' => $firstFileDate,
-                        'addDate' => $addDate,
-                        'modifiedDate' => $modifiedDate,
-                    ];
 
                     $file_path = $tempPath . '/' . $relativePath . '/' . $file->getFileName();
                     $filesystem->remove($file_path);
