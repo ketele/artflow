@@ -13,7 +13,6 @@ class TempFile{
 
                 if( response.status === true ){
                     error_element.classList.add('d-none');
-                    $('#delete-temp-files-modal').modal('hide');
                     window.location.reload(true);
                 } else {
                     error_element.innerHTML = "Something went wrong";
@@ -24,7 +23,6 @@ class TempFile{
         };
         xhr.open("GET", "/admin/temp_files_delete_ajax?year=" + year + "&month=" +month , false);
         xhr.send(null);
-        /**/
     }
 }
 
