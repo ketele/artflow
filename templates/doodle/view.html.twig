@@ -4,35 +4,33 @@
 <div class="container mt-5">
     <div class="row">
         <div class="col-sm">
-            <img src="/img/doodle{{ file_url }}">
-            <div class="row">
-                <div class="col-sm mt-4">
-                    <div class="card-deck">
+            <img class="" src="/img/doodle{{ file_url }}">
+            <div class="row row-cols-1 row-cols-md-3 g-4 mt-4 mb-4">
                         {% for doodle in doodles %}
-                        <div class="card image-card">
-                            <a href="{{ path('doodle_view', {id: doodle.id}) }}" class="">
-                                <img src="/img/doodle{{ doodle.url }}" class="card-img-top" alt="{{ doodle.userName }}">
-                            </a>
-                            <div class="image-card-info">
-                                <div class="opacity-0 image-card-overlay">
-                                </div>
-                                <div class="opacity-0 image-card-description">
-                                    <p>
-                                        <a href="{{ path('doodle_view', {id: doodle.id}) }}" class="">
-                                            {{ doodle.description|slice(0, 200) }}
-                                        </a>
-                                    </p>
-                                    <p>
-                                        <a href="{{ path('doodle_view', {id: doodle.id}) }}" class="">
-                                            <b>{{ doodle.userName }}</b>
-                                        </a>
-                                    </p>
+                        <div class="col">
+                            <div class="card image-card h-100">
+                                <a href="{{ path('doodle_view', {id: doodle.id}) }}" class="">
+                                    <img src="/img/doodle{{ doodle.url }}" class="card-img-top" alt="{{ doodle.userName }}">
+                                </a>
+                                <div class="image-card-info">
+                                    <div class="opacity-0 image-card-overlay">
+                                    </div>
+                                    <div class="opacity-0 image-card-description">
+                                        <p>
+                                            <a href="{{ path('doodle_view', {id: doodle.id}) }}" class="">
+                                                {{ doodle.description|slice(0, 200) }}
+                                            </a>
+                                        </p>
+                                        <p>
+                                            <a href="{{ path('doodle_view', {id: doodle.id}) }}" class="">
+                                                <b>{{ doodle.userName }}</b>
+                                            </a>
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         {% endfor %}
-                    </div>
-                </div>
             </div>
         </div>
         <div class="col-sm">

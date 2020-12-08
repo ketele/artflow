@@ -1,0 +1,7 @@
+.range-artflow::-moz-range-thumb{
+  background-color: $artflow-dark-color;
+}
+
+input.range-artflow[type=range]::-webkit-slider-thumb {
+  background: $artflow-dark-color;
+}

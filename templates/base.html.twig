@@ -22,17 +22,19 @@
     </head>
     <body class="d-flex flex-column h-100">
         <header class="header">
+
             <nav class="navbar navbar-expand-lg navbar-light bg-light bg-white border-bottom shadow-sm">
+                <div class="container-fluid">
                 <h5 class="my-0 mr-md-auto font-weight-normal">
-                    &#9999; <a href="{{ path('home') }}" class="navbar-brand">ART<strong>FLOW</strong></a>
+                    <a href="{{ path('home') }}" class="navbar-brand">ART<strong>FLOW</strong></a>
                 </h5>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item {% if app.request.get('_route') == 'home' %}active{% endif %}">
-                            <a class="nav-link" href="{{ path('home') }}">{{ 'Home'|trans }} <span class="sr-only">(current)</span></a>
+                            <a class="nav-link" href="{{ path('home') }}">{{ 'Home'|trans }} <span class="sr-only"></span></a>
                         </li>
                         <!--li class="nav-item {% if app.request.get('_route') == 'news' %}active{% endif %}">
                             <a class="nav-link" href="{{ path('news') }}">{{ 'News'|trans }}</a>
@@ -44,7 +46,7 @@
                             <a class="nav-link" href="{{ path('doodle_gallery') }}">{{ 'Gallery'|trans }}</a>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 {{ 'Language'|trans }}
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -53,6 +55,7 @@
                             </div>
                         </li>
                     </ul>
+                </div>
                 </div>
             </nav>
         </header>

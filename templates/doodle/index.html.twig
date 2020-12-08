@@ -6,27 +6,24 @@
         <div class="col-sm">
             <input type="hidden" name="id" id="id" value="{{ id }}"/>
             <input type="hidden" name="coordinates" id="coordinates" value="{{ doodle_coordinates_json }}"/>
-            <div class="form-group">
-                <div class="btn-container">
-                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                        <label class="btn btn-secondary active">
-                            <input type="radio" name="tool" id="pencil" checked> {{ 'Pencil'|trans }}
-                        </label>
-                        <label class="btn btn-secondary">
-                            <input type="radio" name="tool" id="eraser"> {{ 'Eraser'|trans }}
-                        </label>
-                    </div>
+            <div class="mb-3">
+                <div class="btn-group" role="group">
+                    <input type="radio" class="btn-check" name="tool" id="pencil" autocomplete="off" checked>
+                    <label class="btn btn-secondary active" for="pencil"> {{ 'Pencil'|trans }}</label>
+
+                    <input type="radio" class="btn-check" name="tool" id="eraser" autocomplete="off">
+                    <label class="btn btn-secondary" for="eraser"> {{ 'Eraser'|trans }}</label>
                 </div>
             </div>
-            <div class="form-group">
-                <label for="opacity">{{ 'Opacity'|trans }}</label>
-                <input type="range" class="custom-range" id="opacity" min="0" max="255" value="255">
+            <div class="mb-3">
+                <label for="opacity" class="form-label">{{ 'Opacity'|trans }}</label>
+                <input type="range" class="form-range range-artflow" id="opacity" min="0" max="255" value="255">
             </div>
-            <div class="form-group">
-                <label for="size">{{ 'Size'|trans }}</label>
-                <input type="range" class="custom-range" id="size" min="1" max="20" value="1">
+            <div class="mb-3">
+                <label for="size" class="form-label">{{ 'Size'|trans }}</label>
+                <input type="range" class="form-range range-artflow" id="size" min="1" max="20" value="1">
             </div>
-            <div class="form-group">
+            <div class="mb-3">
                 <div class="btn-container">
                     <button type="button" class="btn btn-artflow" id="refresh-doodle">{{ 'Refresh Doodle'|trans }}</button>
                     <button type="button" class="btn btn-artflow" id="refresh-symmetrical-doodle">{{ 'Refresh symmetrical Doodle'|trans }}</button>
