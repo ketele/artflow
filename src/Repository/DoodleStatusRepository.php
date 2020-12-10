@@ -19,10 +19,10 @@ class DoodleStatusRepository extends ServiceEntityRepository
         parent::__construct($registry, DoodleStatus::class);
     }
 
-    public function findOneByIdField($value)
+    public function findOne($value)
     {
         return $this->createQueryBuilder('d')
-            ->andWhere('d.exampleField = :val')
+            ->andWhere('d.id = :val')
             ->setParameter('val', $value)
             ->getQuery()
             ->getOneOrNullResult()

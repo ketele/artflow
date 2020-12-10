@@ -1,4 +1,19 @@
-<div id="delete-temp-files-modal-error" class="alert alert-danger d-none" role="alert">
-    A simple danger alert—check it out!
+<div id="change-doodle-status-modal-error" class="alert alert-danger d-none" role="alert">
+    {% if error is not empty  %}
+            <ol>
+                {% for e in error %}
+                    <li>{{ e }}</li>
+                {% endfor %}
+            </ol>
+    {% endif %}
 </div>
-Are you sure ajax?
+<form id="change-doodle-status-modal-form">
+    <input type="hidden" name="id" value="{{ doodle.id }}"/>
+    <div class="mb-3">
+        <select name="statusId" class="form-select" aria-label="Default select example">
+            {% for status in doodleStatuses %}
+            <option value="{{ status.id }}" {% if status.id == doodle.status.id %}selected{% endif %}>{{ status.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+</form>

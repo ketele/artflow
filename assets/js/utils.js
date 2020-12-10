@@ -31,7 +31,7 @@ export class Utils {
 
     static hideLoadingOverlay(){
         let body = document.body;
-        body.classList.add("is-loading-overlay-visible");
+        body.classList.remove("is-loading-overlay-visible");
     }
 
     static iOS(){
