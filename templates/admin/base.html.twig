@@ -31,7 +31,7 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav mr-auto">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item {% if app.request.get('_route') == 'admin' %}active{% endif %}">
                             <a class="nav-link" href="{{ path('admin') }}">{{ 'Home' }} <span class="sr-only"></span></a>
                         </li>
@@ -42,6 +42,21 @@
                             <a class="nav-link" href="{{ path('temp_files') }}">{{ 'Temp files' }}</a>
                         </li>
                     </ul>
+                    <div class="d-flex">
+                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                            <span class="navbar-text">
+                                    {{ app.user.username }}
+                                </span>
+                            <div class="btn-group" role="group">
+                                <a href="{{ path('app_logout') }}" type="button" class="btn">{{ 'Logout'|trans }}</a>
+                            </div>
+                        {% else %}
+                            <div class="btn-group" role="group">
+                                <a href="{{ path('app_login') }}" type="button" class="btn">{{ 'Login'|trans }}</a>
+                                <a href="{{ path('app_register') }}" type="button" class="btn">{{ 'Registration'|trans }}</a>
+                            </div>
+                        {% endif %}
+                    </div>
                 </div>
                 </div>
             </nav>

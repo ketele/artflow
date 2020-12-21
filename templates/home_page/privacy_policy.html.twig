@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-sm">
+                <p><b>{{ 'Privacy policy'|trans|upper }}</b></p>
+                <ol>
+                    <li>
+                        <p><strong>{{ 'General provisions'|trans }}</strong></p>
+                        <p>
+                            {{ 'general.provisions.1'|trans({'{violations_mail}': violations_mail}) }}
+                        </p>
+                    </li>
+                    <li>
+                        <p><strong>{{ 'Purpose and scope of data collection'|trans }}</strong></p>
+                        <p>
+                            <ol>
+                                <li>{{ 'purpose.and.scope.of.data.collection.1'|trans }}</li>
+                                <li>{{ 'purpose.and.scope.of.data.collection.2'|trans }}</li>
+                                <li>{{ 'purpose.and.scope.of.data.collection.4'|trans }}</li>
+                                <li>{{ 'purpose.and.scope.of.data.collection.5'|trans }}</li>
+                                <li>{{ 'purpose.and.scope.of.data.collection.6'|trans }}</li>
+                                <li>{{ 'purpose.and.scope.of.data.collection.7'|trans }}
+                                    <ol class="list-lower-alpha">
+                                        <li>{{ 'purpose.and.scope.of.data.collection.7.a'|trans }}</li>
+                                        <li>{{ 'purpose.and.scope.of.data.collection.7.b'|trans }}</li>
+                                        <li>{{ 'purpose.and.scope.of.data.collection.7.c'|trans }}</li>
+                                    </ol>
+                                </li>
+                            </ol>
+                        </p>
+                    </li>
+                    <li>
+                        <p><strong>{{ 'Right of control, access to own data and their correction'|trans }}</strong></p>
+                        <p>
+                            <ol>
+                                <li>{{ 'right.of.control.access.to.own.data.and.their.correction.1'|trans }}</li>
+                                <li>{{ 'right.of.control.access.to.own.data.and.their.correction.2'|trans({'{violations_mail}': violations_mail}) }}</li>
+                            </ol>
+                        </p>
+                    </li>
+                    <li>
+                        <p><strong>{{ 'Cookies'|trans }}</strong></p>
+                        <p>
+                            <ol>
+                                <li>{{ 'cookies.1'|trans }}</li>
+                                <li>{{ 'cookies.2'|trans }}</li>
+                                <li>{{ 'cookies.3'|trans }}
+                                    <ol class="list-lower-alpha">
+                                        <li>{{ 'cookies.3.1'|trans }}</li>
+                                        <li>{{ 'cookies.3.2'|trans }}</li>
+                                        <li>{{ 'cookies.3.3'|trans }}</li>
+                                    </ol>
+                                </li>
+                                <li>{{ 'cookies.4'|trans }}</li>
+                            </ol>
+                        </p>
+                    </li>
+                    <li>
+                        <p><strong>{{ 'Final provisions'|trans }}</strong></p>
+                        <p>
+                            <ol>
+                                <li>{{ 'final.provisions.1'|trans }}</li>
+                                <li>{{ 'final.provisions.2'|trans }}</li>
+                                <li>{{ 'final.provisions.3'|trans }}</li>
+                                <li>{{ 'final.provisions.4'|trans }}</li>
+                            </ol>
+                        </p>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+{% endblock %}

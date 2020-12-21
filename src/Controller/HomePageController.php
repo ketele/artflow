@@ -65,4 +65,15 @@ class HomePageController extends AbstractController
             'violations_mail' => $_ENV['VIOLATIONS_MAIL'],
         ]);
     }
+
+    /**
+     * @Route("/{_locale<%app.supported_locales%>}/policy/privacy", name="privacy_policy")
+     */
+    public function privacy_policy()
+    {
+        return $this->render('home_page/privacy_policy.html.twig', [
+            'controller_name' => 'HomePageController',
+            'violations_mail' => $_ENV['VIOLATIONS_MAIL'],
+        ]);
+    }
 }

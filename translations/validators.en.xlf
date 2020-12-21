@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" target-language="en" datatype="plaintext" original="file.ext">
+    <header>
+      <tool tool-id="symfony" tool-name="Symfony"/>
+    </header>
+    <body>
+      <trans-unit id="admin.username.exists" resname="admin.username.exists">
+          <source>admin.username.exists</source>
+          <target>There is already an account with this username.</target>
+      </trans-unit>
+      <trans-unit id="dv.C2lt2" resname="admin.email.exists">
+        <source>admin.email.exists</source>
+        <target>There is already an account with this email.</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

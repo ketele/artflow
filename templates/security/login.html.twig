@@ -14,6 +14,7 @@
         </div>
     {% endif %}
 
+    <input type="hidden" value="{{ path('home') }}" name="_target_path">
     <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
     <label for="inputUsername">Username</label>
     <input type="text" value="{{ last_username }}" name="username" id="inputUsername" class="form-control" required autofocus>

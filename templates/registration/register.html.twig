@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'Register'|trans }}{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-sm">
+                <h1>{{ 'Registration'|trans }}</h1>
+            </div>
+        </div>
+    </div>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-sm">
+                {% for flashError in app.flashes('verify_email_error') %}
+                    <div class="alert alert-danger" role="alert">{{ flashError }}</div>
+                {% endfor %}
+
+                {{ form_start(registrationForm) }}
+                {{ form_row(registrationForm.username) }}
+                {{ form_row(registrationForm.email) }}
+                {{ form_row(registrationForm.plainPassword) }}
+                {{ form_row(registrationForm.agreePrivacyPolicy) }}
+                {{ form_row(registrationForm.agreeTerms) }}
+
+                <button type="submit" class="btn btn-artflow">{{ 'Register'|trans }}</button>
+                {{ form_end(registrationForm) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

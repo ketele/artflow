@@ -1,0 +1,467 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" target-language="en" datatype="plaintext" original="file.ext">
+    <header>
+      <tool tool-id="symfony" tool-name="Symfony"/>
+    </header>
+    <body>
+      <trans-unit id="OnhpU4i" resname="Home">
+        <source>Home</source>
+        <target>Home</target>
+      </trans-unit>
+      <trans-unit id="jGvAmVN" resname="Blog">
+        <source>Blog</source>
+        <target>Blog</target>
+      </trans-unit>
+      <trans-unit id="q9qRrg4" resname="welcome_text">
+        <source>welcome_text</source>
+        <target>Welcome to page_name - your online art gym</target>
+      </trans-unit>
+      <trans-unit id="aXUvIxO" resname="News">
+        <source>News</source>
+        <target>News</target>
+      </trans-unit>
+      <trans-unit id="pP5lJk7" resname="Language">
+        <source>Language</source>
+        <target>Language</target>
+      </trans-unit>
+      <trans-unit id="mwxjO_G" resname="Doodle">
+        <source>Doodle</source>
+        <target>Doodle</target>
+      </trans-unit>
+      <trans-unit id="o6Arljd" resname="DoodleController">
+        <source>DoodleController</source>
+        <target>Doodle</target>
+      </trans-unit>
+      <trans-unit id="v0Vl2mn" resname="HomePageController">
+        <source>HomePageController</source>
+        <target>Home Page</target>
+      </trans-unit>
+      <trans-unit id="vjQ1pa9" resname="Pencil">
+        <source>Pencil</source>
+        <target>Pencil</target>
+      </trans-unit>
+      <trans-unit id="aG7uPGz" resname="Eraser">
+        <source>Eraser</source>
+        <target>Eraser</target>
+      </trans-unit>
+      <trans-unit id="YGJlLhD" resname="Opacity">
+        <source>Opacity</source>
+        <target>Opacity</target>
+      </trans-unit>
+      <trans-unit id="GvhRkHM" resname="Size">
+        <source>Size</source>
+        <target>Size</target>
+      </trans-unit>
+      <trans-unit id="IDLfAbH" resname="Refresh Doodle">
+        <source>Refresh Doodle</source>
+        <target>Refresh Doodle</target>
+      </trans-unit>
+      <trans-unit id="W6BVnFn" resname="Clear drawing area">
+        <source>Clear drawing area</source>
+        <target>Clear drawing area</target>
+      </trans-unit>
+      <trans-unit id="OsV13M4" resname="Download image">
+        <source>Download image</source>
+        <target>Download image</target>
+      </trans-unit>
+      <trans-unit id="WOkJwPT" resname="Save image">
+        <source>Save image</source>
+        <target>Save image</target>
+      </trans-unit>
+      <trans-unit id="Um4Ah8w" resname="Description">
+        <source>Description</source>
+        <target>Description</target>
+      </trans-unit>
+      <trans-unit id="47ienTP" resname="Username">
+        <source>Username</source>
+        <target>Username</target>
+      </trans-unit>
+      <trans-unit id="uC4R2jv" resname="User name">
+        <source>User name</source>
+        <target>Signature</target>
+      </trans-unit>
+      <trans-unit id="FQn1YfJ" resname="Save">
+        <source>Save</source>
+        <target>Save</target>
+      </trans-unit>
+      <trans-unit id="npX.8JY" resname="I have read and agree to the Submission Policy">
+        <source>I have read and agree to the Submission Policy</source>
+        <target>I have read and agree to the {submission_policy_link}</target>
+      </trans-unit>
+      <trans-unit id="lLa2Flc" resname="I have read and agree to the Terms of Service">
+        <source>I have read and agree to the Terms of Service</source>
+        <target>I have read and agree to the terms_of_service_link</target>
+      </trans-unit>
+      <trans-unit id=".OQlhAl" resname="I have read and agree to the Privacy policy">
+        <source>I have read and agree to the Privacy policy</source>
+        <target>I have read and agree to the privacy_policy_link</target>
+      </trans-unit>
+      <trans-unit id="ukRc.zi" resname="Privacy policy">
+        <source>Privacy policy</source>
+        <target>Privacy policy</target>
+      </trans-unit>
+      <trans-unit id="RZid5J_" resname="Details">
+        <source>Details</source>
+        <target>Details</target>
+      </trans-unit>
+      <trans-unit id="SvpVv3r" resname="Terms of Service">
+        <source>Terms of Service</source>
+        <target>Terms of Service</target>
+      </trans-unit>
+      <trans-unit id=".w2Q8Ah" resname="This doodle was rejected">
+        <source>This doodle was rejected</source>
+        <target>This doodle was rejected</target>
+      </trans-unit>
+      <trans-unit id="2IWJXVH" resname="This doodle has not been accepted yet">
+        <source>This doodle has not been accepted yet</source>
+        <target>This doodle has not been accepted yet</target>
+      </trans-unit>
+      <trans-unit id="A8icIaB" resname="AGREEMENT">
+        <source>AGREEMENT</source>
+        <target>AGREEMENT</target>
+      </trans-unit>
+      <trans-unit id="JAksrSo" resname="TERMS OF SERVICE">
+        <source>TERMS OF SERVICE</source>
+        <target>TERMS OF SERVICE</target>
+      </trans-unit>
+      <trans-unit id="EvZ.hTn" resname="Availability">
+        <source>Availability</source>
+        <target>Availability</target>
+      </trans-unit>
+      <trans-unit id="c0O3qL3" resname="This Service is provided by ArtFlow on an &quot;AS IS&quot; and &quot;AS AVAILABLE&quot; basis and ArtFlow reserves the right to modify, suspend or discontinue the Service, in its sole discretion, at any time and without notice. You agree that ArtFlow is and will not be liable to you for any modification, suspension or discontinuance of the Service.">
+        <source>This Service is provided by ArtFlow on an "AS IS" and "AS AVAILABLE" basis and ArtFlow reserves the right to modify, suspend or discontinue the Service, in its sole discretion, at any time and without notice. You agree that ArtFlow is and will not be liable to you for any modification, suspension or discontinuance of the Service.</source>
+        <target>This Service is provided by ArtFlow on an "AS IS" and "AS AVAILABLE" basis and ArtFlow reserves the right to modify, suspend or discontinue the Service, in its sole discretion, at any time and without notice. You agree that ArtFlow is and will not be liable to you for any modification, suspension or discontinuance of the Service.</target>
+      </trans-unit>
+      <trans-unit id="jfx3q0C" resname="Copyright">
+        <source>Copyright</source>
+        <target>Copyright</target>
+      </trans-unit>
+      <trans-unit id="bfMn7Nr" resname="ArtFlow is, unless otherwise stated, the owner of all copyright and data rights in the Service and its contents. Individuals who have posted works to ArtFlow are either the copyright owners of the component parts of that work or are posting the work under license from a copyright owner or his or her agent or otherwise as permitted by law. You may not reproduce, distribute, publicly display or perform, or prepare derivative works based on any of the Content including any such works without the express, written consent of ArtFlow or the appropriate owner of copyright in such works. ArtFlow does not claim ownership rights in your works or other materials posted by you to ArtFlow (Your Content). You agree not to distribute any part of the Service other than Your Content in any medium other than as permitted in these Terms of Service or by use of functions on the Service provided by us. You agree not to alter or modify any part of the Service unless expressly permitted to do so by us or by use of functions on the Service provided by us.">
+        <source>ArtFlow is, unless otherwise stated, the owner of all copyright and data rights in the Service and its contents. Individuals who have posted works to ArtFlow are either the copyright owners of the component parts of that work or are posting the work under license from a copyright owner or his or her agent or otherwise as permitted by law. You may not reproduce, distribute, publicly display or perform, or prepare derivative works based on any of the Content including any such works without the express, written consent of ArtFlow or the appropriate owner of copyright in such works. ArtFlow does not claim ownership rights in your works or other materials posted by you to ArtFlow (Your Content). You agree not to distribute any part of the Service other than Your Content in any medium other than as permitted in these Terms of Service or by use of functions on the Service provided by us. You agree not to alter or modify any part of the Service unless expressly permitted to do so by us or by use of functions on the Service provided by us.</source>
+        <target>ArtFlow is, unless otherwise stated, the owner of all copyright and data rights in the Service and its contents. Individuals who have posted works to ArtFlow are either the copyright owners of the component parts of that work or are posting the work under license from a copyright owner or his or her agent or otherwise as permitted by law. You may not reproduce, distribute, publicly display or perform, or prepare derivative works based on any of the Content including any such works without the express, written consent of ArtFlow or the appropriate owner of copyright in such works. ArtFlow does not claim ownership rights in your works or other materials posted by you to ArtFlow (Your Content). You agree not to distribute any part of the Service other than Your Content in any medium other than as permitted in these Terms of Service or by use of functions on the Service provided by us. You agree not to alter or modify any part of the Service unless expressly permitted to do so by us or by use of functions on the Service provided by us.</target>
+      </trans-unit>
+      <trans-unit id=".ccg.T_" resname="Reporting Copyright Violations">
+        <source>Reporting Copyright Violations</source>
+        <target>Reporting Copyright Violations</target>
+      </trans-unit>
+      <trans-unit id="Fd8cHlu" resname="reporting_copyright_violations_p1">
+        <source>reporting_copyright_violations_p1</source>
+        <target>ArtFlow respects the intellectual property rights of others and expects users of the Service to do the same. At ArtFlow's discretion and in appropriate circumstances, ArtFlow may remove Your Content submitted to the Site, terminate the accounts of users or prevent access to the Site by users who infringe the intellectual property rights of others. If you believe the copyright in your work or in the work for which you act as an agent has been infringed through this Service, please contact us for notice of claims of copyright infringement, who can be reached through {violations_mail}. You must provide us with substantially the following information, which ArtFlow may then forward to the alleged infringer:</target>
+      </trans-unit>
+      <trans-unit id="mE9X8cI" resname="A physical or electronic signature of a person authorized to act on behalf of the owner of an exclusive right that is allegedly infringed.">
+        <source>A physical or electronic signature of a person authorized to act on behalf of the owner of an exclusive right that is allegedly infringed.</source>
+        <target>A physical or electronic signature of a person authorized to act on behalf of the owner of an exclusive right that is allegedly infringed.</target>
+      </trans-unit>
+      <trans-unit id="qdGMr.8" resname="Identification of the copyrighted work claimed to have been infringed, or, if multiple copyrighted works at a single online site are covered by a single notification, a representative list of such works at that site.">
+        <source>Identification of the copyrighted work claimed to have been infringed, or, if multiple copyrighted works at a single online site are covered by a single notification, a representative list of such works at that site.</source>
+        <target>Identification of the copyrighted work claimed to have been infringed, or, if multiple copyrighted works at a single online site are covered by a single notification, a representative list of such works at that site.</target>
+      </trans-unit>
+      <trans-unit id="E.oYULU" resname="Identification of the material that is claimed to be infringing or to be the subject of infringing activity and that is to be removed or access to which is to be disabled, and information reasonably sufficient to permit the service provider to locate the material.">
+        <source>Identification of the material that is claimed to be infringing or to be the subject of infringing activity and that is to be removed or access to which is to be disabled, and information reasonably sufficient to permit the service provider to locate the material.</source>
+        <target>Identification of the material that is claimed to be infringing or to be the subject of infringing activity and that is to be removed or access to which is to be disabled, and information reasonably sufficient to permit the service provider to locate the material.</target>
+      </trans-unit>
+      <trans-unit id="aaGdOyu" resname="Information reasonably sufficient to permit the service provider to contact the complaining party, such as an address, telephone number, and, if available, an electronic mail address at which the complaining party may be contacted.">
+        <source>Information reasonably sufficient to permit the service provider to contact the complaining party, such as an address, telephone number, and, if available, an electronic mail address at which the complaining party may be contacted.</source>
+        <target>Information reasonably sufficient to permit the service provider to contact the complaining party, such as an address, telephone number, and, if available, an electronic mail address at which the complaining party may be contacted.</target>
+      </trans-unit>
+      <trans-unit id="o7iuXBZ" resname="A statement that the complaining party has a good faith belief that use of the material in the manner complained of is not authorized by the copyright owner.">
+        <source>A statement that the complaining party has a good faith belief that use of the material in the manner complained of is not authorized by the copyright owner.</source>
+        <target>A statement that the complaining party has a good faith belief that use of the material in the manner complained of is not authorized by the copyright owner.</target>
+      </trans-unit>
+      <trans-unit id="zIKcZYI" resname="A statement that the information in the notification is accurate, and under penalty of perjury, that the complaining party is authorized to act on behalf of the owner of an exclusive right that is allegedly infringed.">
+        <source>A statement that the information in the notification is accurate, and under penalty of perjury, that the complaining party is authorized to act on behalf of the owner of an exclusive right that is allegedly infringed.</source>
+        <target>A statement that the information in the notification is accurate, and under penalty of perjury, that the complaining party is authorized to act on behalf of the owner of an exclusive right that is allegedly infringed.</target>
+      </trans-unit>
+      <trans-unit id="AFRjpsS" resname="External Links">
+        <source>External Links</source>
+        <target>External Links</target>
+      </trans-unit>
+      <trans-unit id="Q7tv1c2" resname="ArtFlow may provide links to third-party websites or resources. You acknowledge and agree that ArtFlow is not responsible or liable for: the availability or accuracy of such websites or resources; or the Content, products, or services on or available from such websites or resources. Links to such websites or resources do not imply any endorsement by ArtFlow of such websites or resources or the Content, products, or services available from such websites or resources. You acknowledge sole responsibility for and assume all risk arising from your use of any such websites or resources.">
+        <source>ArtFlow may provide links to third-party websites or resources. You acknowledge and agree that ArtFlow is not responsible or liable for: the availability or accuracy of such websites or resources; or the Content, products, or services on or available from such websites or resources. Links to such websites or resources do not imply any endorsement by ArtFlow of such websites or resources or the Content, products, or services available from such websites or resources. You acknowledge sole responsibility for and assume all risk arising from your use of any such websites or resources.</source>
+        <target>ArtFlow may provide links to third-party websites or resources. You acknowledge and agree that ArtFlow is not responsible or liable for: the availability or accuracy of such websites or resources; or the Content, products, or services on or available from such websites or resources. Links to such websites or resources do not imply any endorsement by ArtFlow of such websites or resources or the Content, products, or services available from such websites or resources. You acknowledge sole responsibility for and assume all risk arising from your use of any such websites or resources.</target>
+      </trans-unit>
+      <trans-unit id="uccO3dE" resname="Third Party Software">
+        <source>Third Party Software</source>
+        <target>Third Party Software</target>
+      </trans-unit>
+      <trans-unit id="OW.65No" resname="As a convenience, we may make third-party software available through the Service. To use the third-party software, you must agree to the terms and conditions imposed by the third party provider and the agreement to use such software will be solely between you and the third party provider. By downloading third party software, you acknowledge and agree that the software is provided on an &quot;AS IS&quot; basis without warranty of any kind. In no event shall ArtFlow be liable for claims or damages of any nature, whether direct or indirect, arising from or related to any third-party software downloaded through the Service.">
+        <source>As a convenience, we may make third-party software available through the Service. To use the third-party software, you must agree to the terms and conditions imposed by the third party provider and the agreement to use such software will be solely between you and the third party provider. By downloading third party software, you acknowledge and agree that the software is provided on an "AS IS" basis without warranty of any kind. In no event shall ArtFlow be liable for claims or damages of any nature, whether direct or indirect, arising from or related to any third-party software downloaded through the Service.</source>
+        <target>As a convenience, we may make third-party software available through the Service. To use the third-party software, you must agree to the terms and conditions imposed by the third party provider and the agreement to use such software will be solely between you and the third party provider. By downloading third party software, you acknowledge and agree that the software is provided on an "AS IS" basis without warranty of any kind. In no event shall ArtFlow be liable for claims or damages of any nature, whether direct or indirect, arising from or related to any third-party software downloaded through the Service.</target>
+      </trans-unit>
+      <trans-unit id="1U94VXp" resname="Conduct">
+        <source>Conduct</source>
+        <target>Conduct</target>
+      </trans-unit>
+      <trans-unit id="wLRPj9f" resname="You agree that you shall not interfere with or disrupt (or attempt to interfere with or disrupt) this Service or servers or networks connected to this Service, or to disobey any requirements, procedures, policies or regulations of networks connected to this Service; or provide any information to ArtFlow that is false or misleading, that attempts to hide your identity or that you do not have the right to disclose. ArtFlow does not endorse any content placed on the Service by third parties or any opinions or advice contained in such content. You agree to defend, indemnify, and hold harmless ArtFlow, its officers, directors, employees and agents, from and against any claims, liabilities, damages, losses, and expenses, including, without limitation, reasonable legal and expert fees, arising out of or in any way connected with your access to or use of the Services, or your violation of these Terms.">
+        <source>You agree that you shall not interfere with or disrupt (or attempt to interfere with or disrupt) this Service or servers or networks connected to this Service, or to disobey any requirements, procedures, policies or regulations of networks connected to this Service; or provide any information to ArtFlow that is false or misleading, that attempts to hide your identity or that you do not have the right to disclose. ArtFlow does not endorse any content placed on the Service by third parties or any opinions or advice contained in such content. You agree to defend, indemnify, and hold harmless ArtFlow, its officers, directors, employees and agents, from and against any claims, liabilities, damages, losses, and expenses, including, without limitation, reasonable legal and expert fees, arising out of or in any way connected with your access to or use of the Services, or your violation of these Terms.</source>
+        <target>You agree that you shall not interfere with or disrupt (or attempt to interfere with or disrupt) this Service or servers or networks connected to this Service, or to disobey any requirements, procedures, policies or regulations of networks connected to this Service; or provide any information to ArtFlow that is false or misleading, that attempts to hide your identity or that you do not have the right to disclose. ArtFlow does not endorse any content placed on the Service by third parties or any opinions or advice contained in such content. You agree to defend, indemnify, and hold harmless ArtFlow, its officers, directors, employees and agents, from and against any claims, liabilities, damages, losses, and expenses, including, without limitation, reasonable legal and expert fees, arising out of or in any way connected with your access to or use of the Services, or your violation of these Terms.</target>
+      </trans-unit>
+      <trans-unit id="xXTFC8L" resname="Disclaimer of Warranty and Limitation of Liability">
+        <source>Disclaimer of Warranty and Limitation of Liability</source>
+        <target>Disclaimer of Warranty and Limitation of Liability</target>
+      </trans-unit>
+      <trans-unit id="afVhuhW" resname="ARTFLOW MAKES NO REPRESENTATIONS OR WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED AS TO THE OPERATION OF THE SERVICE, OR THE CONTENT OR PRODUCTS, PROVIDED THROUGH THE SERVICE. YOU EXPRESSLY AGREE THAT YOUR USE OF THE SERVICE IS AT YOUR SOLE RISK. ARTFLOW DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION, IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT, TO THE FULLEST EXTENT PERMITTED BY LAW. ARTFLOW MAKES NO WARRANTY AS TO THE SECURITY, RELIABILITY, TIMELINESS, AND PERFORMANCE OF THIS SERVICE. YOU SPECIFICALLY ACKNOWLEDGE THAT ARTFLOW IS NOT LIABLE FOR YOUR DEFAMATORY, OFFENSIVE OR ILLEGAL CONDUCT, OR SUCH CONDUCT BY THIRD PARTIES, AND YOU EXPRESSLY ASSUME ALL RISKS AND RESPONSIBILITY FOR DAMAGES AND LOSSES ARISING FROM SUCH CONDUCT. EXCEPT FOR THE EXPRESS, LIMITED REMEDIES PROVIDED HEREIN, AND TO THE FULLEST EXTENT ALLOWED BY LAW, ARTFLOW SHALL NOT BE LIABLE FOR ANY DAMAGES OF ANY KIND ARISING FROM USE OF THE SERVICE, INCLUDING BUT NOT LIMITED TO DIRECT, INDIRECT, INCIDENTAL, CONSEQUENTIAL, SPECIAL, EXEMPLARY, OR PUNITIVE DAMAGES, EVEN IF ARTFLOW HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. THE FOREGOING DISCLAIMERS, WAIVERS AND LIMITATIONS SHALL APPLY NOTWITHSTANDING ANY FAILURE OF ESSENTIAL PURPOSE OF ANY LIMITED REMEDY. SOME JURISDICTIONS DO NOT ALLOW THE EXCLUSION OF OR LIMITATIONS ON CERTAIN WARRANTIES OR DAMAGES. THEREFORE, SOME OF THE ABOVE EXCLUSIONS OR LIMITATIONS MAY NOT APPLY TO YOU. IN NO EVENT SHALL ARTFLOW'S AGGREGATE LIABILITY TO YOU EXCEED THE AMOUNTS PAID BY YOU TO ARTFLOW PURSUANT TO THIS AGREEMENT.">
+        <source>ARTFLOW MAKES NO REPRESENTATIONS OR WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED AS TO THE OPERATION OF THE SERVICE, OR THE CONTENT OR PRODUCTS, PROVIDED THROUGH THE SERVICE. YOU EXPRESSLY AGREE THAT YOUR USE OF THE SERVICE IS AT YOUR SOLE RISK. ARTFLOW DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION, IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT, TO THE FULLEST EXTENT PERMITTED BY LAW. ARTFLOW MAKES NO WARRANTY AS TO THE SECURITY, RELIABILITY, TIMELINESS, AND PERFORMANCE OF THIS SERVICE. YOU SPECIFICALLY ACKNOWLEDGE THAT ARTFLOW IS NOT LIABLE FOR YOUR DEFAMATORY, OFFENSIVE OR ILLEGAL CONDUCT, OR SUCH CONDUCT BY THIRD PARTIES, AND YOU EXPRESSLY ASSUME ALL RISKS AND RESPONSIBILITY FOR DAMAGES AND LOSSES ARISING FROM SUCH CONDUCT. EXCEPT FOR THE EXPRESS, LIMITED REMEDIES PROVIDED HEREIN, AND TO THE FULLEST EXTENT ALLOWED BY LAW, ARTFLOW SHALL NOT BE LIABLE FOR ANY DAMAGES OF ANY KIND ARISING FROM USE OF THE SERVICE, INCLUDING BUT NOT LIMITED TO DIRECT, INDIRECT, INCIDENTAL, CONSEQUENTIAL, SPECIAL, EXEMPLARY, OR PUNITIVE DAMAGES, EVEN IF ARTFLOW HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. THE FOREGOING DISCLAIMERS, WAIVERS AND LIMITATIONS SHALL APPLY NOTWITHSTANDING ANY FAILURE OF ESSENTIAL PURPOSE OF ANY LIMITED REMEDY. SOME JURISDICTIONS DO NOT ALLOW THE EXCLUSION OF OR LIMITATIONS ON CERTAIN WARRANTIES OR DAMAGES. THEREFORE, SOME OF THE ABOVE EXCLUSIONS OR LIMITATIONS MAY NOT APPLY TO YOU. IN NO EVENT SHALL ARTFLOW'S AGGREGATE LIABILITY TO YOU EXCEED THE AMOUNTS PAID BY YOU TO ARTFLOW PURSUANT TO THIS AGREEMENT.</source>
+        <target>ARTFLOW MAKES NO REPRESENTATIONS OR WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED AS TO THE OPERATION OF THE SERVICE, OR THE CONTENT OR PRODUCTS, PROVIDED THROUGH THE SERVICE. YOU EXPRESSLY AGREE THAT YOUR USE OF THE SERVICE IS AT YOUR SOLE RISK. ARTFLOW DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION, IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT, TO THE FULLEST EXTENT PERMITTED BY LAW. ARTFLOW MAKES NO WARRANTY AS TO THE SECURITY, RELIABILITY, TIMELINESS, AND PERFORMANCE OF THIS SERVICE. YOU SPECIFICALLY ACKNOWLEDGE THAT ARTFLOW IS NOT LIABLE FOR YOUR DEFAMATORY, OFFENSIVE OR ILLEGAL CONDUCT, OR SUCH CONDUCT BY THIRD PARTIES, AND YOU EXPRESSLY ASSUME ALL RISKS AND RESPONSIBILITY FOR DAMAGES AND LOSSES ARISING FROM SUCH CONDUCT. EXCEPT FOR THE EXPRESS, LIMITED REMEDIES PROVIDED HEREIN, AND TO THE FULLEST EXTENT ALLOWED BY LAW, ARTFLOW SHALL NOT BE LIABLE FOR ANY DAMAGES OF ANY KIND ARISING FROM USE OF THE SERVICE, INCLUDING BUT NOT LIMITED TO DIRECT, INDIRECT, INCIDENTAL, CONSEQUENTIAL, SPECIAL, EXEMPLARY, OR PUNITIVE DAMAGES, EVEN IF ARTFLOW HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. THE FOREGOING DISCLAIMERS, WAIVERS AND LIMITATIONS SHALL APPLY NOTWITHSTANDING ANY FAILURE OF ESSENTIAL PURPOSE OF ANY LIMITED REMEDY. SOME JURISDICTIONS DO NOT ALLOW THE EXCLUSION OF OR LIMITATIONS ON CERTAIN WARRANTIES OR DAMAGES. THEREFORE, SOME OF THE ABOVE EXCLUSIONS OR LIMITATIONS MAY NOT APPLY TO YOU. IN NO EVENT SHALL ARTFLOW'S AGGREGATE LIABILITY TO YOU EXCEED THE AMOUNTS PAID BY YOU TO ARTFLOW PURSUANT TO THIS AGREEMENT.</target>
+      </trans-unit>
+      <trans-unit id="bDW7.Xi" resname="Amendment of the Terms">
+        <source>Amendment of the Terms</source>
+        <target>Amendment of the Terms</target>
+      </trans-unit>
+      <trans-unit id="YE3eFnA" resname="We reserve the right to amend these Terms from time to time in our sole discretion.">
+        <source>We reserve the right to amend these Terms from time to time in our sole discretion.</source>
+        <target>We reserve the right to amend these Terms from time to time in our sole discretion.</target>
+      </trans-unit>
+      <trans-unit id="hxtMvgs" resname="Copyright in Your Content">
+        <source>Copyright in Your Content</source>
+        <target>Copyright in Your Content</target>
+      </trans-unit>
+      <trans-unit id="91elSbB" resname="ArtFlow does not claim ownership rights in Your Content. For the sole purpose of enabling us to make your Content available through the Service, you grant to ArtFlow a non-exclusive, royalty-free license to reproduce, distribute, re-format, store, prepare derivative works based on, and publicly display and perform Your Content. Please note that when you upload Content, third parties will be able to copy, distribute and display your Content using readily available tools on their computers for this purpose although other than by linking to your Content on ArtFlow any use by a third party of your Content could violate paragraph 4 of these Terms and Conditions unless the third party receives permission from you by license.">
+        <source>ArtFlow does not claim ownership rights in Your Content. For the sole purpose of enabling us to make your Content available through the Service, you grant to ArtFlow a non-exclusive, royalty-free license to reproduce, distribute, re-format, store, prepare derivative works based on, and publicly display and perform Your Content. Please note that when you upload Content, third parties will be able to copy, distribute and display your Content using readily available tools on their computers for this purpose although other than by linking to your Content on ArtFlow any use by a third party of your Content could violate paragraph 4 of these Terms and Conditions unless the third party receives permission from you by license.</source>
+        <target>ArtFlow does not claim ownership rights in Your Content. For the sole purpose of enabling us to make your Content available through the Service, you grant to ArtFlow a non-exclusive, royalty-free license to reproduce, distribute, re-format, store, prepare derivative works based on, and publicly display and perform Your Content. Please note that when you upload Content, third parties will be able to copy, distribute and display your Content using readily available tools on their computers for this purpose although other than by linking to your Content on ArtFlow any use by a third party of your Content could violate paragraph 4 of these Terms and Conditions unless the third party receives permission from you by license.</target>
+      </trans-unit>
+      <trans-unit id="bGw8Juv" resname="Monitoring Content">
+        <source>Monitoring Content</source>
+        <target>Monitoring Content</target>
+      </trans-unit>
+      <trans-unit id="RKusJsY" resname="ArtFlow has no ability to control the Content you may upload, post or otherwise transmit using the Service and does not have any obligation to monitor such Content for any purpose. You acknowledge that you are solely responsible for all Content and material you upload, post or otherwise transmit using the Service.">
+        <source>ArtFlow has no ability to control the Content you may upload, post or otherwise transmit using the Service and does not have any obligation to monitor such Content for any purpose. You acknowledge that you are solely responsible for all Content and material you upload, post or otherwise transmit using the Service.</source>
+        <target>ArtFlow has no ability to control the Content you may upload, post or otherwise transmit using the Service and does not have any obligation to monitor such Content for any purpose. You acknowledge that you are solely responsible for all Content and material you upload, post or otherwise transmit using the Service.</target>
+      </trans-unit>
+      <trans-unit id="UC2w3AM" resname="At this time, ArtFlow provides free online storage of Your Content. However, you acknowledge and agree that ArtFlow may, at its option, establish limits concerning your use of the Service, including without limitation the maximum number of days that Your Content will be retained by the Service, the maximum size of any Content files that may be stored on the Service, the maximum disk space that will be allotted to you for the storage of Content on ArtFlow's servers. Furthermore, you acknowledge that ArtFlow reserves the right to terminate or suspend accounts that are inactive, in ArtFlow's sole discretion, for an extended period of time (thus deleting or suspending access to your Content). ArtFlow shall have no responsibility or liability for the deletion or failure to store any Content maintained on the Service and you are solely responsible for creating back-ups of Your Content. You further acknowledge that ArtFlow reserves the right to modify its storage policies from time to time, with or without notice to you.">
+        <source>At this time, ArtFlow provides free online storage of Your Content. However, you acknowledge and agree that ArtFlow may, at its option, establish limits concerning your use of the Service, including without limitation the maximum number of days that Your Content will be retained by the Service, the maximum size of any Content files that may be stored on the Service, the maximum disk space that will be allotted to you for the storage of Content on ArtFlow's servers. Furthermore, you acknowledge that ArtFlow reserves the right to terminate or suspend accounts that are inactive, in ArtFlow's sole discretion, for an extended period of time (thus deleting or suspending access to your Content). ArtFlow shall have no responsibility or liability for the deletion or failure to store any Content maintained on the Service and you are solely responsible for creating back-ups of Your Content. You further acknowledge that ArtFlow reserves the right to modify its storage policies from time to time, with or without notice to you.</source>
+        <target>At this time, ArtFlow provides free online storage of Your Content. However, you acknowledge and agree that ArtFlow may, at its option, establish limits concerning your use of the Service, including without limitation the maximum number of days that Your Content will be retained by the Service, the maximum size of any Content files that may be stored on the Service, the maximum disk space that will be allotted to you for the storage of Content on ArtFlow's servers. Furthermore, you acknowledge that ArtFlow reserves the right to terminate or suspend accounts that are inactive, in ArtFlow's sole discretion, for an extended period of time (thus deleting or suspending access to your Content). ArtFlow shall have no responsibility or liability for the deletion or failure to store any Content maintained on the Service and you are solely responsible for creating back-ups of Your Content. You further acknowledge that ArtFlow reserves the right to modify its storage policies from time to time, with or without notice to you.</target>
+      </trans-unit>
+      <trans-unit id="y_TLpie" resname="Suspension and Termination of Access and Membership">
+        <source>Suspension and Termination of Access and Membership</source>
+        <target>Suspension and Termination of Access and Membership</target>
+      </trans-unit>
+      <trans-unit id="7gsQk5t" resname="You agree that ArtFlow may at any time, and without notice, suspend or terminate any part of the Service, or refuse to fulfill any order, or any part of any order or terminate your membership and delete any Content stored on the ArtFlow Site, in ArtFlow's sole discretion, if you fail to comply with the Terms or applicable law.">
+        <source>You agree that ArtFlow may at any time, and without notice, suspend or terminate any part of the Service, or refuse to fulfill any order, or any part of any order or terminate your membership and delete any Content stored on the ArtFlow Site, in ArtFlow's sole discretion, if you fail to comply with the Terms or applicable law.</source>
+        <target>You agree that ArtFlow may at any time, and without notice, suspend or terminate any part of the Service, or refuse to fulfill any order, or any part of any order or terminate your membership and delete any Content stored on the ArtFlow Site, in ArtFlow's sole discretion, if you fail to comply with the Terms or applicable law.</target>
+      </trans-unit>
+      <trans-unit id="FV_BbAQ" resname="Submit">
+        <source>Submit</source>
+        <target>Submit</target>
+      </trans-unit>
+      <trans-unit id="dv.C2lt" resname="admin.username.exists">
+        <source>admin.username.exists</source>
+        <target>There is already an account with this username.</target>
+      </trans-unit>
+      <trans-unit id="LvZfVTy" resname="admin.email.exists">
+        <source>admin.email.exists</source>
+        <target>There is already an account with this email.</target>
+      </trans-unit>
+      <trans-unit id="hpWlheT" resname="Please Confirm your Email">
+        <source>Please Confirm your Email</source>
+        <target>Please Confirm your Email</target>
+      </trans-unit>
+      <trans-unit id="kQWnsB7" resname="Your email address has been verified.">
+        <source>Your email address has been verified.</source>
+        <target>Your email address has been verified.</target>
+      </trans-unit>
+      <trans-unit id="0FJ_Sz1" resname="Logout">
+        <source>Logout</source>
+        <target>Logout</target>
+      </trans-unit>
+      <trans-unit id="nWMiwfT" resname="Login">
+        <source>Login</source>
+        <target>Login</target>
+      </trans-unit>
+      <trans-unit id="x5Pg2aH" resname="Registration">
+        <source>Registration</source>
+        <target>Registration</target>
+      </trans-unit>
+      <trans-unit id="NSz8dJ5" resname="Gallery">
+        <source>Gallery</source>
+        <target>Gallery</target>
+      </trans-unit>
+      <trans-unit id="ijel8Hr" resname="Order by">
+        <source>Order by</source>
+        <target>Order by</target>
+      </trans-unit>
+      <trans-unit id=".mDYURx" resname="Popularity">
+        <source>Popularity</source>
+        <target>Popularity</target>
+      </trans-unit>
+      <trans-unit id="DTIgI3q" resname="Add date">
+        <source>Add date</source>
+        <target>Add date</target>
+      </trans-unit>
+      <trans-unit id="NpKI87A" resname="Refresh symmetrical Doodle">
+        <source>Refresh symmetrical Doodle</source>
+        <target>Refresh symmetrical Doodle</target>
+      </trans-unit>
+      <trans-unit id="w7EFsyB" resname="Similar doodles">
+        <source>Similar doodles</source>
+        <target>Similar doodles</target>
+      </trans-unit>
+      <trans-unit id="POVW877" resname="Use doodle">
+        <source>Use doodle</source>
+        <target>Use doodle</target>
+      </trans-unit>
+      <trans-unit id="rS6pSFC" resname="Most popular">
+        <source>Most popular</source>
+        <target>Most popular</target>
+      </trans-unit>
+      <trans-unit id="hzDTwgI" resname="Latest">
+        <source>Latest</source>
+        <target>Latest</target>
+      </trans-unit>
+      <trans-unit id="u3I07BJ" resname="Register">
+        <source>Register</source>
+        <target>Register</target>
+      </trans-unit>
+      <trans-unit id="588_9PF" resname="Password">
+        <source>Password</source>
+        <target>Password</target>
+      </trans-unit>
+      <trans-unit id="IaE5GBl" resname="You should agree to our terms.">
+        <source>You should agree to our terms.</source>
+        <target>You should agree to our terms.</target>
+      </trans-unit>
+      <trans-unit id="YXZ26gK" resname="Please enter a password">
+        <source>Please enter a password</source>
+        <target>Please enter a password</target>
+      </trans-unit>
+      <trans-unit id=".esazsm" resname="Your password should be at least {{ limit }} characters">
+        <source>Your password should be at least {{ limit }} characters</source>
+        <target>Your password should be at least {{ limit }} characters</target>
+      </trans-unit>
+      <trans-unit id="s5v1J_N" resname="You should agree to our Privacy policy.">
+        <source>You should agree to our Privacy policy.</source>
+        <target>You should agree to our Privacy policy.</target>
+      </trans-unit>
+      <trans-unit id="TdLhlyP" resname="The password fields must match.">
+        <source>The password fields must match.</source>
+        <target>The password fields must match.</target>
+      </trans-unit>
+      <trans-unit id="69y42_R" resname="General provisions">
+        <source>General provisions</source>
+        <target>General provisions</target>
+      </trans-unit>
+      <trans-unit id="tWrXRxt" resname="general.provisions.1">
+        <source>general.provisions.1</source>
+        <target>The administrator of personal data collected via the service ArtFlow.site is Katarzyna Głodny, electronic mail address (e-mail): {violations_mail}, hereinafter referred to as the “Administrator” and being also the Service Provider. </target>
+      </trans-unit>
+      <trans-unit id="Zb1a1hO" resname="general.provisions.2">
+        <source>general.provisions.2</source>
+        <target>general.provisions.2</target>
+      </trans-unit>
+      <trans-unit id="00MW683" resname="Purpose and scope of data collection">
+        <source>Purpose and scope of data collection</source>
+        <target>Purpose and scope of data collection</target>
+      </trans-unit>
+      <trans-unit id="4O0I5sw" resname="purpose.and.scope.of.data.collection.1">
+        <source>purpose.and.scope.of.data.collection.1</source>
+        <target>Personal data will be processed in order to make provide services. Data for these purposes, they will be processed on the basis of art. 6 sec. 1 lit. b), c) and f) of the Regulations (EU) 2016/679 of the European Parliament and of the Council of 27 April 2016 on protection natural persons in connection with the processing of personal data and on a free basis the flow of such data and the repeal of Directive 95/46 / EC (GDPR). </target>
+      </trans-unit>
+      <trans-unit id="gpLj46T" resname="purpose.and.scope.of.data.collection.2">
+        <source>purpose.and.scope.of.data.collection.2</source>
+        <target>After giving separate consent, pursuant to Art. 6 sec. 1 lit. a) GDPR, data may be processed also for the purpose of sending commercial information by electronic means or execution telephone calls for direct marketing purposes – in connection with Art. 10 paragraph 2 of the Act of July 18, 2002 on the provision of electronic services or art. 172 sec. 1 Act of July 16, 2004 – Telecommunications Law, including those managed as a result profiling, provided that the user has given appropriate consent.</target>
+      </trans-unit>
+      <trans-unit id="mIqA3gS" resname="purpose.and.scope.of.data.collection.3">
+        <source>purpose.and.scope.of.data.collection.3</source>
+        <target>purpose.and.scope.of.data.collection.3</target>
+      </trans-unit>
+      <trans-unit id="zrO5AQO" resname="purpose.and.scope.of.data.collection.4">
+        <source>purpose.and.scope.of.data.collection.4</source>
+        <target>If it is found that the processing of personal data violates the provisions of the GDPR, the person, data subject has the right to lodge a complaint with the Inspector General for Data Protection Personal (from May 25, 2018 – the President of the Office for Personal Data Protection).</target>
+      </trans-unit>
+      <trans-unit id="JszP9WA" resname="purpose.and.scope.of.data.collection.5">
+        <source>purpose.and.scope.of.data.collection.5</source>
+        <target>Providing personal data is voluntary, but providing marked personal data is a condition for access to some parts of sevrice, while failure to do so will result in a lack of the possibility of executing some actions in service. </target>
+      </trans-unit>
+      <trans-unit id="6X6H.W0" resname="purpose.and.scope.of.data.collection.6">
+        <source>purpose.and.scope.of.data.collection.6</source>
+        <target>Personal data will also be processed in an automated manner in the form of profiling, if the user agrees to this pursuant to Art. 6 sec. 1 lit. a) GDPR. The consequence of profiling will be to assign a profile to a given person in order to make decisions or analyze them or predicting their preferences, behaviors and attitudes.</target>
+      </trans-unit>
+      <trans-unit id="6sAA6T2" resname="purpose.and.scope.of.data.collection.7">
+        <source>purpose.and.scope.of.data.collection.7</source>
+        <target>The administrator takes special care to protect the interests of the data subjects concern, and in particular ensures that the data collected by him are:</target>
+      </trans-unit>
+      <trans-unit id="_O9xZSh" resname="purpose.and.scope.of.data.collection.7.a">
+        <source>purpose.and.scope.of.data.collection.7.a</source>
+        <target>processed in accordance with the law,</target>
+      </trans-unit>
+      <trans-unit id="G8QJoeQ" resname="purpose.and.scope.of.data.collection.7.b">
+        <source>purpose.and.scope.of.data.collection.7.b</source>
+        <target>collected for specified, lawful purposes and not processed further processing incompatible with these purposes,</target>
+      </trans-unit>
+      <trans-unit id="FaG.3Oe" resname="purpose.and.scope.of.data.collection.7.c">
+        <source>purpose.and.scope.of.data.collection.7.c</source>
+        <target>factually correct and adequate in relation to the purposes for which they are processed and stored in a form that allows identification of persons, to whom they relate, no longer than it is necessary to achieve the purpose of processing.</target>
+      </trans-unit>
+      <trans-unit id="suDMm3b" resname="Right of control, access to own data and their correction">
+        <source>Right of control, access to own data and their correction</source>
+        <target>Right of control, access to own data and their correction</target>
+      </trans-unit>
+      <trans-unit id="van3I1." resname="right.of.control.access.to.own.data.and.their.correction.1">
+        <source>right.of.control.access.to.own.data.and.their.correction.1</source>
+        <target>The data subject has the right to access their personal data and the right rectification, deletion, processing restrictions, the right to transfer data, the right object, the right to withdraw consent at any time without affecting compliance with the law of processing based on consent before its withdrawal.</target>
+      </trans-unit>
+      <trans-unit id="hIoJCjh" resname="right.of.control.access.to.own.data.and.their.correction.2">
+        <source>right.of.control.access.to.own.data.and.their.correction.2</source>
+        <target>In order to exercise the rights referred to in point 1, you can send an appropriate e-mail to the following address: {violations_mail}.</target>
+      </trans-unit>
+      <trans-unit id="FBOV6zV" resname="Cookies">
+        <source>Cookies</source>
+        <target>Cookies</target>
+      </trans-unit>
+      <trans-unit id="Yv9AjLR" resname="cookies.1">
+        <source>cookies.1</source>
+        <target>The Service ArtFlow uses “cookies”. No changes to the settings on the part of the Service Recipient browser is tantamount to consenting to their use.</target>
+      </trans-unit>
+      <trans-unit id="lPQG5ok" resname="cookies.2">
+        <source>cookies.2</source>
+        <target>The installation of “cookies” is necessary for the proper provision of services in the Service. The “cookies” files contain information necessary for the proper functioning of the Service, in particular those requiring authorization.</target>
+      </trans-unit>
+      <trans-unit id="G7Y1oWL" resname="cookies.3">
+        <source>cookies.3</source>
+        <target>The Service uses three types of “cookies”: “session”, “permanent” and “Analytical”.</target>
+      </trans-unit>
+      <trans-unit id="jfj88CG" resname="cookies.3.1">
+        <source>cookies.3.1</source>
+        <target>“Session” cookies are temporary files that are stored on the device end of the Service User until logging out (leaving the Service).</target>
+      </trans-unit>
+      <trans-unit id="Erobj1B" resname="cookies.3.2">
+        <source>cookies.3.2</source>
+        <target>“Permanent” cookies are stored in the end device of the User for a period of time specified in the parameters of “cookies” or until their removal by the User.</target>
+      </trans-unit>
+      <trans-unit id="lwoSBp6" resname="cookies.3.3">
+        <source>cookies.3.3</source>
+        <target>“Analytical” cookies enable a better understanding of the User’s interaction in terms of the content of the Service, it is better to organize its layout. “Analytical” “cookies” collect information on how the Service User uses the Service, the type of website, from which the Service Recipient was redirected, and the number of visits and duration of the visit Recipients on the Service’s website. This information does not record specific personal data Recipients, but they are used to develop statistics on the use of the Service.</target>
+      </trans-unit>
+      <trans-unit id="eCL51pO" resname="cookies.4">
+        <source>cookies.4</source>
+        <target>The Service Recipient has the right to decide on the access of “cookies” to his computer by selecting them in the window of your browser. Detailed information about the possibilities and methods of handling cookies are available in the software settings (web browser).</target>
+      </trans-unit>
+      <trans-unit id="DtdCAHM" resname="Final provisions">
+        <source>Final provisions</source>
+        <target>Final provisions</target>
+      </trans-unit>
+      <trans-unit id="9GRc8Jo" resname="final.provisions.1">
+        <source>final.provisions.1</source>
+        <target>The administrator uses technical and organizational measures to protect the processed data personal data appropriate to the threats and categories of data subject to protection, and in particular, protects data against disclosure to unauthorized persons, removal by an unauthorized person, processing in violation of applicable laws regulations and change, loss, damage or destruction.</target>
+      </trans-unit>
+      <trans-unit id=".2GCB.f" resname="final.provisions.2">
+        <source>final.provisions.2</source>
+        <target>The Service Provider provides appropriate technical preventive measures and modifying by unauthorized persons, personal data sent by electronic means.</target>
+      </trans-unit>
+      <trans-unit id="LZKh435" resname="final.provisions.3">
+        <source>final.provisions.3</source>
+        <target>In matters not covered by this Privacy Policy, it shall be applied accordingly
+                provisions of the Terms of Service of the ArtFlow.site, the provisions of the Regulation of the Parliament
+                2016/679 of the European Parliament and of the Council of 27 April 2016 on the protection of persons
+                individuals with regard to the processing of personal data and on free movement
+                such data and the repeal of Directive 95/46 / EC (GDPR) and other relevant legal provisions
+                Polish.</target>
+      </trans-unit>
+      <trans-unit id="EVPONjg" resname="final.provisions.4">
+        <source>final.provisions.4</source>
+        <target>The provisions of this Privacy Policy shall enter into force on December 21, 2020.</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

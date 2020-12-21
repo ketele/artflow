@@ -39,3 +39,9 @@ composer require symfony/finder
 composer require league/glide-symfony
 php bin/console secrets:set GLIDE_SIGN_KEY
 symfony console doctrine:schema:update
+php bin/console make:registration-form
+composer require symfonycasts/verify-email-bundle
+composer require symfony/google-mailer
+https://github.com/maildev/maildev/issues/274#issuecomment-564542032
+composer require symfony/validator doctrine/annotations
+php bin/console debug:translation en

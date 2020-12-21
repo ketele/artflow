@@ -25,37 +25,52 @@
 
             <nav class="navbar navbar-expand-lg navbar-light bg-light bg-white border-bottom shadow-sm">
                 <div class="container-fluid">
-                <h5 class="my-0 mr-md-auto font-weight-normal">
-                    <a href="{{ path('home') }}" class="navbar-brand">ART<strong>FLOW</strong></a>
-                </h5>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item {% if app.request.get('_route') == 'home' %}active{% endif %}">
-                            <a class="nav-link" href="{{ path('home') }}">{{ 'Home'|trans }} <span class="sr-only"></span></a>
-                        </li>
-                        <!--li class="nav-item {% if app.request.get('_route') == 'news' %}active{% endif %}">
-                            <a class="nav-link" href="{{ path('news') }}">{{ 'News'|trans }}</a>
-                        </li-->
-                        <li class="nav-item {% if app.request.get('_route') == 'doodle' %}active{% endif %}">
-                            <a class="nav-link" href="{{ path('doodle') }}">{{ 'Doodle'|trans }}</a>
-                        </li>
-                        <li class="nav-item {% if app.request.get('_route') == 'doodle_gallery' %}active{% endif %}">
-                            <a class="nav-link" href="{{ path('doodle_gallery') }}">{{ 'Gallery'|trans }}</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                {{ 'Language'|trans }}
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{{ path('home', {_locale: 'en'}) }}"> English</a>
-                                <a class="dropdown-item" href="{{ path('home', {_locale: 'pl'}) }}"> Polski</a>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
+                    <h5 class="my-0 mr-md-auto font-weight-normal">
+                        <a href="{{ path('home') }}" class="navbar-brand">ART<strong>FLOW</strong></a>
+                    </h5>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item {% if app.request.get('_route') == 'home' %}active{% endif %}">
+                                <a class="nav-link" href="{{ path('home') }}">{{ 'Home'|trans }} <span class="sr-only"></span></a>
+                            </li>
+                            <!--li class="nav-item {% if app.request.get('_route') == 'news' %}active{% endif %}">
+                                <a class="nav-link" href="{{ path('news') }}">{{ 'News'|trans }}</a>
+                            </li-->
+                            <li class="nav-item {% if app.request.get('_route') == 'doodle' %}active{% endif %}">
+                                <a class="nav-link" href="{{ path('doodle') }}">{{ 'Doodle'|trans }}</a>
+                            </li>
+                            <li class="nav-item {% if app.request.get('_route') == 'doodle_gallery' %}active{% endif %}">
+                                <a class="nav-link" href="{{ path('doodle_gallery') }}">{{ 'Gallery'|trans }}</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    {{ 'Language'|trans }}
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{ path('home', {_locale: 'en'}) }}"> English</a>
+                                    <a class="dropdown-item" href="{{ path('home', {_locale: 'pl'}) }}"> Polski</a>
+                                </div>
+                            </li>
+                        </ul>
+                        <div class="d-flex">
+                            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                                <span class="navbar-text">
+                                    {{ app.user.username }}
+                                </span>
+                                <div class="btn-group" role="group">
+                                    <a href="{{ path('app_logout') }}" type="button" class="btn">{{ 'Logout'|trans }}</a>
+                                </div>
+                            {% else %}
+                                <div class="btn-group" role="group">
+                                    <a href="{{ path('app_login') }}" type="button" class="btn">{{ 'Login'|trans }}</a>
+                                    <a href="{{ path('app_register') }}" type="button" class="btn">{{ 'Registration'|trans }}</a>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
                 </div>
             </nav>
         </header>

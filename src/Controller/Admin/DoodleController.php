@@ -41,6 +41,8 @@ class DoodleController extends AbstractController
                             string $doodleFolder,
                             Request $request
     ){
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $order = $request->get('order', 'popularity');
         $status = $request->get('status');
         $glide = new Glide();
@@ -94,6 +96,9 @@ class DoodleController extends AbstractController
     public function statusChangeModalView(Request $request, DoodleRepository $doodleRepository,
                                           DoodleStatusRepository $doodleStatusRepository)
     {
+
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $error = [];
         $jsonData['status'] = true;
 
@@ -131,6 +136,8 @@ class DoodleController extends AbstractController
 
     public function statusChangeAjax(Request $request, DoodleRepository $doodleRepository, DoodleStatusRepository $doodleStatusRepository): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $error = [];
         $jsonData['status'] = true;
 

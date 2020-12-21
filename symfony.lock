@@ -289,6 +289,15 @@
             "./src/Kernel.php"
         ]
     },
+    "symfony/google-mailer": {
+        "version": "4.4",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "4.4",
+            "ref": "f8fd4ddb9b477510f8f4bce2b9c054ab428c0120"
+        }
+    },
     "symfony/http-client": {
         "version": "v5.1.5"
     },
@@ -561,6 +570,9 @@
     },
     "symfony/yaml": {
         "version": "v5.1.5"
+    },
+    "symfonycasts/verify-email-bundle": {
+        "version": "v1.1.0"
     },
     "twig/extra-bundle": {
         "version": "v3.0.5"

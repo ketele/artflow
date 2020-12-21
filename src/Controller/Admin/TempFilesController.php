@@ -13,11 +13,17 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class TempFilesController extends AbstractController
 {
+    public function __construct()
+    {
+    }
+
     /**
      * @Route("admin/temp_files", name="temp_files")
      */
     public function index(Request $request): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $glide = new Glide();
         $finder = new Finder();
 
@@ -95,6 +101,8 @@ class TempFilesController extends AbstractController
 
     public function deleteTempFiles(Request $request): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $jsonData['status'] = true;
 
         $filesystem = new Filesystem();
