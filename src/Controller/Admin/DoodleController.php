@@ -43,7 +43,7 @@ class DoodleController extends AbstractController
     ){
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
-        $order = $request->get('order', 'popularity');
+        $order = $request->get('order', 'createdAt');
         $status = $request->get('status');
         $glide = new Glide();
         $where = [];
