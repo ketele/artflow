@@ -453,6 +453,26 @@
         <source>final.provisions.4</source>
         <target>Postanowienia niniejszej Polityki Prywatności wchodzą w życie z dniem 21 grudnia 2020 roku.</target>
       </trans-unit>
+      <trans-unit id="wYmEDPf" resname="Log in">
+        <source>Log in</source>
+        <target>Zaloguj</target>
+      </trans-unit>
+      <trans-unit id="acVpEs4" resname="You are logged in as">
+        <source>You are logged in as</source>
+        <target>Jesteś zalogowany jako</target>
+      </trans-unit>
+      <trans-unit id="dDUw20Q" resname="Please sign in">
+        <source>Please sign in</source>
+        <target>Proszę się zalogować</target>
+      </trans-unit>
+      <trans-unit id="v9QCsvb" resname="Sign in">
+        <source>Sign in</source>
+        <target>Zaloguj się</target>
+      </trans-unit>
+      <trans-unit id="dv.C2lt3" resname="Repeat Password">
+        <source>Repeat Password</source>
+        <target>Powtórz hasło</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

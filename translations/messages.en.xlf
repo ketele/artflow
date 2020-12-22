@@ -457,6 +457,26 @@
         <source>final.provisions.4</source>
         <target>The provisions of this Privacy Policy shall enter into force on December 21, 2020.</target>
       </trans-unit>
+      <trans-unit id="wYmEDPf" resname="Log in">
+        <source>Log in</source>
+        <target>Log in</target>
+      </trans-unit>
+      <trans-unit id="acVpEs4" resname="You are logged in as">
+        <source>You are logged in as</source>
+        <target>You are logged in as</target>
+      </trans-unit>
+      <trans-unit id="dDUw20Q" resname="Please sign in">
+        <source>Please sign in</source>
+        <target>Please sign in</target>
+      </trans-unit>
+      <trans-unit id="v9QCsvb" resname="Sign in">
+        <source>Sign in</source>
+        <target>Sign in</target>
+      </trans-unit>
+      <trans-unit id="dv.C2lt3" resname="Repeat Password">
+        <source>Repeat Password</source>
+        <target>Repeat Password</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
