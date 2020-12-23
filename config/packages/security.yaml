@@ -22,6 +22,7 @@ security:
                 authenticators:
                     - App\Security\AppAuthenticator
             form_login:
+                login_path: app_login
                 use_referer: true
             logout:
                 path: app_logout
