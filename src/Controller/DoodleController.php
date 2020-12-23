@@ -227,6 +227,11 @@ class DoodleController extends AbstractController
      */
     public function add_doodle(Request $request, NotifierInterface $notifier, string $doodleDir, string $doodleFolder, DoodleRepository $doodleRepository)
     {
+        if( $this->isGranted('ROLE_USER') == false ){
+            $this->addFlash('warning', $this->translator->trans('You need to be logged to save doodle'));
+            return $this->redirectToRoute('app_login');
+        }
+
         $tempDir = $request->get('temp_dir');
         $sourceDoodle = $request->get('source_doodle');
         $sourceDoodleId = $request->get('source_doodle_id');
@@ -236,13 +241,14 @@ class DoodleController extends AbstractController
         $fileName = null;
         $doodle = new Doodle();
         $glide = new Glide();
+        $user = $this->getUser();
 
         $defaultData['tempDir'] = $tempDir;
         $defaultData['sourceDoodle'] = $sourceDoodle;
         $defaultData['sourceDoodleId'] = $sourceDoodleId;
 
         $form = $this->createFormBuilder($defaultData)
-            ->add('userName', TextType::class)
+            //->add('userName', TextType::class)
             ->add('description', TextareaType::class)
             ->add('tempDir', HiddenType::class)
             ->add('sourceDoodle', HiddenType::class)
@@ -268,6 +274,7 @@ class DoodleController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+
             $form_data = $request->get('form');
             $tempPath = sys_get_temp_dir() . '/' . $form_data['tempDir'] . '/';
             $finder->files()->in($tempPath);
@@ -281,8 +288,9 @@ class DoodleController extends AbstractController
                 $fileName = $firstFile->getRelativePathname();
             }
 
+            $doodle->setUser($user);
             $doodle->setFileName($fileName);
-            $doodle->setUserName($form_data['userName']);
+            $doodle->setUserName($user->getUsername());
             $doodle->setDescription($form_data['description']);
             if( is_numeric( $sourceDoodleId ) )
                 $doodle->setSourceDoodleId($sourceDoodleId);

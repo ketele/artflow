@@ -17,6 +17,9 @@
                 {% if error %}
                     <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
                 {% endif %}
+                {% for flashError in app.flashes('warning') %}
+                    <div class="alert alert-warning" role="alert">{{ flashError }}</div>
+                {% endfor %}
 
                 {% if app.user %}
                     <div class="mb-3">

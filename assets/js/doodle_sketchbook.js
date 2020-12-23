@@ -142,6 +142,7 @@ class DoodleSketchbook {
 
                     const temp_form = document.createElement('form');
                     temp_form.method = "POST";
+                    temp_form.target = "_blank";
                     temp_form.action = "/" + Utils.getUrlParam(0) + "/add_doodle";
                     temp_form.setAttribute('name', 'doodle');
                     temp_form.innerHTML = `
@@ -149,8 +150,10 @@ class DoodleSketchbook {
 <input type="text" name="source_doodle" value="${source_doodle}" />
 <input type="text" name="source_doodle_id" value="${source_doodle_id}" />
 `;
-                    document.body.appendChild(temp_form);
+                    let formObj = document.body.appendChild(temp_form);
                     temp_form.submit();
+                    formObj.remove();
+
                     Utils.hideLoadingOverlay();
                 }
             };

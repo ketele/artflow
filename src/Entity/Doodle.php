@@ -73,6 +73,11 @@ class Doodle
      */
     private $ipTree = '';
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Admin::class, inversedBy="doodles")
+     */
+    private $user;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -252,6 +257,18 @@ class Doodle
     public function setIpTree(string $ipTree): self
     {
         $this->ipTree = $ipTree;
+
+        return $this;
+    }
+
+    public function getUser(): ?Admin
+    {
+        return $this->user;
+    }
+
+    public function setUser(?Admin $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }

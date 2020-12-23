@@ -3,15 +3,17 @@
 namespace App\Entity;
 
 use App\Repository\AdminRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=AdminRepository::class)
  * @UniqueEntity(fields={"username"}, message="admin.username.exists")
  * @UniqueEntity(fields={"email"}, message="admin.email.exists")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Admin implements UserInterface
 {
@@ -52,6 +54,16 @@ class Admin implements UserInterface
      * @ORM\Column(type="integer")
      */
     private $createdAt;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Doodle::class, mappedBy="user")
+     */
+    private $doodles;
+
+    public function __construct()
+    {
+        $this->doodles = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -179,5 +191,35 @@ class Admin implements UserInterface
     {
         $dateTime = new \DateTime();
         $this->createdAt = $dateTime->getTimestamp();
+    }
+
+    /**
+     * @return Collection|Doodle[]
+     */
+    public function getDoodles(): Collection
+    {
+        return $this->doodles;
+    }
+
+    public function addDoodle(Doodle $doodle): self
+    {
+        if (!$this->doodles->contains($doodle)) {
+            $this->doodles[] = $doodle;
+            $doodle->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDoodle(Doodle $doodle): self
+    {
+        if ($this->doodles->removeElement($doodle)) {
+            // set the owning side to null (unless already changed)
+            if ($doodle->getUser() === $this) {
+                $doodle->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }
