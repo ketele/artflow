@@ -48,6 +48,11 @@ class Admin implements UserInterface
      */
     private $isVerified = false;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $createdAt;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -153,5 +158,26 @@ class Admin implements UserInterface
     public function getIsVerified(): ?bool
     {
         return $this->is_verified;
+    }
+
+    public function getCreatedAt(): ?int
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(int $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function setCreatedAtValue()
+    {
+        $dateTime = new \DateTime();
+        $this->createdAt = $dateTime->getTimestamp();
     }
 }
