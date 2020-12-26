@@ -12,6 +12,13 @@
         </script>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        {% block metadescription %}
+            <meta name="description" content="{{ "Daily exercise improves your artistic skills"|trans }}">
+        {% endblock %}
+        {% block metakeywords %}
+            <meta name="keywords" content="{{ "art block"|trans }},{{ "art warm up"|trans }}">
+        {% endblock %}
+        <meta name="robots" content="index,follow">
 
         <title>{% block title %}{{ controller_name|trans }} &#x2027; {{ page_name }}{% endblock %}</title>
 
