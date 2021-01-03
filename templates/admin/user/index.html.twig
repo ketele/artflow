@@ -1,0 +1,37 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}{{ 'Users' }}{% endblock %}
+
+{% block body %}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-sm">
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">{{ 'Username' }}</th>
+            <th scope="col">{{ 'Created At' }}</th>
+            <th scope="col">{{ 'Roles' }}</th>
+            <th scope="col">{{ 'E-mail' }}</th>
+            <th scope="col">{{ 'Is verified' }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+        <tr>
+            <th scope="row">{{ loop.index }}</th>
+            <td>{{ user.username }}</td>
+            <td>{{ user.createdAt|date }}</td>
+            <td>{{ user.roles|join(', ') }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.isVerified ? 'yes' : 'no' }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+        </div>
+        </div>
+        </div>
+{% endblock %}
