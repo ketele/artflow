@@ -529,9 +529,9 @@
         <source>Comments</source>
         <target>Comments</target>
       </trans-unit>
-      <trans-unit id="NV958p12" resname="You have to be logged to add comment">
-        <source>You have to be logged to add comment</source>
-        <target>You have to be logged to add comment</target>
+      <trans-unit id="mK8e1hg" resname="Since">
+        <source>Since</source>
+        <target>Since</target>
       </trans-unit>
     </body>
   </file>

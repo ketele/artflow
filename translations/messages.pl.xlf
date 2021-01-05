@@ -519,15 +519,15 @@
       </trans-unit>
       <trans-unit id="CG59a_u" resname="You have to be logged to add comment">
         <source>You have to be logged to add comment</source>
-        <target>Musisz być zalogowany, aby dodać komentarz</target>
+        <target>Musisz być zalogowany, by dodać komentarz</target>
       </trans-unit>
       <trans-unit id="NV958p1" resname="Comments">
         <source>Comments</source>
         <target>Komentarze</target>
       </trans-unit>
-      <trans-unit id="NV958p12" resname="You have to be logged to add comment">
-        <source>You have to be logged to add comment</source>
-        <target>Musisz być zalogowany, by dodać komentarz</target>
+      <trans-unit id="mK8e1hg" resname="Since">
+        <source>Since</source>
+        <target>Od</target>
       </trans-unit>
     </body>
   </file>

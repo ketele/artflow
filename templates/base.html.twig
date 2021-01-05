@@ -62,7 +62,7 @@
                         <div class="d-flex">
                             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                                 <span class="navbar-text">
-                                    {{ app.user.username }}
+                                    <a href="{{ path('user', {username: app.user.username}) }}">{{ app.user.username }}</a>
                                 </span>
                                 <div class="btn-group" role="group">
                                     <a href="{{ path('app_logout') }}" type="button" class="btn">{{ 'Logout'|trans }}</a>

@@ -45,7 +45,9 @@
             {% endif %}
             <dl class="row">
                 <dt class="col-sm-3">{{ 'User name'|trans }}</dt>
-                <dd class="col-sm-9">{{ user_name }}</dd>
+                <dd class="col-sm-9">
+                    <a href="{{ path('user', {username: user_name}) }}">{{ user_name }}</a>
+                </dd>
                 <dt class="col-sm-3">{{ 'Description'|trans }}</dt>
                 <dd class="col-sm-9">
                     <p>{{ description|nl2br  }}</p>
@@ -76,7 +78,10 @@
                             <p>{{ doodleComment.content }}</p>
                         </blockquote>
                         <figcaption class="blockquote-footer text-end">
-                            {{ doodleComment.user.username }} <cite title="Source Title">{{ doodleComment.createdAt|date('Y-m-d H:i:s') }}</cite>
+                            <a href="{{ path('user', {username: doodleComment.user.username}) }}">
+                                {{ doodleComment.user.username }}
+                            </a>
+                            <cite title="Source Title">{{ doodleComment.createdAt|date('Y-m-d H:i:s') }}</cite>
                         </figcaption>
                     </figure>
                 </div>
