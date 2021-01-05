@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\DoodleRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
 
@@ -77,6 +79,16 @@ class Doodle
      * @ORM\ManyToOne(targetEntity=Admin::class, inversedBy="doodles")
      */
     private $user;
+
+    /**
+     * @ORM\OneToMany(targetEntity=DoodleComment::class, mappedBy="doodle", orphanRemoval=true)
+     */
+    private $doodleComments;
+
+    public function __construct()
+    {
+        $this->doodleComments = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -269,6 +281,36 @@ class Doodle
     public function setUser(?Admin $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|DoodleComment[]
+     */
+    public function getDoodleComments(): Collection
+    {
+        return $this->doodleComments;
+    }
+
+    public function addDoodleComment(DoodleComment $doodleComment): self
+    {
+        if (!$this->doodleComments->contains($doodleComment)) {
+            $this->doodleComments[] = $doodleComment;
+            $doodleComment->setDoodle($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDoodleComment(DoodleComment $doodleComment): self
+    {
+        if ($this->doodleComments->removeElement($doodleComment)) {
+            // set the owning side to null (unless already changed)
+            if ($doodleComment->getDoodle() === $this) {
+                $doodleComment->setDoodle(null);
+            }
+        }
 
         return $this;
     }

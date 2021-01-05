@@ -513,6 +513,22 @@
         <source>Cheers!</source>
         <target>Cheers!</target>
       </trans-unit>
+      <trans-unit id="DaeCJAg" resname="Your comment has been added">
+        <source>Your comment has been added</source>
+        <target>Your comment has been added</target>
+      </trans-unit>
+      <trans-unit id="xNiR6ah" resname="Add comment">
+        <source>Add comment</source>
+        <target>Add comment</target>
+      </trans-unit>
+      <trans-unit id="CG59a_u" resname="You have to be logged to add comment">
+        <source>You have to be logged to add comment</source>
+        <target>You have to be logged to add comment</target>
+      </trans-unit>
+      <trans-unit id="NV958p1" resname="Comments">
+        <source>Comments</source>
+        <target>Comments</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

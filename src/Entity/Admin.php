@@ -60,9 +60,15 @@ class Admin implements UserInterface
      */
     private $doodles;
 
+    /**
+     * @ORM\OneToMany(targetEntity=DoodleComment::class, mappedBy="user")
+     */
+    private $doodleComments;
+
     public function __construct()
     {
         $this->doodles = new ArrayCollection();
+        $this->doodleComments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -217,6 +223,36 @@ class Admin implements UserInterface
             // set the owning side to null (unless already changed)
             if ($doodle->getUser() === $this) {
                 $doodle->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|DoodleComment[]
+     */
+    public function getDoodleComments(): Collection
+    {
+        return $this->doodleComments;
+    }
+
+    public function addDoodleComment(DoodleComment $doodleComment): self
+    {
+        if (!$this->doodleComments->contains($doodleComment)) {
+            $this->doodleComments[] = $doodleComment;
+            $doodleComment->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDoodleComment(DoodleComment $doodleComment): self
+    {
+        if ($this->doodleComments->removeElement($doodleComment)) {
+            // set the owning side to null (unless already changed)
+            if ($doodleComment->getUser() === $this) {
+                $doodleComment->setUser(null);
             }
         }
 

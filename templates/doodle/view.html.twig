@@ -3,37 +3,37 @@
 {% block body %}
 <div class="container mt-5">
     <div class="row">
-        <div class="col-sm">
-            <img class="" src="/img/doodle{{ file_url }}">
+        <div class="col-lg-6 col-md-12">
+            <img class="img-fluid" src="/img/doodle{{ file_url }}">
             <div class="row row-cols-1 row-cols-md-3 g-4 mt-4 mb-4">
-                        {% for doodle in doodles %}
-                        <div class="col">
-                            <div class="card image-card h-100">
-                                <a href="{{ path('doodle_view', {id: doodle.id}) }}" class="">
-                                    <img src="/img/doodle{{ doodle.url }}" class="card-img-top" alt="{{ doodle.userName }}">
-                                </a>
-                                <div class="image-card-info">
-                                    <div class="opacity-0 image-card-overlay">
-                                    </div>
-                                    <div class="opacity-0 image-card-description">
-                                        <p>
-                                            <a href="{{ path('doodle_view', {id: doodle.id}) }}" class="">
-                                                {{ doodle.description|slice(0, 200) }}
-                                            </a>
-                                        </p>
-                                        <p>
-                                            <a href="{{ path('doodle_view', {id: doodle.id}) }}" class="">
-                                                <b>{{ doodle.userName }}</b>
-                                            </a>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        {% endfor %}
+                 {% for doodle in doodles %}
+                 <div class="col">
+                     <div class="card image-card h-100">
+                         <a href="{{ path('doodle_view', {id: doodle.id}) }}" class="">
+                             <img src="/img/doodle{{ doodle.url }}" class="card-img-top" alt="{{ doodle.userName }}">
+                         </a>
+                         <div class="image-card-info">
+                             <div class="opacity-0 image-card-overlay">
+                             </div>
+                             <div class="opacity-0 image-card-description">
+                                 <p>
+                                     <a href="{{ path('doodle_view', {id: doodle.id}) }}" class="">
+                                         {{ doodle.description|slice(0, 200) }}
+                                     </a>
+                                 </p>
+                                 <p>
+                                     <a href="{{ path('doodle_view', {id: doodle.id}) }}" class="">
+                                         <b>{{ doodle.userName }}</b>
+                                     </a>
+                                 </p>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+                 {% endfor %}
             </div>
         </div>
-        <div class="col-sm">
+        <div class="col-lg-6 col-md-12">
             {% if status_rejected %}
             <div class="alert alert-danger" role="alert">
                 {{ 'This doodle was rejected'|trans }}
@@ -58,6 +58,29 @@
                     <a href="{{ path('doodle', {id : id}) }}" class="btn btn-secondary">{{ 'Use doodle'|trans }}</a>
                     {% endif %}
                 </div>
+            </div>
+            <div class="row mt-4 mb-4"><p class="h4">{{ 'Comments'|trans }} ({{ doodleComments|length }})</p></div>
+            <div class="row mt-4 mb-4">
+                <div class="col">
+                    {% for flashSuccess in app.flashes('success') %}
+                        <div class="alert alert-success" role="alert">{{ flashSuccess }}</div>
+                    {% endfor %}
+                    {{ form(commentForm) }}
+                </div>
+            </div>
+            <div class="row">
+                {% for doodleComment in doodleComments %}
+                <div class="col-12">
+                    <figure>
+                        <blockquote class="blockquote">
+                            <p>{{ doodleComment.content }}</p>
+                        </blockquote>
+                        <figcaption class="blockquote-footer text-end">
+                            {{ doodleComment.user.username }} <cite title="Source Title">{{ doodleComment.createdAt|date('Y-m-d H:i:s') }}</cite>
+                        </figcaption>
+                    </figure>
+                </div>
+                {% endfor %}
             </div>
         </div>
     </div>

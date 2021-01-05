@@ -3,7 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Doodle;
+use App\Entity\DoodleComment;
 use App\Entity\DoodleStatus;
+use App\Form\DoodleCommentFormType;
+use App\Repository\DoodleCommentRepository;
 use App\Repository\DoodleRepository;
 use App\Security\Glide;
 use Doctrine\ORM\EntityManagerInterface;
@@ -25,6 +28,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use League\Glide\ServerFactory;
 use League\Glide\Responses\SymfonyResponseFactory;
+use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class DoodleController extends AbstractController
@@ -112,11 +116,17 @@ class DoodleController extends AbstractController
      * @return Response
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function view(int $id, string $doodleFolder, DoodleRepository $doodleRepository, EntityManagerInterface $entityManager)
+    public function view(int $id, string $doodleFolder,
+                         DoodleRepository $doodleRepository,
+                         DoodleCommentRepository $doodleCommentRepository,
+                         Request $request
+    )
     {
         $glide = new Glide();
+        $doodleComment = new DoodleComment();
         $doodle = $doodleRepository->findOne($id);
         $fileName = $doodle->getFileName();
+        $user = $this->getUser();
 
         $otherDoodlesCount = 3;
         $doodle->setViews($doodle->getViews() + 1);
@@ -137,7 +147,7 @@ class DoodleController extends AbstractController
         ]);
 
         if(count($doodles) < $otherDoodlesCount) {
-            $doodles2 = $doodleRepository->getDoodles([
+            $doodlesTemp = $doodleRepository->getDoodles([
                 'select' => 'd, ABS(DATE_DIFF( d.createdAt, :parentCreatedAt )) AS HIDDEN score',
                 'where' => [
                     'd.id NOT IN(:doodles)',
@@ -151,23 +161,46 @@ class DoodleController extends AbstractController
                 'order' => [['score','ASC']],
             ]);
 
-            $doodles = array_merge($doodles, $doodles2);
+            $doodles = array_merge($doodles, $doodlesTemp);
         }
 
         foreach($doodles AS $doodles_key => $d) {
             $d->setUrl($glide->generateUrl($doodleFolder . $d->getId(), $d->getFileName()));
         }
 
-        return $this->render('doodle/view.html.twig', [
-            'controller_name' => 'DoodleController',
-            'description' => $doodle->getDescription(),
-            'user_name' => $doodle->getUserName(),
-            'status_rejected' => $doodle->getStatus()->getId() == DoodleStatus::STATUS_REJECTED,
-            'status_new' => $doodle->getStatus()->getId() == DoodleStatus::STATUS_NEW,
-            'file_url' => $glide->generateUrl($doodleFolder . $id, $fileName, []),
-            'id' => $id,
-            'doodles' => $doodles,
-        ]);
+        $doodleComment->setDoodle($doodle);
+        $commentForm  = $this->createForm(DoodleCommentFormType::class, $doodleComment);
+        $commentForm->handleRequest($request);
+
+        if ($commentForm->isSubmitted() && $commentForm->isValid()) {
+
+            $form_data = $request->get('doodle_comment_form');
+            $doodleId = $form_data['doodleId'];
+
+            $doodleComment->setUser($user);
+            $doodleComment->setContent($form_data['content']);
+            $doodleCommentRepository->save($doodleComment);
+
+            $this->addFlash('success', $this->translator->trans('Your comment has been added'));
+
+            return $this->redirectToRoute('doodle_view',
+                ['id' => $doodle->getId()]);
+        } else {
+            $doodleComments = $doodleCommentRepository->getDoodlesComments(['where' => ['d.doodle = ' . $id]]);
+
+            return $this->render('doodle/view.html.twig', [
+                'controller_name' => 'DoodleController',
+                'description' => $doodle->getDescription(),
+                'user_name' => $doodle->getUserName(),
+                'status_rejected' => $doodle->getStatus()->getId() == DoodleStatus::STATUS_REJECTED,
+                'status_new' => $doodle->getStatus()->getId() == DoodleStatus::STATUS_NEW,
+                'file_url' => $glide->generateUrl($doodleFolder . $id, $fileName, []),
+                'id' => $id,
+                'doodles' => $doodles,
+                'commentForm' => $commentForm->createView(),
+                'doodleComments' => $doodleComments,
+            ]);
+        }
     }
 
     /**
