@@ -8,18 +8,23 @@ use Symfony\Component\Security\Core\Security;
 class Notification
 {
     private $notificationRepository;
-    private $securit;
+    private $security;
 
-    public function __construct(Security $securit, NotificationRepository $notificationRepository)
+    public function __construct(Security $security, NotificationRepository $notificationRepository)
     {
         $this->notificationRepository = $notificationRepository;
-        $this->securit = $securit;
+        $this->security = $security;
     }
 
     public function getUserNotificationCount(): string
     {
-        $user = $this->securit->getUser();
+        $count = 0;
 
-        return $this->notificationRepository->count(['readAt' => 'IS NULL', 'user' => $user->getId()]);
+        if ($this->security->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            $user = $this->security->getUser();
+            $count = $this->notificationRepository->count(['readAt' => 'IS NULL', 'user' => $user->getId()]);
+        }
+
+        return $count;
     }
 }
