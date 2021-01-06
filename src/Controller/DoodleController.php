@@ -12,6 +12,7 @@ use App\Security\Glide;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Filesystem\Filesystem;
@@ -278,7 +279,7 @@ class DoodleController extends AbstractController
         $defaultData['sourceDoodleId'] = $sourceDoodleId;
 
         $form = $this->createFormBuilder($defaultData)
-            //->add('userName', TextType::class)
+            ->add('title', TextType::class)
             ->add('description', TextareaType::class)
             ->add('tempDir', HiddenType::class)
             ->add('sourceDoodle', HiddenType::class)
@@ -322,6 +323,7 @@ class DoodleController extends AbstractController
             $doodle->setFileName($fileName);
             $doodle->setUserName($user->getUsername());
             $doodle->setDescription($form_data['description']);
+            $doodle->setTitle($form_data['title']);
             if( is_numeric( $sourceDoodleId ) )
                 $doodle->setSourceDoodleId($sourceDoodleId);
             $doodle->setCoordinates($sourceDoodle);
