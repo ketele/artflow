@@ -1,3 +1,4 @@
+{% set user_notification_count = notification.getUserNotificationCount %}
 <!doctype html>
 <html lang="en" class="h-100">
     <head>
@@ -64,8 +65,17 @@
                                 <div class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="navbarUserDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         {{ app.user.username }}
+                                        {% if user_notification_count > 0 %}
+                                            <span class="badge bg-danger">!</span>
+                                        {% endif %}
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="navbarUserDropdown">
+                                        <a class="dropdown-item" href="{{ path('user_notifications', {username: app.user.username}) }}">
+                                            {{ 'Notifications'|trans }}
+                                            {% if user_notification_count > 0 %}
+                                                <span class="badge bg-success">{{ user_notification_count }}</span>
+                                            {% endif %}
+                                        </a>
                                         <a class="dropdown-item" href="{{ path('user', {username: app.user.username}) }}">{{ 'Your profile'|trans }}</a>
                                         <li><hr class="dropdown-divider"></li>
                                         <a class="dropdown-item" href="{{ path('app_logout') }}">{{ 'Logout'|trans }}</a>

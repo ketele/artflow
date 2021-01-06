@@ -258,4 +258,34 @@ class Admin implements UserInterface
 
         return $this;
     }
+
+    /**
+     * @return Collection|Notification[]
+     */
+    public function getNotifications(): Collection
+    {
+        return $this->doodleComments;
+    }
+
+    public function addNotification(Notification $notification): self
+    {
+        if (!$this->doodleComments->contains($notification)) {
+            $this->doodleComments[] = $notification;
+            $notification->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNotification(Notification $notification): self
+    {
+        if ($this->doodleComments->removeElement($notification)) {
+            // set the owning side to null (unless already changed)
+            if ($notification->getUser() === $this) {
+                $notification->setUser(null);
+            }
+        }
+
+        return $this;
+    }
 }
