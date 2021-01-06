@@ -27,4 +27,14 @@ class Notification
 
         return $count;
     }
+
+    public function addNotification(array $options): void
+    {
+        foreach( $options['users'] AS $user ) {
+            $notification = new \App\Entity\Notification();
+            $notification->setUser($user);
+            $notification->setContent($options['content']);
+            $this->notificationRepository->save($notification);
+        }
+    }
 }

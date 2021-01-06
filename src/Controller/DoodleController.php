@@ -111,13 +111,17 @@ class DoodleController extends AbstractController
      * @param int $id
      * @param string $doodleFolder
      * @param DoodleRepository $doodleRepository
+     * @param DoodleCommentRepository $doodleCommentRepository
+     * @param Request $request
+     * @param \App\Service\Notification $notificationService
      * @return Response
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function view(int $id, string $doodleFolder,
                          DoodleRepository $doodleRepository,
                          DoodleCommentRepository $doodleCommentRepository,
-                         Request $request
+                         Request $request,
+                         \App\Service\Notification $notificationService
     )
     {
         $glide = new Glide();
@@ -171,7 +175,6 @@ class DoodleController extends AbstractController
         $commentForm->handleRequest($request);
 
         if ($commentForm->isSubmitted() && $commentForm->isValid()) {
-
             $form_data = $request->get('doodle_comment_form');
             $doodleId = $form_data['doodleId'];
 
@@ -180,6 +183,12 @@ class DoodleController extends AbstractController
             $doodleCommentRepository->save($doodleComment);
 
             $this->addFlash('success', $this->translator->trans('Your comment has been added'));
+
+            if( $doodle->getUser() != $user )
+                $notificationService->addNotification([
+                    'users' => [$doodle->getUser()],
+                    'content' => $this->translator->trans('You have new comment in doodle') . ' "' . $doodle->getTitle() . '"'
+                ]);
 
             return $this->redirectToRoute('doodle_view',
                 ['id' => $doodle->getId()]);
