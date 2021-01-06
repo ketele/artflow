@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block leftmenu %}
+    <ul class="nav flex-column">
+        <li class="nav-item">
+            {{ 'Order by'|trans }}
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link {% if app.request.get('order') == 'popularity' %}active{% endif %}" href="{{ path('user_doodle_gallery', {order: 'popularity', username: app.request.get('username')}) }}">
+                        {{ 'Popularity'|trans }}
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if app.request.get('order') == 'createdAt' %}active{% endif %}" href="{{ path('user_doodle_gallery', {order: 'createdAt', username: app.request.get('username')}) }}">
+                        {{ 'Add date'|trans }}
+                    </a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <div class="row mt-4">
+            <div class="col-sm">
+                <h6>{{ 'Gallery'|trans|upper }}</h6>
+            </div>
+        </div>
+        <div class="row row-cols-1 row-cols-md-3 g-4 mb-4">
+            {% for doodle in doodles %}
+            {% if (loop.index - 1) % 3 == 0 %}
+        </div>
+        <div class="row row-cols-1 row-cols-md-3 g-4 mb-4">
+            {% endif %}
+            <div class="col">
+                <div class="card image-card h-100">
+                    <a href="{{ path('doodle_view', {id: doodle.id}) }}" class="">
+                        <img src="/img/doodle{{ doodle.url }}" class="card-img-top" alt="{{ doodle.userName }}">
+                    </a>
+                    <div class="image-card-info">
+                        <div class="opacity-0 image-card-overlay">
+                        </div>
+                        <div class="opacity-0 image-card-description">
+                            <p>
+                                <a href="{{ path('doodle_view', {id: doodle.id}) }}" class="">
+                                    {{ doodle.description|slice(0, 200) }}
+                                </a>
+                            </p>
+                            <p>
+                                <a href="{{ path('doodle_view', {id: doodle.id}) }}" class="">
+                                    <b>{{ doodle.userName }}</b>
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% if (doodles|length) % 3 == 1 %}
+                <div class="col">
+                    <div class="card h-100"></div>
+                </div>
+                <div class="col">
+                    <div class="card h-100"></div>
+                </div>
+            {% elseif (doodles|length) % 3 == 2 %}
+                <div class="col">
+                    <div class="card h-100"></div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\DoodleStatus;
 use App\Repository\AdminRepository;
 use App\Repository\DoodleRepository;
 use App\Security\Glide;
@@ -12,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class UserController extends AbstractController
 {
     /**
-     * @Route("/user/{username}", name="user")
+     * @Route("/{_locale<%app.supported_locales%>}/user/{username}", name="user")
      */
     public function index(
         string $username,
@@ -45,6 +46,48 @@ class UserController extends AbstractController
             'doodleDir' => $doodleDir,
             'doodleFolder' => $doodleFolder,
             'glide' => $glide,
+        ]);
+    }
+
+    /**
+     * @Route(
+     *     "/{_locale<%app.supported_locales%>}/user/{username}/doodle/gallery/{order<createdAt|popularity>}",
+     *     name="user_doodle_gallery",
+     *     defaults={"order": "popularity","id": null}
+     * )
+     * @param string $order
+     * @param DoodleRepository $doodleRepository
+     * @param string $doodleFolder
+     * @return Response
+     */
+    public function gallery(
+        string $username,
+        string $order,
+        DoodleRepository $doodleRepository,
+        string $doodleFolder,
+        AdminRepository $adminRepository
+    ){
+        $glide = new Glide();
+        $user = $adminRepository->findOneBy(['username' => $username]);
+
+        $where[] = 'd.status = ' . DoodleStatus::STATUS_PUBLISHED;
+        $where[] = 'd.user = ' . $user->getId();
+        $parameters = [];
+
+        $doodles = $doodleRepository->getDoodles([
+            'order' => [['d.' . $order, 'DESC']],
+            'maxResults' => 50,
+            'where' => $where,
+            'parameters' => $parameters,
+        ]);
+
+        foreach($doodles AS $doodles_key => $d) {
+            $d->setUrl($glide->generateUrl($doodleFolder . $d->getId(), $d->getFileName()));
+        }
+
+        return $this->render('user/doodle_gallery.html.twig', [
+            'controller_name' => 'DoodleController',
+            'doodles' => $doodles,
         ]);
     }
 }

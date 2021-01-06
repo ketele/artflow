@@ -14,7 +14,7 @@
         <hr/>
         <div class="row mt-4">
             <div class="col-sm">
-                <a href="{{ path('doodle_gallery', {order: 'popularity'}) }}">
+                <a href="{{ path('user_doodle_gallery', {order: 'popularity', username: user.username}) }}">
                     <h6>{{ 'Most popular'|trans|upper }}</h6>
                 </a>
             </div>
@@ -49,7 +49,7 @@
         <hr/>
         <div class="row mt-4">
             <div class="col-sm">
-                <a href="{{ path('doodle_gallery', {order: 'createdAt'}) }}">
+                <a href="{{ path('user_doodle_gallery', {order: 'createdAt', username: user.username}) }}">
                     <h6>{{ 'Latest'|trans|upper }}</h6>
                 </a>
             </div>
