@@ -188,8 +188,7 @@ class DoodleController extends AbstractController
 
             return $this->render('doodle/view.html.twig', [
                 'controller_name' => 'DoodleController',
-                'description' => $doodle->getDescription(),
-                'user' => $doodle->getUser(),
+                'doodle' => $doodle,
                 'status_rejected' => $doodle->getStatus()->getId() == DoodleStatus::STATUS_REJECTED,
                 'status_new' => $doodle->getStatus()->getId() == DoodleStatus::STATUS_NEW,
                 'file_url' => $glide->generateUrl($doodleFolder . $id, $fileName, []),

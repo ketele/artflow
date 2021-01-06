@@ -46,11 +46,19 @@
             <dl class="row">
                 <dt class="col-sm-3">{{ 'User name'|trans }}</dt>
                 <dd class="col-sm-9">
-                    <a href="{{ path('user', {username: user.username}) }}">{{ user.username }}</a>
+                    <a href="{{ path('user', {username: doodle.user.username}) }}">{{ doodle.user.username }}</a>
+                </dd>
+                <dt class="col-sm-3">{{ 'Title'|trans }}</dt>
+                <dd class="col-sm-9">
+                    {{ doodle.title }}
                 </dd>
                 <dt class="col-sm-3">{{ 'Description'|trans }}</dt>
                 <dd class="col-sm-9">
-                    <p>{{ description|nl2br  }}</p>
+                    <p>{{ doodle.description|nl2br  }}</p>
+                </dd>
+                <dt class="col-sm-3">{{ 'Views'|trans }}</dt>
+                <dd class="col-sm-9">
+                    <p>{{ doodle.views }}</p>
                 </dd>
             </dl>
             <div class="row">
