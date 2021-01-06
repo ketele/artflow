@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\DoodleStatus;
 use App\Repository\AdminRepository;
 use App\Repository\DoodleRepository;
 use App\Security\Glide;
@@ -70,7 +69,6 @@ class UserController extends AbstractController
         $glide = new Glide();
         $user = $adminRepository->findOneBy(['username' => $username]);
 
-        $where[] = 'd.status = ' . DoodleStatus::STATUS_PUBLISHED;
         $where[] = 'd.user = ' . $user->getId();
         $parameters = [];
 
