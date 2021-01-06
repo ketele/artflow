@@ -85,6 +85,11 @@ class Doodle
      */
     private $doodleComments;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $title;
+
     public function __construct()
     {
         $this->doodleComments = new ArrayCollection();
@@ -311,6 +316,18 @@ class Doodle
                 $doodleComment->setDoodle(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(string $title): self
+    {
+        $this->title = $title;
 
         return $this;
     }
