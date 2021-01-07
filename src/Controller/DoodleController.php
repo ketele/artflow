@@ -184,14 +184,17 @@ class DoodleController extends AbstractController
 
             $this->addFlash('success', $this->translator->trans('Your comment has been added'));
 
-            if( $doodle->getUser() != $user )
+            if( $doodle->getUser() != $user ) {
+                $doodleUser = $doodle->getUser();
                 $notificationService->addNotification([
-                    'users' => [$doodle->getUser()],
-                    'content' => $this->translator->trans('You have new comment in doodle') . ' "' . $doodle->getTitle() . '"
+                    'users' => [$doodleUser],
+                    'content' => $this->translator->trans('You have new comment in doodle', [], null, $doodleUser->getLocale())
+                        . ' "' . $doodle->getTitle() . '"
                     
                     "' . $form_data['content'] . '"
                     - ' . $user->getUsername()
                 ]);
+            }
 
             return $this->redirectToRoute('doodle_view',
                 ['id' => $doodle->getId()]);
