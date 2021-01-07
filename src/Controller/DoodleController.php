@@ -187,7 +187,10 @@ class DoodleController extends AbstractController
             if( $doodle->getUser() != $user )
                 $notificationService->addNotification([
                     'users' => [$doodle->getUser()],
-                    'content' => $this->translator->trans('You have new comment in doodle') . ' "' . $doodle->getTitle() . '"'
+                    'content' => $this->translator->trans('You have new comment in doodle') . ' "' . $doodle->getTitle() . '"
+                    
+                    "' . $form_data['content'] . '"
+                    - ' . $user->getUsername()
                 ]);
 
             return $this->redirectToRoute('doodle_view',

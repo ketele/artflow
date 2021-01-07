@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'Notifications'|trans }} &#x2027; {{ page_name }}{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-12">
+                <h2>{{ 'Notifications'|trans }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="container mt-5">
+        <div class="row">
+                {% if notifications|length > 0 %}
+                {% for notification in notifications %}
+                <div class="col-12">
+                    <p><small>{{ notification.createdAt|date('Y-m-d H:i:s') }}</small></p>
+                    <p>
+                        {% if notification.readAt is empty %}<span class="badge bg-success">{{ 'New'|trans }}</span>{% endif %}
+                        {{ notification.content|nl2br }}
+                    </p>
+                    <hr/>
+                </div>
+                {% endfor %}
+                {% endif %}
+        </div>
+    </div>
+{% endblock %}

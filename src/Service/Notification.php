@@ -2,8 +2,10 @@
 
 namespace App\Service;
 
+use App\Entity\Admin;
 use App\Repository\NotificationRepository;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\User\User;
 
 class Notification
 {
@@ -22,7 +24,7 @@ class Notification
 
         if ($this->security->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             $user = $this->security->getUser();
-            $count = $this->notificationRepository->count(['readAt' => 'IS NULL', 'user' => $user->getId()]);
+            $count = $this->notificationRepository->countUserUnread($user);
         }
 
         return $count;
@@ -34,6 +36,16 @@ class Notification
             $notification = new \App\Entity\Notification();
             $notification->setUser($user);
             $notification->setContent($options['content']);
+            $this->notificationRepository->save($notification);
+        }
+    }
+
+    public function setAsRead(?array $notifications){
+        $dateTime = new \DateTime();
+        $readdAt = $dateTime->getTimestamp();
+
+        foreach( $notifications AS $notification ) {
+            $notification->setReadAt($readdAt);
             $this->notificationRepository->save($notification);
         }
     }

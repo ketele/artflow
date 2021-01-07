@@ -70,7 +70,7 @@
                                         {% endif %}
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="navbarUserDropdown">
-                                        <a class="dropdown-item" href="{{ path('user_notifications', {username: app.user.username}) }}">
+                                        <a class="dropdown-item" href="{{ path('user_notifications') }}">
                                             {{ 'Notifications'|trans }}
                                             {% if user_notification_count > 0 %}
                                                 <span class="badge bg-success">{{ user_notification_count }}</span>

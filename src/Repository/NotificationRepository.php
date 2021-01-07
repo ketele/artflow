@@ -32,6 +32,18 @@ class NotificationRepository extends ServiceEntityRepository
         $this->entityManager->flush();
     }
 
+    public function countUserUnread($user)
+    {
+        return $this->createQueryBuilder('n')
+            ->select('count(n.id)')
+            ->andWhere('n.user = :val')
+            ->andWhere('n.readAt is NULL')
+            ->setParameter('val', $user)
+            ->getQuery()
+            ->getSingleScalarResult()
+            ;
+    }
+
     // /**
     //  * @return Notification[] Returns an array of Notification objects
     //  */
