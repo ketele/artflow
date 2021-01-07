@@ -60,16 +60,16 @@
                                 </div>
                             </li>
                         </ul>
-                        <div class="d-flex">
+                        <ul class="navbar-nav d-flex ">
                             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                                <div class="nav-item dropdown">
+                                <li class="nav-item dropdown ">
                                     <a class="nav-link dropdown-toggle" href="#" id="navbarUserDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         {{ app.user.username }}
                                         {% if user_notification_count > 0 %}
                                             <span class="badge bg-danger">!</span>
                                         {% endif %}
                                     </a>
-                                    <div class="dropdown-menu" aria-labelledby="navbarUserDropdown">
+                                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarUserDropdown">
                                         <a class="dropdown-item" href="{{ path('user_notifications') }}">
                                             {{ 'Notifications'|trans }}
                                             {% if user_notification_count > 0 %}
@@ -77,17 +77,20 @@
                                             {% endif %}
                                         </a>
                                         <a class="dropdown-item" href="{{ path('user', {username: app.user.username}) }}">{{ 'Your profile'|trans }}</a>
-                                        <li><hr class="dropdown-divider"></li>
+                                        <hr class="dropdown-divider">
                                         <a class="dropdown-item" href="{{ path('app_logout') }}">{{ 'Logout'|trans }}</a>
                                     </div>
-                                </div>
+                                </li>
                             {% else %}
-                                <div class="btn-group" role="group">
+                                <li class="nav-item">
                                     <a href="{{ path('app_login') }}" type="button" class="btn">{{ 'Login'|trans }}</a>
+                                </li>
+                                <li class="nav-item">
                                     <a href="{{ path('app_register') }}" type="button" class="btn">{{ 'Registration'|trans }}</a>
-                                </div>
+                                </li>
                             {% endif %}
-                        </div>
+                            </li>
+                        </ul>
                     </div>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
