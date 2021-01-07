@@ -12,18 +12,22 @@
     </div>
     <div class="container mt-5">
         <div class="row">
+            <div class="col-12">
                 {% if notifications|length > 0 %}
                 {% for notification in notifications %}
-                <div class="col-12">
                     <p><small>{{ notification.createdAt|date('Y-m-d H:i:s') }}</small></p>
                     <p>
                         {% if notification.readAt is empty %}<span class="badge bg-success">{{ 'New'|trans }}</span>{% endif %}
                         {{ notification.content|nl2br }}
                     </p>
                     <hr/>
-                </div>
                 {% endfor %}
+                {% elseif %}
+                    <div class="alert alert-info" role="alert">
+                        {{ 'You have no notifications yet'|trans }}
+                    </div>
                 {% endif %}
+            </div>
         </div>
     </div>
 {% endblock %}

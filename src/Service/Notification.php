@@ -44,9 +44,10 @@ class Notification
         $dateTime = new \DateTime();
         $readdAt = $dateTime->getTimestamp();
 
-        foreach( $notifications AS $notification ) {
-            $notification->setReadAt($readdAt);
-            $this->notificationRepository->save($notification);
-        }
+        foreach( $notifications AS $notification )
+            if( empty( $notification->getReadAt() ) ){
+                $notification->setReadAt($readdAt);
+                $this->notificationRepository->save($notification);
+            }
     }
 }
