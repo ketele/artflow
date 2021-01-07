@@ -78,7 +78,7 @@ class UserController extends AbstractController
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $user = $this->getUser();
-        $notifications = $notificationRepository->findBy(['user' => $user->getId()]);
+        $notifications = $notificationRepository->findBy(['user' => $user->getId()], ['createdAt' => 'ASC']);
 
         $view = $this->render('user/notifications.html.twig', [
             'controller_name' => 'UserController',
