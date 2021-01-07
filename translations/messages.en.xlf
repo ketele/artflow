@@ -533,9 +533,33 @@
         <source>Since</source>
         <target>Since</target>
       </trans-unit>
-      <trans-unit id="tPXXeMs" resname="Your profile">
+      <trans-unit id="Uo2JrXL" resname="Your profile">
         <source>Your profile</source>
         <target>Your profile</target>
+      </trans-unit>
+      <trans-unit id="M1oL4gY" resname="You have new comment in doodle">
+        <source>You have new comment in doodle</source>
+        <target>You have new comment in doodle</target>
+      </trans-unit>
+      <trans-unit id="eIARgzp" resname="Notifications">
+        <source>Notifications</source>
+        <target>Notifications</target>
+      </trans-unit>
+      <trans-unit id="fozSBW2" resname="Title">
+        <source>Title</source>
+        <target>Title</target>
+      </trans-unit>
+      <trans-unit id="acQEWR6" resname="Views">
+        <source>Views</source>
+        <target>Views</target>
+      </trans-unit>
+      <trans-unit id="GP3VSbL" resname="New">
+        <source>New</source>
+        <target>New</target>
+      </trans-unit>
+      <trans-unit id="DaZX.15" resname="You have no notifications yet">
+        <source>You have no notifications yet</source>
+        <target>You have no notifications yet</target>
       </trans-unit>
     </body>
   </file>
