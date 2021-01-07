@@ -65,6 +65,11 @@ class Admin implements UserInterface
      */
     private $doodleComments;
 
+    /**
+     * @ORM\Column(type="string", length=3)
+     */
+    private $locale;
+
     public function __construct()
     {
         $this->doodles = new ArrayCollection();
@@ -285,6 +290,18 @@ class Admin implements UserInterface
                 $notification->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getLocale(): ?string
+    {
+        return $this->locale;
+    }
+
+    public function setLocale(string $locale): self
+    {
+        $this->locale = $locale;
 
         return $this;
     }

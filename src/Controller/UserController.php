@@ -51,6 +51,23 @@ class UserController extends AbstractController
     }
 
     /**
+     * @Route("/locale/change/{locale}", name="user_locale_change")
+     */
+    public function changeLocale(
+        string $locale,
+        AdminRepository $adminRepository
+    )
+    {
+        if( $this->isGranted('IS_AUTHENTICATED_FULLY') ){
+            $user = $this->getUser();
+            $user->setLocale($locale);
+            $adminRepository->save($user);
+        }
+
+        return $this->redirectToRoute('home', ['_locale' => $locale]);
+    }
+
+    /**
      * @Route("/{_locale<%app.supported_locales%>}/user/notifications", name="user_notifications")
      */
     public function notifications(

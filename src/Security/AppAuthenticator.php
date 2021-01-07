@@ -92,6 +92,10 @@ class AppAuthenticator extends AbstractFormLoginAuthenticator implements Passwor
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $providerKey)
     {
+        $user = $token->getUser();
+        $_locale = $user->getLocale();
+        $request->getSession()->set('_locale', $_locale);
+
         if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
             return new RedirectResponse($targetPath);
         }
@@ -99,7 +103,7 @@ class AppAuthenticator extends AbstractFormLoginAuthenticator implements Passwor
         // For example : return new RedirectResponse($this->urlGenerator->generate('some_route'));
         //throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
 
-        return new RedirectResponse($this->urlGenerator->generate('home'));
+        return new RedirectResponse($this->urlGenerator->generate('home', ['_locale' => $_locale]));
     }
 
     protected function getLoginUrl()
