@@ -4,10 +4,10 @@ body {
 }
 
 a {
-  color: $contrast-color;
+  color: $dark-contrast-color;
   text-decoration: none;
 }
 
 a:hover {
-  color: $light-contrast-color;
+  color: $contrast-color;
 }

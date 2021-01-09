@@ -4,6 +4,12 @@
   border-color: $artflow-dark-color;
 }
 
+.btn-artflow:hover {
+  color: $artflow-light2-color;
+  background-color: $artflow-dark2-color;
+  border-color: $artflow-dark2-color;
+}
+
 .btn-container > .btn, .btn-container > .btn-group{
   margin-top: .25rem;
   margin-bottom: .25rem;
