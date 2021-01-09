@@ -8,8 +8,11 @@ use App\Repository\NotificationRepository;
 use App\Security\Glide;
 use App\Service\Notification;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Router;
+use Symfony\Component\Routing\RouterInterface;
 
 class UserController extends AbstractController
 {
@@ -55,7 +58,9 @@ class UserController extends AbstractController
      */
     public function changeLocale(
         string $locale,
-        AdminRepository $adminRepository
+        AdminRepository $adminRepository,
+        Request $request,
+        RouterInterface $router
     )
     {
         if( $this->isGranted('IS_AUTHENTICATED_FULLY') ){
@@ -64,7 +69,20 @@ class UserController extends AbstractController
             $adminRepository->save($user);
         }
 
-        return $this->redirectToRoute('home', ['_locale' => $locale]);
+        $referer = $request->headers->get('referer');
+
+        if ($referer == NULL) {
+            return $this->redirectToRoute('home', ['_locale' => $locale]);
+        }
+
+        $refererPathInfo = Request::create($referer)->getPathInfo();
+        $routeInfos = $router->match($refererPathInfo);
+
+        $routeInfos['_locale'] = $locale;
+        $routeName = $routeInfos['_route'];
+        unset($routeInfos['_route']);
+
+        return $this->redirectToRoute($routeName, $routeInfos);
     }
 
     /**
