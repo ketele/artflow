@@ -565,6 +565,14 @@
         <source>Refresh symmetrical shape</source>
         <target>Odśwież symetryczny kształt</target>
       </trans-unit>
+      <trans-unit id="5p4GFEh" resname="Terms of service">
+        <source>Terms of service</source>
+        <target>Warunki usługi</target>
+      </trans-unit>
+      <trans-unit id="8bdQWvp" resname="Social">
+        <source>Social</source>
+        <target>Social media</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

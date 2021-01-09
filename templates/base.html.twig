@@ -25,6 +25,7 @@
 
         {% block stylesheets %}
             <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,500,500i,600,600i&display=swap" rel="stylesheet" />
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
             {{ encore_entry_link_tags('app') }}
         {% endblock %}
     </head>
@@ -115,9 +116,35 @@
 
         <footer class="footer mt-auto py-3">
             <div class="container">
-                <a href="{{ path('home') }}">
-                    <span class="text-muted">ART<strong>FLOW</strong></span>
-                </a>
+                <div class="row">
+                    <div class="col-9">
+                    </div>
+                    <div class="col-3">
+                        <p>
+                            <b class="float-end">{{ 'Social'|trans }}</b>
+                            <br/>
+                            <a class="float-end" href="https://www.facebook.com/ArtFlow-Site-100372725365759">
+                                <i class="bi-facebook"></i>
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            <hr/>
+                <div class="row">
+                    <div class="col-9">
+                        @{{ 'now'|date('Y') }} ART<strong>FLOW</strong>
+                    </div>
+                    <div class="col-3">
+                        <div class="float-end">
+                        <a href="{{ path('privacy_policy') }}">
+                            {{ 'Privacy policy'|trans }}
+                        </a>
+                        <a href="{{ path('terms_of_service') }}">
+                            {{ 'Terms of Service'|trans }}
+                        </a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </footer>
 
