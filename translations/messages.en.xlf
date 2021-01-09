@@ -561,6 +561,14 @@
         <source>You have no notifications yet</source>
         <target>You have no notifications yet</target>
       </trans-unit>
+      <trans-unit id="7ptlv8S" resname="Refresh shape">
+        <source>Refresh shape</source>
+        <target>Refresh shape</target>
+      </trans-unit>
+      <trans-unit id="3Iy_XG0" resname="Refresh symmetrical shape">
+        <source>Refresh symmetrical shape</source>
+        <target>Refresh symmetrical shape</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

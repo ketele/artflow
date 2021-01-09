@@ -557,6 +557,14 @@
         <source>You have no notifications yet</source>
         <target>Nie masz jeszcze żadnych powiadomień</target>
       </trans-unit>
+      <trans-unit id="7ptlv8S" resname="Refresh shape">
+        <source>Refresh shape</source>
+        <target>Odśwież kształt</target>
+      </trans-unit>
+      <trans-unit id="3Iy_XG0" resname="Refresh symmetrical shape">
+        <source>Refresh symmetrical shape</source>
+        <target>Odśwież symetryczny kształt</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
