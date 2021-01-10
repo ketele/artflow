@@ -573,6 +573,26 @@
         <source>Social</source>
         <target>Social media</target>
       </trans-unit>
+      <trans-unit id="QYck63o" resname="Are you sure you want to delete this doodle?">
+        <source>Are you sure you want to delete this doodle?</source>
+        <target>Czy na pewno chcesz usunąć ten bazgroł?</target>
+      </trans-unit>
+      <trans-unit id="GXZu1sy" resname="Cancel">
+        <source>Cancel</source>
+        <target>Anuluj</target>
+      </trans-unit>
+      <trans-unit id="4tClSWj" resname="Delete">
+        <source>Delete</source>
+        <target>Usuń</target>
+      </trans-unit>
+      <trans-unit id="eQz45A4" resname="Use shape">
+        <source>Use shape</source>
+        <target>Użyj kształt</target>
+      </trans-unit>
+      <trans-unit id="RkxP.QG" resname="Edit">
+        <source>Edit</source>
+        <target>Edytuj</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

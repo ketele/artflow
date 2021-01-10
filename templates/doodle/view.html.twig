@@ -10,7 +10,7 @@
                  <div class="col">
                      <div class="card image-card h-100">
                          <a href="{{ path('doodle_view', {id: doodle.id}) }}" class="">
-                             <img src="/img/doodle{{ doodle.url }}" class="card-img-top" alt="{{ doodle.userName }}">
+                             <img src="/img/doodle{{ doodle.url }}" class="card-img-top" alt="{{ doodle.title }}">
                          </a>
                          <div class="image-card-info">
                              <div class="opacity-0 image-card-overlay">
@@ -65,7 +65,11 @@
                 <div class="col-sm">
                     <a href="{{ path('doodle_gallery', {order: 'popularity',id : id}) }}" class="btn btn-secondary">{{ 'Similar doodles'|trans }}</a>
                     {% if id != 2 %}
-                    <a href="{{ path('doodle', {id : id}) }}" class="btn btn-secondary">{{ 'Use doodle'|trans }}</a>
+                    <a href="{{ path('doodle', {id : id}) }}" class="btn btn-secondary">{{ 'Use shape'|trans }}</a>
+                    {% endif %}
+                    {% if doodle.user == app.user %}
+                    <a href="{{ path('user_doodle_edit', {id : id}) }}" class="btn btn-secondary">{{ 'Edit'|trans }}</a>
+                    <a href="{{ path('user_doodle_delete', {id : id}) }}" class="btn btn-secondary">{{ 'Delete'|trans }}</a>
                     {% endif %}
                 </div>
             </div>
