@@ -300,7 +300,7 @@ class DoodleController extends AbstractController
             ->add('sourceDoodle', HiddenType::class)
             ->add('sourceDoodleId', HiddenType::class)
             ->add('submit', SubmitType::class, [
-                'attr' => ['class' => 'btn-artflow'],
+                'attr' => ['class' => 'btn-artflow mt-4 float-end'],
             ])
             ->getForm();
 
@@ -494,7 +494,7 @@ class DoodleController extends AbstractController
             ->add('title', TextType::class)
             ->add('description', TextareaType::class)
             ->add('submit', SubmitType::class, [
-                'attr' => ['class' => 'btn-artflow'],
+                'attr' => ['class' => 'btn-artflow mt-4 float-end'],
             ])
             ->getForm();
 

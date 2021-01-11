@@ -7,7 +7,12 @@
             <img class="img-fluid" src="/img/doodle{{ file_url }}">
         </div>
         <div class="col-lg-6 col-md-12">
-
+            <dl class="row">
+                <dt class="col-sm-3">{{ 'Title'|trans }}</dt>
+                <dd class="col-sm-9">
+                    {{ doodle.title }}
+                </dd>
+            </dl>
             <div class="row">
                 <div class="col-sm">
                     {% if doodle.user == app.user %}

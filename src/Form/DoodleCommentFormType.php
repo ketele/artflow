@@ -37,7 +37,7 @@ class DoodleCommentFormType extends AbstractType
                     'required' => true,
                 ])
             ->add('save', SubmitType::class, [
-                    'attr' => ['class' => 'btn-artflow mt-4 float-right'],
+                    'attr' => ['class' => 'btn-artflow mt-4 float-end'],
                     'label' => $this->translator->trans('Add comment')
                 ]
             )
