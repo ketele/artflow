@@ -86,7 +86,7 @@
                 {% macro doodle_comments(comments, i) %}
                     {% import _self as macros %}
                         {% for doodleComment in comments %}
-                            <div class="{% if i > 1 and i <= 3 %}ms-4{% endif %} col-12 doodle-comment" id="doodle-comment-{{ doodleComment.id }}">
+                            <div class="{% if i > 1 and i <= 3 %}ms-4 col{% else %}col-12{% endif %}  doodle-comment" id="doodle-comment-{{ doodleComment.id }}">
                                 <figure>
                                     <blockquote class="blockquote">
                                         <p>{{ doodleComment.content }}</p>
