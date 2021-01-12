@@ -75,64 +75,6 @@ class DoodleCommentRepository extends ServiceEntityRepository
         return $query->getResult();
     }
 
-    public function getDoodlesCommentsTree($params = false){
-        $queryBuilder = $this->createQueryBuilder('d');
-
-        $opt = [
-            'select' => 'd',
-            'where' => [],
-            'parameters' => [],
-            'order' => [['d.createdAt', 'DESC']],
-            'maxResults' => null,
-        ];
-
-        if (!empty($params))
-            $opt = array_merge($opt,$params);
-
-        extract($opt);
-
-        $queryBuilder->select($select);
-
-        $whereTemp = $where;
-
-        if( !empty($whereTemp) )
-            foreach( $whereTemp as $w )
-                $queryBuilder->andWhere($w);
-
-        if( !empty($parameters) )
-            foreach( $parameters as $p_key => $p )
-                $queryBuilder->setParameter($p_key, $p);
-
-        if( !empty($order) ) {
-            foreach ($order as $o)
-                $queryBuilder->orderBy($o[0], $o[1]);
-        }
-
-        if( $maxResults >= 0 )
-            $queryBuilder->setMaxResults($maxResults);
-
-        $query = $queryBuilder->getQuery();
-
-        $results = $query->getResult();
-        //$results = $query->getArrayResult();
-
-        foreach($results as $resultKey => $result){
-            $whereTemp = ['d.parent = ' . $result->getId()];
-
-            $resultsTemp = $this->getDoodlesCommentsTree([
-                'maxResults' => null,
-                'where' => $whereTemp,
-            ]);
-
-            foreach ($resultsTemp as $item) {
-
-                $results[$resultKey]->addDoodleComment($item);
-            }
-        }
-
-        return $results;
-    }
-
     // /**
     //  * @return DoodleComment[] Returns an array of DoodleComment objects
     //  */
