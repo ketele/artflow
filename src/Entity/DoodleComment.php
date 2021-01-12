@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\DoodleCommentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -33,12 +34,12 @@ class DoodleComment
     /**
      * @ORM\ManyToOne(targetEntity=DoodleComment::class, inversedBy="doodleComments")
      */
-    private $parent;
+    private $parent = null;
 
     /**
      * @ORM\OneToMany(targetEntity=DoodleComment::class, mappedBy="parent")
      */
-    private $doodleComments;
+    private $doodleComments = [];
 
     /**
      * @ORM\ManyToOne(targetEntity=Doodle::class, inversedBy="doodleComments")
@@ -88,6 +89,11 @@ class DoodleComment
     public function getParent(): ?self
     {
         return $this->parent;
+    }
+
+    public function getParentId(): ?int
+    {
+        return ($this->parent) ? $this->parent->id : null;
     }
 
     public function setParent(?self $parent): self

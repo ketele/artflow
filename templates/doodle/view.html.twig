@@ -83,21 +83,38 @@
                 </div>
             </div>
             <div class="row">
-                {% for doodleComment in doodleComments %}
-                <div class="col-12">
-                    <figure>
-                        <blockquote class="blockquote">
-                            <p>{{ doodleComment.content }}</p>
-                        </blockquote>
-                        <figcaption class="blockquote-footer text-end">
-                            <a href="{{ path('user', {username: doodleComment.user.username}) }}">
-                                {{ doodleComment.user.username }}
-                            </a>
-                            <cite title="Source Title">{{ doodleComment.createdAt|date('Y-m-d H:i:s') }}</cite>
-                        </figcaption>
-                    </figure>
-                </div>
-                {% endfor %}
+                {% macro doodle_comments(comments, i) %}
+                    {% import _self as macros %}
+                        {% for doodleComment in comments %}
+                            <div class="{% if i > 1 and i <= 3 %}ms-4{% endif %} col-12 doodle-comment" id="doodle-comment-{{ doodleComment.id }}">
+                                <figure>
+                                    <blockquote class="blockquote">
+                                        <p>{{ doodleComment.content }}</p>
+                                    </blockquote>
+                                    <figcaption class="blockquote-footer text-end">
+                                        <a href="{{ path('user', {username: doodleComment.user.username}) }}">
+                                            {{ doodleComment.user.username }}
+                                        </a>
+                                        <cite title="Source Title">{{ doodleComment.createdAt|date('Y-m-d H:i:s') }}</cite>
+                                    </figcaption>
+                                    <a href="#"
+                                       class="doodle-comment-reply"
+                                       id="doodle-comment-reply-{{ doodleComment.id }}"
+                                       data-id="{{ doodleComment.id }}"
+                                       data-for="doodle-comment-{{ doodleComment.id }}"
+                                    >
+                                        {{ 'Reply'|trans }}
+                                    </a>
+                                </figure>
+
+                                {% if doodleComment.doodleComments.count %}
+                                {{ macros.doodle_comments(doodleComment.doodleComments, i+1) }}
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                {% endmacro %}
+                {% import _self as macros %}
+                {{ macros.doodle_comments(doodleComments, 1) }}
             </div>
         </div>
     </div>
@@ -105,4 +122,5 @@
 {% endblock %}
 
 {% block pagejavascripts %}
+    {{ encore_entry_script_tags('doodle_view') }}
 {% endblock %}

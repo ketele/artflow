@@ -1,6 +1,6 @@
 import 'bootstrap/js/src/modal.js';
 
-class TempFile{
+export class TempFile{
     deleteTempFiles(obj){
         const xhr = new XMLHttpRequest();
         let year = obj.dataset.year;

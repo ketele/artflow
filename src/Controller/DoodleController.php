@@ -6,7 +6,6 @@ use App\Entity\Doodle;
 use App\Entity\DoodleComment;
 use App\Entity\DoodleStatus;
 use App\Form\DoodleCommentFormType;
-use App\Repository\AdminRepository;
 use App\Repository\DoodleCommentRepository;
 use App\Repository\DoodleRepository;
 use App\Security\Glide;
@@ -180,7 +179,6 @@ class DoodleController extends AbstractController
             $doodleId = $form_data['doodleId'];
 
             $doodleComment->setUser($user);
-            $doodleComment->setContent($form_data['content']);
             $doodleCommentRepository->save($doodleComment);
 
             $this->addFlash('success', $this->translator->trans('Your comment has been added'));
@@ -200,7 +198,15 @@ class DoodleController extends AbstractController
             return $this->redirectToRoute('doodle_view',
                 ['id' => $doodle->getId()]);
         } else {
-            $doodleComments = $doodleCommentRepository->getDoodlesComments(['where' => ['d.doodle = ' . $id]]);
+            $doodleComments = $doodleCommentRepository->getDoodlesComments(['where' => [
+                'd.doodle = ' . $id,
+                'd.parent is NULL',
+                ]]);
+            /*$doodleComments = $doodleCommentRepository->getDoodlesCommentsTree(['where' => [
+                'd.doodle = ' . $id,
+                'd.parent is NULL',
+                ]]);*/
+//dump($doodleComments);exit;
 
             return $this->render('doodle/view.html.twig', [
                 'controller_name' => 'DoodleController',
@@ -214,6 +220,35 @@ class DoodleController extends AbstractController
                 'doodleComments' => $doodleComments,
             ]);
         }
+    }
+
+    /**
+     * @Route("/doodle_comment_ajax", name="doodle_comment_ajax")
+     * @param Request $request
+     * @return JsonResponse
+     * @throws \Exception
+     */
+    public function doodle_comment_ajax(
+        Request $request,
+        DoodleRepository $doodleRepository,
+        DoodleCommentRepository $doodleCommentRepository
+    )
+    {
+        $id = $request->get('id');
+
+        $parentDoodleComment = $doodleCommentRepository->findOneBy(['id' => $id]);
+        $doodleComment = new DoodleComment();
+
+        $doodle = $doodleRepository->findOne($parentDoodleComment->getId());
+        $doodleComment->setDoodle($doodle);
+        $doodleComment->setParent($parentDoodleComment);
+        $commentForm  = $this->createForm(DoodleCommentFormType::class, $doodleComment);
+        $content = $this->renderView('doodle/comment_form.html.twig', ['form' => $commentForm->createView() ]);
+
+        $jsonData['status'] = true;
+        $jsonData['content'] = $content;
+
+        return new JsonResponse($jsonData);
     }
 
     /**
@@ -299,8 +334,22 @@ class DoodleController extends AbstractController
             ->add('tempDir', HiddenType::class)
             ->add('sourceDoodle', HiddenType::class)
             ->add('sourceDoodleId', HiddenType::class)
+            ->add('agreeTermsOfService', CheckboxType::class,
+                [
+                    'label'  => $this->translator->trans('I have read and agree to the Terms of Service',
+                        [
+                            'terms_of_service_link' => '<a href="' . $this->generateUrl('terms_of_service') . '" target="_blank">
+                            ' . $this->translator->trans('Terms of Service') . '
+                            </a>'
+                        ]
+                    ),
+                    'label_html' => true,
+                    'required' => true,
+                    'mapped' => false
+                ]
+            )
             ->add('submit', SubmitType::class, [
-                'attr' => ['class' => 'btn-artflow mt-4 float-end'],
+                'attr' => ['class' => 'btn-artflow'],
             ])
             ->getForm();
 
@@ -418,150 +467,6 @@ class DoodleController extends AbstractController
             return $server->getImageResponse($path, $data);
         } catch (\Exception $e) {
             return new Response($e->getMessage());
-        }
-    }
-
-    /**
-     * @Route(
-     *     "/{_locale<%app.supported_locales%>}/user/doodle/gallery/{username}/{order<createdAt|popularity>}",
-     *     name="user_doodle_gallery",
-     *     defaults={"order": "popularity","id": null}
-     * )
-     * @param string $username
-     * @param string $order
-     * @param DoodleRepository $doodleRepository
-     * @param string $doodleFolder
-     * @param AdminRepository $adminRepository
-     * @return Response
-     */
-    public function userGallery(
-        string $username,
-        string $order,
-        DoodleRepository $doodleRepository,
-        string $doodleFolder,
-        AdminRepository $adminRepository
-    ){
-        $glide = new Glide();
-        $user = $adminRepository->findOneBy(['username' => $username]);
-
-        $where[] = 'd.user = ' . $user->getId();
-        $parameters = [];
-
-        $doodles = $doodleRepository->getDoodles([
-            'order' => [['d.' . $order, 'DESC']],
-            'maxResults' => 50,
-            'where' => $where,
-            'parameters' => $parameters,
-        ]);
-
-        foreach($doodles AS $doodles_key => $d) {
-            $d->setUrl($glide->generateUrl($doodleFolder . $d->getId(), $d->getFileName()));
-        }
-
-        return $this->render('user/doodle_gallery.html.twig', [
-            'controller_name' => 'DoodleController',
-            'doodles' => $doodles,
-        ]);
-    }
-
-    /**
-     * @Route(
-     *     "/{_locale<%app.supported_locales%>}/user/doodle/edit/{id}",
-     *     name="user_doodle_edit"
-     * )
-     * @param DoodleRepository $doodleRepository
-     * @param string $doodleFolder
-     * @return Response
-     */
-    public function editDoodle(
-        int $id,
-        DoodleRepository $doodleRepository,
-        string $doodleFolder,
-        Request $request
-    ){
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
-        $glide = new Glide();
-        $doodle = $doodleRepository->findOne($id);
-        $fileName = $doodle->getFileName();
-        $user = $this->getUser();
-
-        if( $user != $doodle->getUser() )
-            return $this->redirectToRoute('doodle_view',
-                ['id' => $doodle->getId()]);
-
-        $form = $this->createFormBuilder($doodle)
-            ->add('title', TextType::class)
-            ->add('description', TextareaType::class)
-            ->add('submit', SubmitType::class, [
-                'attr' => ['class' => 'btn-artflow mt-4 float-end'],
-            ])
-            ->getForm();
-
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-
-            $form_data = $request->get('form');
-
-            $doodle->setDescription($form_data['description']);
-            $doodle->setTitle($form_data['title']);
-            $doodleRepository->save($doodle);
-
-            return $this->redirectToRoute('doodle_view',
-                ['id' => $doodle->getId()]);
-        } else {
-            return $this->render('doodle/edit.html.twig', [
-                'controller_name' => 'DoodleController',
-                'doodle' => $doodle,
-                'user' => $user,
-                'form' => $form->createView(),
-                'file_url' => $glide->generateUrl($doodleFolder . $id, $fileName, []),
-            ]);
-        }
-    }
-
-    /**
-     * @Route(
-     *     "/{_locale<%app.supported_locales%>}/user/doodle/delete/{id}/{confirmed}",
-     *     name="user_doodle_delete",
-     *     defaults={"confirmed": false}
-     * )
-     * @param DoodleRepository $doodleRepository
-     * @param string $doodleFolder
-     * @return Response
-     */
-    public function deleteDoodle(
-        int $id,
-        bool $confirmed,
-        DoodleRepository $doodleRepository,
-        string $doodleFolder,
-        Request $request
-    ){
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
-        $glide = new Glide();
-        $doodle = $doodleRepository->findOne($id);
-        $fileName = $doodle->getFileName();
-        $user = $this->getUser();
-
-        if( $user != $doodle->getUser() )
-            return $this->redirectToRoute('doodle_view',
-                ['id' => $doodle->getId()]);
-
-        if ($confirmed) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($doodle);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('user_doodle_gallery',
-                ['username' => $user->getUsername()]);
-        } else {
-            return $this->render('doodle/delete.html.twig', [
-                'controller_name' => 'DoodleController',
-                'doodle' => $doodle,
-                'user' => $user,
-                'file_url' => $glide->generateUrl($doodleFolder . $id, $fileName, []),
-            ]);
         }
     }
 }

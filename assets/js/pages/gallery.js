@@ -1,7 +1,7 @@
 import 'bootstrap/js/src/modal.js';
 import {Utils} from "./../utils";
 
-class Gallery {
+export class Gallery {
     changDoodleStatusShowModal(e){
         Utils.showLoadingOverlay();
         const xhr = new XMLHttpRequest();
