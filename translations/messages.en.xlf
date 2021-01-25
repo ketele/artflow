@@ -597,6 +597,58 @@
         <source>Edit</source>
         <target>Edit</target>
       </trans-unit>
+      <trans-unit id="ZOrvzLg" resname="Please write title">
+        <source>Please write title</source>
+        <target>Please write title</target>
+      </trans-unit>
+      <trans-unit id="s6YOYaU" resname="Tasks">
+        <source>Tasks</source>
+        <target>Tasks</target>
+      </trans-unit>
+      <trans-unit id="wlP0Ub3" resname="Reply">
+        <source>Reply</source>
+        <target>Reply</target>
+      </trans-unit>
+      <trans-unit id="QC3z9Ye" resname="Add Task">
+        <source>Add Task</source>
+        <target>Add Task</target>
+      </trans-unit>
+      <trans-unit id="ClQNI0m" resname="Add Status">
+        <source>Add Status</source>
+        <target>Add Status</target>
+      </trans-unit>
+      <trans-unit id="N0zZ0iD" resname="Created by">
+        <source>Created by</source>
+        <target>Created by</target>
+      </trans-unit>
+      <trans-unit id="rfb6h3u" resname="Change status">
+        <source>Change status</source>
+        <target>Change status</target>
+      </trans-unit>
+      <trans-unit id="kg5BPH1" resname="Status">
+        <source>Status</source>
+        <target>Status</target>
+      </trans-unit>
+      <trans-unit id="3JN7WYk" resname="None">
+        <source>None</source>
+        <target>None</target>
+      </trans-unit>
+      <trans-unit id="xGYKb.f" resname="Manage task">
+        <source>Manage task</source>
+        <target>Manage task</target>
+      </trans-unit>
+      <trans-unit id="fZ63rLE" resname="Close">
+        <source>Close</source>
+        <target>Close</target>
+      </trans-unit>
+      <trans-unit id="wL91vXi" resname="Change">
+        <source>Change</source>
+        <target>Change</target>
+      </trans-unit>
+      <trans-unit id="7r3SSnf" resname="Confirm">
+        <source>Confirm</source>
+        <target>Confirm</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
