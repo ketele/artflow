@@ -649,6 +649,26 @@
         <source>Confirm</source>
         <target>Confirm</target>
       </trans-unit>
+      <trans-unit id="BQHwvle" resname="You can't edit this task">
+        <source>You can't edit this task</source>
+        <target>You can't edit this task</target>
+      </trans-unit>
+      <trans-unit id="vq2lO4V" resname="You can't edit this status">
+        <source>You can't edit this status</source>
+        <target>You can't edit this status</target>
+      </trans-unit>
+      <trans-unit id="vq2lO41" resname="To do">
+        <source>To do</source>
+        <target>To do</target>
+      </trans-unit>
+      <trans-unit id="vq2lO42" resname="In progress">
+        <source>In progress</source>
+        <target>In progress</target>
+      </trans-unit>
+      <trans-unit id="vq2lO43" resname="Done">
+        <source>Done</source>
+        <target>Done</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
