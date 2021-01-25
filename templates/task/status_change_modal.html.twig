@@ -1,0 +1,19 @@
+<div id="change-task-status-modal-error" class="alert alert-danger d-none" role="alert">
+    {% if error is not empty  %}
+            <ol>
+                {% for e in error %}
+                    <li>{{ e }}</li>
+                {% endfor %}
+            </ol>
+    {% endif %}
+</div>
+<form id="change-task-status-modal-form">
+    <input type="hidden" name="id" value="{{ task.id }}"/>
+    <div class="mb-3">
+        <select name="statusId" class="form-select" aria-label="{{ 'None'|trans }}">
+            {% for status in taskStatuses %}
+            <option value="{{ status.id }}" {% if status.id == task.status.id %}selected{% endif %}>{{ status.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+</form>

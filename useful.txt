@@ -27,7 +27,7 @@ symfony var:export
 symfony console make:migration
 symfony console doctrine:migrations:migrate -n
 symfony console doctrine:migrations:status
-symfony console doctrine:migrations:execute DoctrineMigrations\Version20201223121659 --down
+symfony console doctrine:migrations:execute DoctrineMigrations\Version20210125163837 --down
 docker exec -it artflow_database_1 mysql -uroot -p
 use main
 show tables;

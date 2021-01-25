@@ -29,6 +29,7 @@ Encore
     .addEntry('doodle_sketchbook', './assets/js/doodle_sketchbook.js')
     .addEntry('temp_files', './assets/js/pages/temp_files.js')
     .addEntry('gallery', './assets/js/pages/gallery.js')
+    .addEntry('task', './assets/js/pages/task.js')
     .addEntry('doodle_view', './assets/js/pages/doodle_view.js')
     //.addEntry('main', './assets/main.ts')
     //.addEntry('page2', './assets/js/page2.js')

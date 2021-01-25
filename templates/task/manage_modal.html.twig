@@ -1,0 +1,16 @@
+<div id="manage-task-modal-error" class="alert alert-danger d-none" role="alert">
+    {% if error is not empty  %}
+            <ol>
+                {% for e in error %}
+                    <li>{{ e }}</li>
+                {% endfor %}
+            </ol>
+    {% endif %}
+</div>
+<form id="manage-task-modal-form">
+    <input type="hidden" name="id" value="{{ task.id }}"/>
+    <div class="mb-3">
+        <label for="title" class="form-label">{{ 'Title'|trans }}</label>
+        <textarea id="title" class="form-control" name="title">{{ task.title }}</textarea>
+    </div>
+</form>
