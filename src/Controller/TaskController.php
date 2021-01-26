@@ -58,9 +58,11 @@ class TaskController extends AbstractController
         $jsonData['status'] = true;
 
         if (!$request->isXmlHttpRequest()) {
-            return new JsonResponse(array(
-                'status' => false,
-                'message' => 'Error! Not Xml Http Request'),
+            return new JsonResponse(
+                [
+                    'status' => false,
+                    'message' => 'Error! Not Xml Http Request'
+                ],
                 400);
         }
 
@@ -106,14 +108,14 @@ class TaskController extends AbstractController
         $statusId = $request->get('statusId');
 
         if (!is_numeric($id)) {
-            $error[] = 'Wrong input data';
+            $error[] = $this->translator->trans("Wrong id");
         } else {
             $task = $taskRepository->findOne($id);
 
         }
 
         if (!is_numeric($statusId)) {
-            $error[] = 'Wrong input data';
+            $error[] = $this->translator->trans("Wrong id");
         }
 
         if (empty($error)) {
@@ -143,9 +145,11 @@ class TaskController extends AbstractController
         $jsonData['status'] = true;
 
         if (!$request->isXmlHttpRequest()) {
-            return new JsonResponse(array(
-                'status' => false,
-                'message' => 'Error! Not Xml Http Request'),
+            return new JsonResponse(
+                [
+                    'status' => false,
+                    'message' => 'Error! Not Xml Http Request'
+                ],
                 400);
         }
 
@@ -231,9 +235,10 @@ class TaskController extends AbstractController
         $jsonData['status'] = true;
 
         if (!$request->isXmlHttpRequest()) {
-            return new JsonResponse(array(
+            return new JsonResponse([
                 'status' => false,
-                'message' => 'Error! Not Xml Http Request'),
+                'message' => 'Error! Not Xml Http Request'
+            ],
                 400);
         }
 
@@ -315,16 +320,18 @@ class TaskController extends AbstractController
         $jsonData['status'] = true;
 
         if (!$request->isXmlHttpRequest()) {
-            return new JsonResponse(array(
-                'status' => false,
-                'message' => 'Error! Not Xml Http Request'),
+            return new JsonResponse(
+                [
+                    'status' => false,
+                    'message' => 'Error! Not Xml Http Request'
+                ],
                 400);
         }
 
         $id = $request->get('id');
 
         if (!is_numeric($id)) {
-            $error[] = 'Wrong input data';
+            $error[] = $this->translator->trans("Wrong id");
         } else {
             $task = $taskRepository->findOne($id);
         }
@@ -358,7 +365,7 @@ class TaskController extends AbstractController
         $id = $request->get('id');
 
         if (!is_numeric($id)) {
-            $error[] = 'Wrong input data';
+            $error[] = $this->translator->trans("Wrong id");
         } else {
             $task = $taskRepository->findOne($id);
             if ($user != $task->getUser()) {
@@ -390,16 +397,18 @@ class TaskController extends AbstractController
         $jsonData['status'] = true;
 
         if (!$request->isXmlHttpRequest()) {
-            return new JsonResponse(array(
-                'status' => false,
-                'message' => 'Error! Not Xml Http Request'),
+            return new JsonResponse(
+                [
+                    'status' => false,
+                    'message' => 'Error! Not Xml Http Request'
+                ],
                 400);
         }
 
         $id = $request->get('id');
 
         if (!is_numeric($id)) {
-            $error[] = 'Wrong input data';
+            $error[] = $this->translator->trans("Wrong id");
         } else {
             $taskStatus = $taskStatusRepository->findOne($id);
         }
@@ -433,7 +442,7 @@ class TaskController extends AbstractController
         $id = $request->get('id');
 
         if (!is_numeric($id)) {
-            $error[] = 'Wrong id';
+            $error[] = $this->translator->trans("Wrong id");
         } else {
             $taskStatus = $taskStatusRepository->findOne($id);
             if ($user != $taskStatus->getUser()) {
