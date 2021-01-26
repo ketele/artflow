@@ -1,0 +1,15 @@
+<div id="delete-task-board-modal-error" class="alert alert-danger d-none" role="alert">
+    {% if error is not empty  %}
+            <ol>
+                {% for e in error %}
+                    <li>{{ e }}</li>
+                {% endfor %}
+            </ol>
+    {% endif %}
+</div>
+<form id="delete-task-board-modal-form">
+    <input type="hidden" name="id" value="{{ taskStatus.id }}"/>
+    <div class="mb-3">
+        {{ 'Are you sure you want to delete this status?'|trans }}
+    </div>
+</form>

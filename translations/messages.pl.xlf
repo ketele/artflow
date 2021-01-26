@@ -653,17 +653,37 @@
         <source>You can't edit this status</source>
         <target>Nie możesz edytować tego statusu</target>
       </trans-unit>
-      <trans-unit id="vq2lO41" resname="To do">
+      <trans-unit id="EA7BvHi" resname="To do">
         <source>To do</source>
         <target>Do zrobienia</target>
       </trans-unit>
-      <trans-unit id="vq2lO42" resname="In progress">
+      <trans-unit id="wfiOnWx" resname="In progress">
         <source>In progress</source>
         <target>W trakcie</target>
       </trans-unit>
-      <trans-unit id="vq2lO43" resname="Done">
+      <trans-unit id="EaZ2fVZ" resname="Done">
         <source>Done</source>
         <target>Zrobione</target>
+      </trans-unit>
+      <trans-unit id="YtK5qaI" resname="Are you sure you want to delete this status?">
+        <source>Are you sure you want to delete this status?</source>
+        <target>Jesteś pewien, że chcesz usunąć ten status?</target>
+      </trans-unit>
+      <trans-unit id="99lkaPa" resname="Are you sure you want to delete this task?">
+        <source>Are you sure you want to delete this task?</source>
+        <target>Jesteś pewien, że chcesz usunąć to zadanie?</target>
+      </trans-unit>
+      <trans-unit id="O69VR4S" resname="Delete task">
+        <source>Delete task</source>
+        <target>Usuń zadanie</target>
+      </trans-unit>
+      <trans-unit id="u5zdiX3" resname="Delete status">
+        <source>Delete status</source>
+        <target>Usuń status</target>
+      </trans-unit>
+      <trans-unit id="cmquuw5" resname="You can't delete status with tasks">
+        <source>You can't delete status with tasks</source>
+        <target>Nie można usunąć statusu z zadaniami</target>
       </trans-unit>
     </body>
   </file>

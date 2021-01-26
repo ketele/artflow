@@ -362,12 +362,94 @@ class TaskController extends AbstractController
          else {
              $task = $taskRepository->findOne($id);
              if( $user != $task->getUser() )
-                 $error[] = $this->translator->trans("You can't edit this status");
+                 $error[] = $this->translator->trans("You can't edit this task");
          }
 
         if(empty($error)) {
             $entityManager->remove($task);
             $entityManager->flush();
+        }
+
+        $jsonData['id'] = $id;
+        $jsonData['error'] = $error;
+
+        return new JsonResponse($jsonData);
+    }
+
+    /**
+     * @Route("/task/delete_board_modal_view", name="task_board_delete_modal_view")
+     * @throws \Exception
+     */
+
+    public function taskBoardDeleteModalView(Request $request, TaskStatusRepository $taskStatusRepository)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        $error = [];
+        $jsonData['status'] = true;
+
+        if (!$request->isXmlHttpRequest()) {
+            return new JsonResponse(array(
+                'status' => false,
+                'message' => 'Error! Not Xml Http Request'),
+                400);
+        }
+
+        $id = $request->get('id');
+
+        if( !is_numeric($id) ){
+            $error[] = 'Wrong input data';
+        }else{
+            $taskStatus = $taskStatusRepository->findOne($id);
+        }
+
+        $jsonData['content'] = $this->renderView('task/delete_board_modal.html.twig', [
+            'error' => $error,
+            'id' => $id,
+            'taskStatus' => $taskStatus,
+        ]);
+
+        return new JsonResponse($jsonData);
+    }
+
+    /**
+     * @Route("/task/delete_board_ajax", name="task_board_delete_ajax")
+     */
+
+    public function taskBoardDeleteAjax(
+        Request $request,
+        TaskStatusRepository $taskStatusRepository
+    ): Response
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $user = $this->getUser();
+
+        $error = [];
+        $jsonData['status'] = true;
+
+        $id = $request->get('id');
+
+        if (!is_numeric($id))
+        {
+            $error[] = 'Wrong input data';
+        }
+        else {
+            $taskStatus = $taskStatusRepository->findOne($id);
+            if( $user != $taskStatus->getUser() )
+                $error[] = $this->translator->trans("You can't edit this status");
+
+            if(count($taskStatus->getTasks()) > 0){
+                $error[] = $this->translator->trans("You can't delete status with tasks");
+            }
+        }
+
+        if(empty($error)) {
+            $entityManager->remove($taskStatus);
+            $entityManager->flush();
+        }else{
+            $jsonData['status'] = false;
         }
 
         $jsonData['id'] = $id;

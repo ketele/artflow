@@ -221,6 +221,67 @@ export class Task {
         xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
         xhr.send(formData);
     }
+
+    deleteTaskBoardShowModal(e){
+        Utils.showLoadingOverlay();
+        const xhr = new XMLHttpRequest();
+        let obj = e.currentTarget;
+        let button = e.relatedTarget;
+        let id = button.dataset.id;
+
+        xhr.onreadystatechange = e => {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                let response = JSON.parse(xhr.response);
+                let manage_task_modal_body = document.getElementById('delete-task-board-modal-body');
+
+                if( response.status === true ){
+                    manage_task_modal_body.innerHTML = response.content;
+                } else {
+                }
+
+                Utils.hideLoadingOverlay();
+            }else{
+            }
+        };
+        xhr.open("GET", "/task/delete_board_modal_view?id=" + id , false);
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        xhr.send(null);
+    }
+
+    deleteTaskBoard(e){
+        const xhr = new XMLHttpRequest();
+        let button = e.currentTarget;
+        let formElement = document.getElementById('delete-task-board-modal-form');
+        let formData = new FormData(formElement);
+
+        xhr.onreadystatechange = e => {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                let response = JSON.parse(xhr.response);
+                let error_element = document.getElementById('delete-task-board-modal-error');
+
+                if( response.status === true ){
+                    error_element.classList.add('d-none');
+                    window.location.reload(true);
+                } else {
+                    if(response.error.length > 0){
+                        error_element.innerHTML = '<ol>';
+                        for( let i = 0; i < response.error.length; i++ )
+                            error_element.innerHTML += '<li>' + response.error[i] + '</li>';
+                        error_element.innerHTML += '</ol>';
+                    }else
+                        error_element.innerHTML = "Something went wrong";
+                    error_element.classList.remove('d-none');
+                }
+
+                Utils.hideLoadingOverlay();
+            }else{
+            }
+        };
+
+        xhr.open("POST", "/task/delete_board_ajax" , false);
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        xhr.send(formData);
+    }
 }
 
 Utils.ready(function() {
@@ -264,6 +325,16 @@ Utils.ready(function() {
 
     document.getElementById('delete-task-modal-submit').addEventListener('click', e => {
         task.deleteTask(e);
+    } );
+
+    let deleteTaskBoardModal = document.getElementById('delete-task-board-modal');
+
+    deleteTaskBoardModal.addEventListener('show.bs.modal', e => {
+        task.deleteTaskBoardShowModal(e);
+    });
+
+    document.getElementById('delete-task-board-modal-submit').addEventListener('click', e => {
+        task.deleteTaskBoard(e);
     } );
 
 });
