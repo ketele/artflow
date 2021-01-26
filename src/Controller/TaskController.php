@@ -299,4 +299,80 @@ class TaskController extends AbstractController
 
         return new JsonResponse($jsonData);
     }
+
+    /**
+     * @Route("/task/delete_modal_view", name="task_delete_modal_view")
+     * @throws \Exception
+     */
+
+    public function taskDeleteModalView(Request $request, TaskRepository $taskRepository)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        $error = [];
+        $jsonData['status'] = true;
+
+        if (!$request->isXmlHttpRequest()) {
+            return new JsonResponse(array(
+                'status' => false,
+                'message' => 'Error! Not Xml Http Request'),
+                400);
+        }
+
+        $id = $request->get('id');
+
+        if( !is_numeric($id) ){
+            $error[] = 'Wrong input data';
+        }else{
+            $task = $taskRepository->findOne($id);
+        }
+
+        $jsonData['content'] = $this->renderView('task/delete_modal.html.twig', [
+            'error' => $error,
+            'id' => $id,
+            'task' => $task,
+        ]);
+
+        return new JsonResponse($jsonData);
+    }
+
+    /**
+     * @Route("/task/delete_ajax", name="task_delete_ajax")
+     */
+
+    public function taskDeleteAjax(
+        Request $request,
+        TaskRepository $taskRepository
+    ): Response
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $user = $this->getUser();
+
+        $error = [];
+        $jsonData['status'] = true;
+
+        $id = $request->get('id');
+
+         if (!is_numeric($id))
+         {
+             $error[] = 'Wrong input data';
+         }
+         else {
+             $task = $taskRepository->findOne($id);
+             if( $user != $task->getUser() )
+                 $error[] = $this->translator->trans("You can't edit this status");
+         }
+
+        if(empty($error)) {
+            $entityManager->remove($task);
+            $entityManager->flush();
+        }
+
+        $jsonData['id'] = $id;
+        $jsonData['error'] = $error;
+
+        return new JsonResponse($jsonData);
+    }
 }

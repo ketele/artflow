@@ -43,17 +43,23 @@
                         <div class="alert alert-warning" role="alert">
                             <p>{{ task.title }}</p>
                             <p><small>{{ 'Created by'|trans }}: {{ task.user.userName }}</small></p>
-                            <a href="#" class="change-task-status btn btn-outline-warning btn-sm"
+                            <a href="#" class="btn btn-outline-warning btn-sm"
                                data-id="{{ task.id }}"
                                data-bs-toggle="modal"
                                data-bs-target="#change-task-status-modal">
                                 {{ 'Change status'|trans }}
                             </a>
-                            <a href="#" class="change-task-status btn btn-outline-warning btn-sm"
+                            <a href="#" class="btn btn-outline-warning btn-sm"
                                data-id="{{ task.id }}"
                                data-bs-toggle="modal"
                                data-bs-target="#mange-task-modal">
                                 {{ 'Edit'|trans }}
+                            </a>
+                            <a href="#" class="btn btn-outline-warning btn-sm"
+                               data-id="{{ task.id }}"
+                               data-bs-toggle="modal"
+                               data-bs-target="#delete-task-modal">
+                                {{ 'Delete'|trans }}
                             </a>
                         </div>
                         {% endfor %}
@@ -113,6 +119,24 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ "Close"|trans }}</button>
                     <button type="button" class="btn btn-primary" id="manage-task-board-modal-submit">{{ "Confirm"|trans }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal task board -->
+    <div class="modal fade" id="delete-task-modal" tabindex="-1" aria-labelledby="delete-task-modal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{{ "Manage task"|trans }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="delete-task-modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ "Close"|trans }}</button>
+                    <button type="button" class="btn btn-primary" id="delete-task-modal-submit">{{ "Confirm"|trans }}</button>
                 </div>
             </div>
         </div>

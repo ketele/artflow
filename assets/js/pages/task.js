@@ -166,14 +166,67 @@ export class Task {
         xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
         xhr.send(formData);
     }
+
+    deleteTaskShowModal(e){
+        Utils.showLoadingOverlay();
+        const xhr = new XMLHttpRequest();
+        let obj = e.currentTarget;
+        let button = e.relatedTarget;
+        let id = button.dataset.id;
+
+        xhr.onreadystatechange = e => {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                let response = JSON.parse(xhr.response);
+                let manage_task_modal_body = document.getElementById('delete-task-modal-body');
+
+                if( response.status === true ){
+                    manage_task_modal_body.innerHTML = response.content;
+                } else {
+                }
+
+                Utils.hideLoadingOverlay();
+            }else{
+            }
+        };
+        xhr.open("GET", "/task/delete_modal_view?id=" + id , false);
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        xhr.send(null);
+    }
+
+    deleteTask(e){
+        const xhr = new XMLHttpRequest();
+        let button = e.currentTarget;
+        let formElement = document.getElementById('delete-task-modal-form');
+        let formData = new FormData(formElement);
+
+        xhr.onreadystatechange = e => {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                let response = JSON.parse(xhr.response);
+                let error_element = document.getElementById('delete-task-modal-error');
+
+                if( response.status === true ){
+                    error_element.classList.add('d-none');
+                    window.location.reload(true);
+                } else {
+                    error_element.innerHTML = "Something went wrong";
+                    error_element.classList.remove('d-none');
+                }
+
+                Utils.hideLoadingOverlay();
+            }else{
+            }
+        };
+
+        xhr.open("POST", "/task/delete_ajax" , false);
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        xhr.send(formData);
+    }
 }
 
 Utils.ready(function() {
     let task = new Task();
 
     let changeTaskStatusModal = document.getElementById('change-task-status-modal');
-    let manageTaskModal = document.getElementById('mange-task-modal');
-    let manageTaskBoardModal = document.getElementById('mange-task-board-modal');
 
     changeTaskStatusModal.addEventListener('show.bs.modal', e => {
         task.changTaskStatusShowModal(e);
@@ -183,6 +236,8 @@ Utils.ready(function() {
         task.changeTaskStatus(e);
     } );
 
+    let manageTaskModal = document.getElementById('mange-task-modal');
+
     manageTaskModal.addEventListener('show.bs.modal', e => {
         task.manageTaskShowModal(e);
     });
@@ -191,12 +246,24 @@ Utils.ready(function() {
         task.manageTask(e);
     } );
 
+    let manageTaskBoardModal = document.getElementById('mange-task-board-modal');
+
     manageTaskBoardModal.addEventListener('show.bs.modal', e => {
         task.manageTaskBoardShowModal(e);
     });
 
     document.getElementById('manage-task-board-modal-submit').addEventListener('click', e => {
         task.manageTaskBoard(e);
+    } );
+
+    let deleteTaskModal = document.getElementById('delete-task-modal');
+
+    deleteTaskModal.addEventListener('show.bs.modal', e => {
+        task.deleteTaskShowModal(e);
+    });
+
+    document.getElementById('delete-task-modal-submit').addEventListener('click', e => {
+        task.deleteTask(e);
     } );
 
 });
