@@ -40,7 +40,8 @@ class DoodleController extends AbstractController
                             DoodleStatusRepository $doodleStatusRepository,
                             string $doodleFolder,
                             Request $request
-    ){
+    )
+    {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
         $order = $request->get('order', 'createdAt');
@@ -50,11 +51,11 @@ class DoodleController extends AbstractController
 
         $parameters = [];
 
-        if( is_numeric($status) ) {
+        if (is_numeric($status)) {
             $where[] = 'd.status = ' . $status;
         }
 
-        if( is_numeric($id) ) {
+        if (is_numeric($id)) {
             $rootDoodle = $doodleRepository->findOne($id);
             $ipTree = $rootDoodle->getIpTree();
             $rootId = explode('.', $ipTree)[0];
@@ -74,7 +75,7 @@ class DoodleController extends AbstractController
 
         $doodleStatuses = $doodleStatusRepository->getStatuses();
 
-        foreach($doodles AS $doodles_key => $d) {
+        foreach ($doodles AS $doodles_key => $d) {
             $d->setUrl($glide->generateUrl($doodleFolder . $d->getId(), $d->getFileName()));
         }
 
@@ -111,10 +112,10 @@ class DoodleController extends AbstractController
 
         $id = $request->get('id');
 
-        if( !is_numeric($id) ){
+        if (!is_numeric($id)) {
             $jsonData['status'] = false;
             $error[] = 'Wrong id';
-        }else{
+        } else {
             $doodle = $doodleRepository->findOne($id);
         }
 
@@ -144,13 +145,15 @@ class DoodleController extends AbstractController
         $id = $request->get('id');
         $statusId = $request->get('statusId');
 
-        if( !is_numeric($id) )
+        if (!is_numeric($id)) {
             $error[] = 'Wrong input data';
+        }
 
-        if( !is_numeric($statusId) )
+        if (!is_numeric($statusId)) {
             $error[] = 'Wrong input data';
+        }
 
-        if(empty($error)){
+        if (empty($error)) {
             $doodle = $doodleRepository->findOne($id);
             $status = $doodleStatusRepository->findOne($statusId);
             $doodle->setStatus($status);

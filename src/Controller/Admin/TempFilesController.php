@@ -13,10 +13,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class TempFilesController extends AbstractController
 {
-    public function __construct()
-    {
-    }
-
     /**
      * @Route("admin/temp_files", name="temp_files")
      */
@@ -36,7 +32,7 @@ class TempFilesController extends AbstractController
         $year = $request->get('year');
         $month = $request->get('month');
 
-        if( !is_numeric($year) || !is_numeric($month) ){
+        if (!is_numeric($year) || !is_numeric($month)) {
             $year = date('Y');
             $month = date('m');
         }
@@ -46,7 +42,7 @@ class TempFilesController extends AbstractController
             ->sortByModifiedTime()
             ->in($tempPath);
 
-        if ( $finder->hasResults() ) {
+        if ($finder->hasResults()) {
             $iterator = $finder->getIterator();
             $iterator->rewind();
             $firstFile = $iterator->current();
@@ -57,7 +53,7 @@ class TempFilesController extends AbstractController
 
         $tempDate = $firstFileDate;
 
-        while( $tempDate <= date('Y-m-d') ){
+        while ($tempDate <= date('Y-m-d')) {
             $months[] = $tempDate;
 
             $tempDate = date('Y-m-d', strtotime(date('Y-m-t', strtotime($tempDate)) . ' +1 DAY'));
@@ -71,8 +67,8 @@ class TempFilesController extends AbstractController
             ->reverseSorting()
             ->in($tempPath);
 
-        if ( $finder->hasResults() ) {
-            foreach( $finder as $file ) {
+        if ($finder->hasResults()) {
+            foreach ($finder as $file) {
                 $relativePath = $file->getRelativePath();
                 $addDate = $file->getATime();
                 $modifiedDate = $file->getMTime();
@@ -108,11 +104,11 @@ class TempFilesController extends AbstractController
         $filesystem = new Filesystem();
         $finder = new Finder();
         $tempPath = sys_get_temp_dir();
-        
+
         $year = $request->get('year');
         $month = $request->get('month');
 
-        if(is_numeric($year) && is_numeric($month)){
+        if (is_numeric($year) && is_numeric($month)) {
             $finder->files()
                 ->date('>= ' . $year . '-' . $month . '-01')
                 ->date('<= ' . date('Y-m-t', strtotime($year . '-' . $month . '-30')))
@@ -121,15 +117,15 @@ class TempFilesController extends AbstractController
                 ->reverseSorting()
                 ->in($tempPath);
 
-            if ( $finder->hasResults() ) {
-                foreach( $finder as $file ) {
+            if ($finder->hasResults()) {
+                foreach ($finder as $file) {
                     $relativePath = $file->getRelativePath();
 
                     $file_path = $tempPath . '/' . $relativePath . '/' . $file->getFileName();
                     $filesystem->remove($file_path);
                 }
             }
-        }else{
+        } else {
             $jsonData['status'] = false;
         }
 

@@ -25,15 +25,15 @@ class DoodleStatusRepository extends ServiceEntityRepository
             ->andWhere('d.id = :val')
             ->setParameter('val', $value)
             ->getQuery()
-            ->getOneOrNullResult()
-            ;
+            ->getOneOrNullResult();
     }
 
     /**
      * @param bool $params
      * @return mixed
      */
-    public function getStatuses($params = false){
+    public function getStatuses($params = false)
+    {
         $queryBuilder = $this->createQueryBuilder('d');
 
         $opt = [
@@ -45,59 +45,36 @@ class DoodleStatusRepository extends ServiceEntityRepository
         ];
 
         if (!empty($params))
-            $opt = array_merge($opt,$params);
+            $opt = array_merge($opt, $params);
 
         extract($opt);
 
         $queryBuilder->select($select);
 
-        if( !empty($where) )
-            foreach( $where AS $w )
+        if (!empty($where)) {
+            foreach ($where AS $w) {
                 $queryBuilder->andWhere($w);
-
-        if( !empty($parameters) )
-            foreach( $parameters AS $p_key => $p )
-                $queryBuilder->setParameter($p_key, $p);
-
-        if( !empty($order) ) {
-            foreach ($order AS $o)
-                $queryBuilder->orderBy($o[0], $o[1]);
+            }
         }
 
-        if(is_numeric($maxResults))
-            $queryBuilder->setMaxResults($maxResults);
+        if (!empty($parameters)) {
+            foreach ($parameters AS $p_key => $p) {
+                $queryBuilder->setParameter($p_key, $p);
+            }
+        }
 
-        $query =    $queryBuilder->getQuery();
+        if (!empty($order)) {
+            foreach ($order AS $o) {
+                $queryBuilder->orderBy($o[0], $o[1]);
+            }
+        }
+
+        if (is_numeric($maxResults)) {
+            $queryBuilder->setMaxResults($maxResults);
+        }
+
+        $query = $queryBuilder->getQuery();
 
         return $query->getResult();
     }
-
-    // /**
-    //  * @return DoodleStatus[] Returns an array of DoodleStatus objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('d')
-            ->andWhere('d.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('d.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?DoodleStatus
-    {
-        return $this->createQueryBuilder('d')
-            ->andWhere('d.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

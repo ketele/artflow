@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ 'Tasks'|trans}}{% endblock %}
+{% block title %}{{ 'Tasks'|trans }}{% endblock %}
 
 {% block body %}
     <div class="container mt-5">
@@ -25,60 +25,68 @@
     <div class="container mt-5">
         <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
             {% for status in statuses %}
-            <div class="col">
-                <div class="card mb-4 shadow-sm">
-                    <div class="card-header">
-                        <h4 class="my-0 fw-normal">{% if status.user.id is defined %}{{ status.name }}{% else %}{{ status.name|trans }}{% endif %}
-                        {% if app.user == status.user %}
-                            <a href="#" class="change-task-board-status"
-                           data-id="{{ status.id }}"
-                           data-bs-toggle="modal"
-                           data-bs-target="#mange-task-board-modal">
-                            <i class="bi-pencil-fill"></i>
-                        </a>
-                            <a href="#" class="delete-task-board-status"
-                           data-id="{{ status.id }}"
-                           data-bs-toggle="modal"
-                           data-bs-target="#delete-task-board-modal">
-                            <i class="bi-trash-fill"></i>
-                        </a>
-                            {% endif %}
-                        </h4>
-                    </div>
-                    <div class="card-body">
-                        {% for task in taskRepository.getUserTasksByStatus(app.user.id,status.id) %}
-                        <div class="alert alert-warning" role="alert">
-                            <p>{{ task.title }}</p>
-                            <p><small>{{ 'Created by'|trans }}: {{ task.user.userName }}</small></p>
-                            <a href="#" class="btn btn-outline-warning btn-sm"
-                               data-id="{{ task.id }}"
-                               data-bs-toggle="modal"
-                               data-bs-target="#change-task-status-modal">
-                                {{ 'Change status'|trans }}
-                            </a>
-                            <a href="#" class="btn btn-outline-warning btn-sm"
-                               data-id="{{ task.id }}"
-                               data-bs-toggle="modal"
-                               data-bs-target="#mange-task-modal">
-                                {{ 'Edit'|trans }}
-                            </a>
-                            <a href="#" class="btn btn-outline-warning btn-sm"
-                               data-id="{{ task.id }}"
-                               data-bs-toggle="modal"
-                               data-bs-target="#delete-task-modal">
-                                {{ 'Delete'|trans }}
-                            </a>
+                <div class="col">
+                    <div class="card mb-4 shadow-sm">
+                        <div class="card-header">
+                            <h4 class="my-0 fw-normal">
+                                {% if status.user.id is defined %}
+                                    {{ status.name }}
+                                {% else %}
+                                    {{ status.name|trans }}
+                                {% endif %}
+                                {% if app.user == status.user %}
+                                    <a href="#" class="change-task-board-status"
+                                       data-id="{{ status.id }}"
+                                       data-bs-toggle="modal"
+                                       data-bs-target="#mange-task-board-modal">
+                                        <i class="bi-pencil-fill"></i>
+                                    </a>
+                                    <a href="#" class="delete-task-board-status"
+                                       data-id="{{ status.id }}"
+                                       data-bs-toggle="modal"
+                                       data-bs-target="#delete-task-board-modal">
+                                        <i class="bi-trash-fill"></i>
+                                    </a>
+                                {% endif %}
+                            </h4>
                         </div>
-                        {% endfor %}
+                        <div class="card-body">
+                            {% for task in taskRepository.getUserTasksByStatus(app.user.id,status.id) %}
+                                <div class="alert alert-warning" role="alert">
+                                    <p>{{ task.title }}</p>
+                                    <p>
+                                        <small>{{ 'Created by'|trans }}: {{ task.user.userName }}</small>
+                                    </p>
+                                    <a href="#" class="btn btn-outline-warning btn-sm"
+                                       data-id="{{ task.id }}"
+                                       data-bs-toggle="modal"
+                                       data-bs-target="#change-task-status-modal">
+                                        {{ 'Change status'|trans }}
+                                    </a>
+                                    <a href="#" class="btn btn-outline-warning btn-sm"
+                                       data-id="{{ task.id }}"
+                                       data-bs-toggle="modal"
+                                       data-bs-target="#mange-task-modal">
+                                        {{ 'Edit'|trans }}
+                                    </a>
+                                    <a href="#" class="btn btn-outline-warning btn-sm"
+                                       data-id="{{ task.id }}"
+                                       data-bs-toggle="modal"
+                                       data-bs-target="#delete-task-modal">
+                                        {{ 'Delete'|trans }}
+                                    </a>
+                                </div>
+                            {% endfor %}
+                        </div>
                     </div>
                 </div>
-            </div>
             {% endfor %}
         </div>
     </div>
 
     <!-- Modal task status -->
-    <div class="modal fade" id="change-task-status-modal" tabindex="-1" aria-labelledby="change-task-status-modal" aria-hidden="true">
+    <div class="modal fade" id="change-task-status-modal" tabindex="-1" aria-labelledby="change-task-status-modal"
+         aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -89,7 +97,8 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ "Close"|trans }}</button>
-                    <button type="button" class="btn btn-primary" id="change-task-status-modal-submit">{{ "Change"|trans }}</button>
+                    <button type="button" class="btn btn-primary"
+                            id="change-task-status-modal-submit">{{ "Change"|trans }}</button>
                 </div>
             </div>
         </div>
@@ -107,14 +116,16 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ "Close"|trans }}</button>
-                    <button type="button" class="btn btn-primary" id="manage-task-modal-submit">{{ "Confirm"|trans }}</button>
+                    <button type="button" class="btn btn-primary"
+                            id="manage-task-modal-submit">{{ "Confirm"|trans }}</button>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Modal task board -->
-    <div class="modal fade" id="mange-task-board-modal" tabindex="-1" aria-labelledby="mange-task-board-modal" aria-hidden="true">
+    <div class="modal fade" id="mange-task-board-modal" tabindex="-1" aria-labelledby="mange-task-board-modal"
+         aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -125,7 +136,8 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ "Close"|trans }}</button>
-                    <button type="button" class="btn btn-primary" id="manage-task-board-modal-submit">{{ "Confirm"|trans }}</button>
+                    <button type="button" class="btn btn-primary"
+                            id="manage-task-board-modal-submit">{{ "Confirm"|trans }}</button>
                 </div>
             </div>
         </div>
@@ -143,14 +155,16 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ "Close"|trans }}</button>
-                    <button type="button" class="btn btn-primary" id="delete-task-modal-submit">{{ "Confirm"|trans }}</button>
+                    <button type="button" class="btn btn-primary"
+                            id="delete-task-modal-submit">{{ "Confirm"|trans }}</button>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Modal task board -->
-    <div class="modal fade" id="delete-task-board-modal" tabindex="-1" aria-labelledby="delete-task-board-modal" aria-hidden="true">
+    <div class="modal fade" id="delete-task-board-modal" tabindex="-1" aria-labelledby="delete-task-board-modal"
+         aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -161,7 +175,8 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ "Close"|trans }}</button>
-                    <button type="button" class="btn btn-primary" id="delete-task-board-modal-submit">{{ "Confirm"|trans }}</button>
+                    <button type="button" class="btn btn-primary"
+                            id="delete-task-board-modal-submit">{{ "Confirm"|trans }}</button>
                 </div>
             </div>
         </div>

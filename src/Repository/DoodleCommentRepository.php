@@ -36,7 +36,8 @@ class DoodleCommentRepository extends ServiceEntityRepository
         $this->entityManager->flush();
     }
 
-    public function getDoodlesComments($params = false){
+    public function getDoodlesComments($params = false)
+    {
         $queryBuilder = $this->createQueryBuilder('d');
 
         $opt = [
@@ -47,60 +48,38 @@ class DoodleCommentRepository extends ServiceEntityRepository
             'maxResults' => null,
         ];
 
-        if (!empty($params))
-            $opt = array_merge($opt,$params);
+        if (!empty($params)) {
+            $opt = array_merge($opt, $params);
+        }
 
         extract($opt);
 
         $queryBuilder->select($select);
 
-        if( !empty($where) )
-            foreach( $where AS $w )
+        if (!empty($where)) {
+            foreach ($where AS $w) {
                 $queryBuilder->andWhere($w);
-
-        if( !empty($parameters) )
-            foreach( $parameters AS $p_key => $p )
-                $queryBuilder->setParameter($p_key, $p);
-
-        if( !empty($order) ) {
-            foreach ($order AS $o)
-                $queryBuilder->orderBy($o[0], $o[1]);
+            }
         }
 
-        if( $maxResults >= 0 )
+        if (!empty($parameters)) {
+            foreach ($parameters AS $p_key => $p) {
+                $queryBuilder->setParameter($p_key, $p);
+            }
+        }
+
+        if (!empty($order)) {
+            foreach ($order AS $o) {
+                $queryBuilder->orderBy($o[0], $o[1]);
+            }
+        }
+
+        if ($maxResults >= 0) {
             $queryBuilder->setMaxResults($maxResults);
+        }
 
         $query = $queryBuilder->getQuery();
 
         return $query->getResult();
     }
-
-    // /**
-    //  * @return DoodleComment[] Returns an array of DoodleComment objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('d')
-            ->andWhere('d.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('d.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?DoodleComment
-    {
-        return $this->createQueryBuilder('d')
-            ->andWhere('d.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

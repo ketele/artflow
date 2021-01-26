@@ -66,10 +66,10 @@ class TaskController extends AbstractController
 
         $id = $request->get('id');
 
-        if( !is_numeric($id) ){
+        if (!is_numeric($id)) {
             $jsonData['status'] = false;
             $error[] = 'Wrong id';
-        }else{
+        } else {
             $task = $taskRepository->findOne($id);
         }
 
@@ -105,17 +105,18 @@ class TaskController extends AbstractController
         $id = $request->get('id');
         $statusId = $request->get('statusId');
 
-        if( !is_numeric($id) )
+        if (!is_numeric($id)) {
             $error[] = 'Wrong input data';
-        else{
+        } else {
             $task = $taskRepository->findOne($id);
 
         }
 
-        if( !is_numeric($statusId) )
+        if (!is_numeric($statusId)) {
             $error[] = 'Wrong input data';
+        }
 
-        if(empty($error)){
+        if (empty($error)) {
             $status = $taskStatusRepository->findOne($statusId);
             $task->setStatus($status);
             $entityManager->persist($task);
@@ -151,12 +152,13 @@ class TaskController extends AbstractController
         $id = $request->get('id');
         $user = $this->getUser();
 
-        if( is_numeric($id) ){
+        if (is_numeric($id)) {
             $task = $taskRepository->findOne($id);
-        }else{
+        } else {
             $task = new Task();
-            if( $user != $task->getUser() )
+            if ($user != $task->getUser()) {
                 $error[] = $this->translator->trans("You can't edit this task");
+            }
         }
 
         $jsonData['content'] = $this->renderView('task/manage_modal.html.twig', [
@@ -189,20 +191,20 @@ class TaskController extends AbstractController
         $id = $request->get('id');
         $title = $request->get('title');
 
-        if( strlen($title) <= 0 )
+        if (strlen($title) <= 0) {
             $error[] = $this->translator->trans('Please write title');
-        if (!is_numeric($id))
-        {
-            $task = new Task();
-            $task->setStatus($taskStatusRepository->findOneBy(['id'=>TaskStatus::STATUS_TO_DO]));
         }
-        else {
+        if (!is_numeric($id)) {
+            $task = new Task();
+            $task->setStatus($taskStatusRepository->findOneBy(['id' => TaskStatus::STATUS_TO_DO]));
+        } else {
             $task = $taskRepository->findOne($id);
-            if( $user != $task->getUser() )
+            if ($user != $task->getUser()) {
                 $error[] = $this->translator->trans("You can't edit this task");
+            }
         }
 
-        if(empty($error)) {
+        if (empty($error)) {
             $task->setTitle($title);
             $task->setUser($user);
             $entityManager->persist($task);
@@ -237,9 +239,9 @@ class TaskController extends AbstractController
 
         $id = $request->get('id');
 
-        if( is_numeric($id) ){
+        if (is_numeric($id)) {
             $taskStatus = $taskStatusRepository->findOne($id);
-        }else{
+        } else {
             $taskStatus = new TaskStatus();
         }
 
@@ -272,21 +274,21 @@ class TaskController extends AbstractController
         $id = $request->get('id');
         $name = $request->get('name');
 
-        if( strlen($name) <= 0 )
+        if (strlen($name) <= 0) {
             $error[] = $this->translator->trans('Please write title');
+        }
 
-         if (!is_numeric($id))
-         {
-             $taskStatus = new TaskStatus();
-             $taskStatus->setUser($user);
-         }
-         else {
-             $taskStatus = $taskStatusRepository->findOne($id);
-             if( $user != $taskStatus->getUser() )
-                 $error[] = $this->translator->trans("You can't edit this status");
-         }
+        if (!is_numeric($id)) {
+            $taskStatus = new TaskStatus();
+            $taskStatus->setUser($user);
+        } else {
+            $taskStatus = $taskStatusRepository->findOne($id);
+            if ($user != $taskStatus->getUser()) {
+                $error[] = $this->translator->trans("You can't edit this status");
+            }
+        }
 
-        if(empty($error)) {
+        if (empty($error)) {
 
             $taskStatus->setName($name);
             $entityManager->persist($taskStatus);
@@ -321,9 +323,9 @@ class TaskController extends AbstractController
 
         $id = $request->get('id');
 
-        if( !is_numeric($id) ){
+        if (!is_numeric($id)) {
             $error[] = 'Wrong input data';
-        }else{
+        } else {
             $task = $taskRepository->findOne($id);
         }
 
@@ -355,17 +357,16 @@ class TaskController extends AbstractController
 
         $id = $request->get('id');
 
-         if (!is_numeric($id))
-         {
-             $error[] = 'Wrong input data';
-         }
-         else {
-             $task = $taskRepository->findOne($id);
-             if( $user != $task->getUser() )
-                 $error[] = $this->translator->trans("You can't edit this task");
-         }
+        if (!is_numeric($id)) {
+            $error[] = 'Wrong input data';
+        } else {
+            $task = $taskRepository->findOne($id);
+            if ($user != $task->getUser()) {
+                $error[] = $this->translator->trans("You can't edit this task");
+            }
+        }
 
-        if(empty($error)) {
+        if (empty($error)) {
             $entityManager->remove($task);
             $entityManager->flush();
         }
@@ -397,9 +398,9 @@ class TaskController extends AbstractController
 
         $id = $request->get('id');
 
-        if( !is_numeric($id) ){
+        if (!is_numeric($id)) {
             $error[] = 'Wrong input data';
-        }else{
+        } else {
             $taskStatus = $taskStatusRepository->findOne($id);
         }
 
@@ -431,24 +432,23 @@ class TaskController extends AbstractController
 
         $id = $request->get('id');
 
-        if (!is_numeric($id))
-        {
-            $error[] = 'Wrong input data';
-        }
-        else {
+        if (!is_numeric($id)) {
+            $error[] = 'Wrong id';
+        } else {
             $taskStatus = $taskStatusRepository->findOne($id);
-            if( $user != $taskStatus->getUser() )
+            if ($user != $taskStatus->getUser()) {
                 $error[] = $this->translator->trans("You can't edit this status");
+            }
 
-            if(count($taskStatus->getTasks()) > 0){
+            if (count($taskStatus->getTasks()) > 0) {
                 $error[] = $this->translator->trans("You can't delete status with tasks");
             }
         }
 
-        if(empty($error)) {
+        if (empty($error)) {
             $entityManager->remove($taskStatus);
             $entityManager->flush();
-        }else{
+        } else {
             $jsonData['status'] = false;
         }
 

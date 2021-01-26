@@ -31,14 +31,14 @@ class UserController extends AbstractController
         $user = $adminRepository->findOneBy(['username' => $username]);
 
         $doodles = $doodleRepository->getDoodles(['where' => ['d.user = ' . $user->getId()]]);
-        foreach($doodles AS $doodles_key => $doodle) {
+        foreach ($doodles AS $doodles_key => $doodle) {
             $doodle->setUrl($glide->generateUrl($doodleFolder . $doodle->getId(), $doodle->getFileName()));
         }
         $new_doodles = $doodleRepository->getDoodles([
             'where' => ['d.user = ' . $user->getId()],
             'order' => [['d.createdAt', 'DESC']],
         ]);
-        foreach($new_doodles AS $doodles_key => $doodle) {
+        foreach ($new_doodles AS $doodles_key => $doodle) {
             $doodle->setUrl($glide->generateUrl($doodleFolder . $doodle->getId(), $doodle->getFileName()));
         }
 
@@ -63,7 +63,7 @@ class UserController extends AbstractController
         RouterInterface $router
     )
     {
-        if( $this->isGranted('IS_AUTHENTICATED_FULLY') ){
+        if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
             $user = $this->getUser();
             $user->setLocale($locale);
             $adminRepository->save($user);

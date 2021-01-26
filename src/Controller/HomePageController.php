@@ -25,13 +25,16 @@ class HomePageController extends AbstractController
     {
         $glide = new Glide();
         $doodles = $doodleRepository->getDoodles();
-        foreach($doodles AS $doodles_key => $doodle) {
+
+        foreach ($doodles AS $doodles_key => $doodle) {
             $doodle->setUrl($glide->generateUrl($doodleFolder . $doodle->getId(), $doodle->getFileName()));
         }
+
         $new_doodles = $doodleRepository->getDoodles([
             'order' => [['d.createdAt', 'DESC']],
         ]);
-        foreach($new_doodles AS $doodles_key => $doodle) {
+
+        foreach ($new_doodles AS $doodles_key => $doodle) {
             $doodle->setUrl($glide->generateUrl($doodleFolder . $doodle->getId(), $doodle->getFileName()));
         }
 

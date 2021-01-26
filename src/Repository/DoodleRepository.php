@@ -53,8 +53,7 @@ class DoodleRepository extends ServiceEntityRepository
             ->orderBy('d.createdAt', 'DESC')
             ->setMaxResults(3)
             ->getQuery()
-            ->getResult()
-            ;
+            ->getResult();
     }
 
     public function findByStatusTheMostPopular($value)
@@ -65,11 +64,11 @@ class DoodleRepository extends ServiceEntityRepository
             ->orderBy('d.popularity', 'DESC')
             ->setMaxResults(3)
             ->getQuery()
-            ->getResult()
-            ;
+            ->getResult();
     }
 
-    public function getDoodles($params = false){
+    public function getDoodles($params = false)
+    {
         $queryBuilder = $this->createQueryBuilder('d');
 
         $opt = [
@@ -81,26 +80,32 @@ class DoodleRepository extends ServiceEntityRepository
         ];
 
         if (!empty($params))
-            $opt = array_merge($opt,$params);
+            $opt = array_merge($opt, $params);
 
         extract($opt);
 
         $queryBuilder->select($select);
 
-        if( !empty($where) )
-            foreach( $where AS $w )
+        if (!empty($where)) {
+            foreach ($where AS $w) {
                 $queryBuilder->andWhere($w);
+            }
+        }
 
-        if( !empty($parameters) )
-            foreach( $parameters AS $p_key => $p )
+        if (!empty($parameters)) {
+            foreach ($parameters AS $p_key => $p) {
                 $queryBuilder->setParameter($p_key, $p);
+            }
+        }
 
-        if( !empty($order) )
-            foreach( $order AS $o )
+        if (!empty($order)) {
+            foreach ($order AS $o) {
                 $queryBuilder->orderBy($o[0], $o[1]);
+            }
+        }
 
-            $queryBuilder->setMaxResults($maxResults);
-        $query =    $queryBuilder->getQuery();
+        $queryBuilder->setMaxResults($maxResults);
+        $query = $queryBuilder->getQuery();
 
         return $query->getResult();
     }
@@ -119,12 +124,10 @@ class DoodleRepository extends ServiceEntityRepository
         $updated_doodles = array();
         $doodle = $this->findWrongIpTreeRow();
 
-        while( !empty( $doodle ) )
-        {
+        while (!empty($doodle)) {
             $doodle_id = $doodle->getId();
 
-            if (!in_array($doodle_id, $updated_doodles))
-            {
+            if (!in_array($doodle_id, $updated_doodles)) {
                 $updated_doodles[] = $doodle_id;
 
                 $this->_user_ip_tree = array();
@@ -141,17 +144,19 @@ class DoodleRepository extends ServiceEntityRepository
         return true;
     }
 
-    public function findWrongIpTreeRow( $where = array() )
+    public function findWrongIpTreeRow($where = array())
     {
         $queryBuilder = $this->entityManager->createQueryBuilder();
 
-        if( !empty($where) )
-            foreach( $where AS $w )
+        if (!empty($where)) {
+            foreach ($where AS $w) {
                 $queryBuilder->andWhere($w);
+            }
+        }
 
         $query = $queryBuilder->select('child')
-            ->from(Doodle::class,'child')
-            ->leftJoin(Doodle::class,'parent',\Doctrine\ORM\Query\Expr\Join::WITH, 'parent.id = child.sourceDoodleId')
+            ->from(Doodle::class, 'child')
+            ->leftJoin(Doodle::class, 'parent', \Doctrine\ORM\Query\Expr\Join::WITH, 'parent.id = child.sourceDoodleId')
             ->andWhere('( child.ipTree NOT LIKE CONCAT( parent.ipTree ,\'.\', child.id ) OR child.ipTree IS NULL OR child.ipTree = \'\')')
             ->andWhere('( ( child.sourceDoodleId IS NULL AND child.id != child.ipTree ) OR child.sourceDoodleId IS NOT NULL )')
             ->setMaxResults(1)
@@ -165,26 +170,27 @@ class DoodleRepository extends ServiceEntityRepository
      * @return array
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function generateDoodleIpTree( int $doodleId )
+    public function generateDoodleIpTree(int $doodleId)
     {
-        if( !isset($doodleIpTreeArray) || !is_array($doodleIpTreeArray) )
+        if (!isset($doodleIpTreeArray) || !is_array($doodleIpTreeArray)) {
             $doodleIpTreeArray = [];
+        }
 
         $doodleData = $this->findOne($doodleId);
         $sourceDoodleId = $doodleData->getSourceDoodleId();
 
-        if( is_numeric( $sourceDoodleId )
+        if (is_numeric($sourceDoodleId)
             AND $sourceDoodleId > 0
-            AND ( !in_array( $sourceDoodleId, $doodleIpTreeArray ) )
+            AND (!in_array($sourceDoodleId, $doodleIpTreeArray))
         ) {
-            $doodleIpTreeArray = $this->generateDoodleIpTree( $sourceDoodleId );
+            $doodleIpTreeArray = $this->generateDoodleIpTree($sourceDoodleId);
             $doodleIpTreeArray[] = $doodleId;
             return $doodleIpTreeArray;
-        }else if( is_numeric( $sourceDoodleId )
+        } else if (is_numeric($sourceDoodleId)
             AND $sourceDoodleId > 0
-            AND ( in_array( $sourceDoodleId, $doodleIpTreeArray ) )
-        ){
-            $this->logger->error('Loop in doodle ip tree structure for ip ' . $sourceDoodleId . '.' . implode( '.', $doodleIpTreeArray ));
+            AND (in_array($sourceDoodleId, $doodleIpTreeArray))
+        ) {
+            $this->logger->error('Loop in doodle ip tree structure for ip ' . $sourceDoodleId . '.' . implode('.', $doodleIpTreeArray));
         }
 
         $doodleIpTreeArray[] = $doodleId;
