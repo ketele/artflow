@@ -15,26 +15,26 @@ export class Utils {
     }
 
     static getUrlParam(pos) {
-        pos = ( typeof pos !== 'undefined' ) ? pos : 0;
+        pos = (typeof pos !== 'undefined') ? pos : 0;
         let url_string = window.location.href,
-        url = new URL(url_string),
-        path = url.pathname,
-        parts = path.substr(1).split('/');
+            url = new URL(url_string),
+            path = url.pathname,
+            parts = path.substr(1).split('/');
 
         return parts[pos];
     }
 
-    static showLoadingOverlay(){
+    static showLoadingOverlay() {
         let body = document.body;
         body.classList.add("is-loading-overlay-visible");
     }
 
-    static hideLoadingOverlay(){
+    static hideLoadingOverlay() {
         let body = document.body;
         body.classList.remove("is-loading-overlay-visible");
     }
 
-    static iOS(){
+    static iOS() {
         return [
                 'iPad Simulator',
                 'iPhone Simulator',
@@ -56,11 +56,25 @@ export class Utils {
             document.addEventListener('DOMContentLoaded', callbackFunc);
         } else {
             // Old IE browsers
-            document.attachEvent('onreadystatechange', function() {
+            document.attachEvent('onreadystatechange', function () {
                 if (document.readyState === 'complete') {
                     callbackFunc();
                 }
             });
         }
+    }
+
+    static generateListHTML(list) {
+        let html = '';
+
+        if (list.length > 0) {
+            html = '<ol>';
+            for (let i = 0; i < list.length; i++) {
+                html += '<li>' + list[i] + '</li>';
+            }
+            html += '</ol>';
+        }
+
+        return html;
     }
 }

@@ -32,7 +32,7 @@ docker exec -it artflow_database_1 mysql -uroot -p
 use main
 show tables;
 symfony console security:encode-password
-INSERT INTO admin (username, roles, password) VALUES ('admin', '[\"ROLE_ADMIN\"]', '$argon2id$v=19$m=65536,t=4,p=1$Z7HuY+9lLXJikuYiMLQwSQ$pvSMZwqBCtNT3IXzC3P+ke0yk+TW6uFtHJ5lIBKsSzQ');
+INSERT INTO admin (username, roles, password) VALUES ('admin', '[\"ROLE_ADMIN\"]', '$argon2id$v=19$m=65536,t=4,p=1$Z7HuY+9lLXJikuYiMLQwSQ$pvSMZwq1CtNT3IXzC3P+ke0yk+TW6uFtHJ5lIBKsSzQ');
 symfony console make:auth
 symfony console make:entity Doodle
 symfony composer req symfony/filesystem
