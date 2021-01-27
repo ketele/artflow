@@ -32,28 +32,22 @@ export class Task {
         let button = e.currentTarget;
         let formElement = document.getElementById('change-task-status-modal-form');
         let formData = new FormData(formElement);
+        let error_element = document.getElementById('change-task-status-modal-error');
 
-        xhr.onreadystatechange = e => {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                let response = JSON.parse(xhr.response);
-                let error_element = document.getElementById('change-task-status-modal-error');
-
-                if (response.status === true) {
+        fetch("/api/task/" + formData.get('id') + "?" + new URLSearchParams(formData).toString(), {method: 'PATCH'})
+            .then(response => response.json().then(data => {
+                if (response.status < 300) {
                     error_element.classList.add('d-none');
                     window.location.reload(true);
                 } else {
-                    error_element.innerHTML = "Something went wrong";
+                    if (data.error && data.error.length > 0) {
+                        error_element.innerHTML = Utils.generateListHTML(data.error);
+                    } else {
+                        error_element.innerHTML = 'Error: ' + response.statusText + ' ' + response.status;
+                    }
                     error_element.classList.remove('d-none');
                 }
-
-                Utils.hideLoadingOverlay();
-            } else {
-            }
-        };
-
-        xhr.open("POST", "/task/status_change_ajax", false);
-        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-        xhr.send(formData);
+            }));
     }
 
     manageTaskShowModal(e) {

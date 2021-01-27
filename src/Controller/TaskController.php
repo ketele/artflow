@@ -88,34 +88,37 @@ class TaskController extends AbstractController
     }
 
     /**
-     * @Route("/api/task/status/<\d+>", name="task_status_change_ajax", methods={"DELETE"})
+     * @Route("/api/task/{id<\d+>}", name="task_param_change_ajax", methods={"PATCH"})
      */
 
-    public function statusChangeAjax(
+    public function paramChangeApi(
         int $id,
         Request $request,
         TaskRepository $taskRepository,
         TaskStatusRepository $taskStatusRepository
-    ): Response
+    ): JsonResponse
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $error = [];
+        $response = new JsonResponse();
+
+        if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            $error[] = $this->translator->trans("You can't edit this status");
+            $response->setStatusCode(Response::HTTP_FORBIDDEN);
+        }
 
         $entityManager = $this->getDoctrine()->getManager();
-
-        $error = [];
-        $jsonData['status'] = true;
-
-        $id = $request->get('id');
         $statusId = $request->get('statusId');
 
         if (!is_numeric($id)) {
             $error[] = $this->translator->trans("Wrong id");
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
         } else {
             $task = $taskRepository->findOne($id);
         }
 
         if (!is_numeric($statusId)) {
-            $error[] = $this->translator->trans("Wrong id");
+            $error[] = $this->translator->trans("Wrong status id");
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
         }
 
         if (empty($error)) {
@@ -125,11 +128,7 @@ class TaskController extends AbstractController
             $entityManager->flush();
         }
 
-        $jsonData['id'] = $id;
-        $jsonData['statusId'] = $statusId;
-        $jsonData['error'] = $error;
-
-        return new JsonResponse($jsonData);
+        return $response->setData(['error' => $error]);
     }
 
     /**
@@ -179,7 +178,7 @@ class TaskController extends AbstractController
      *     methods={"PUT|POST"}, defaults={"id": null})
      */
 
-    public function taskManageAjax(
+    public function taskManageApi(
         ?int $id,
         Request $request,
         TaskRepository $taskRepository,
@@ -189,7 +188,7 @@ class TaskController extends AbstractController
         $error = [];
         $response = new JsonResponse();
 
-        if(!$this->isGranted('IS_AUTHENTICATED_FULLY')){
+        if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
             $error[] = $this->translator->trans("You can't edit this status");
             $response->setStatusCode(Response::HTTP_FORBIDDEN);
         }
@@ -267,7 +266,7 @@ class TaskController extends AbstractController
      *     methods={"PUT|POST"}, defaults={"id": null})
      */
 
-    public function taskBoardManageAjax(
+    public function taskBoardManageApi(
         ?int $id,
         Request $request,
         TaskStatusRepository $taskStatusRepository
@@ -276,7 +275,7 @@ class TaskController extends AbstractController
         $error = [];
         $response = new JsonResponse();
 
-        if(!$this->isGranted('IS_AUTHENTICATED_FULLY')){
+        if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
             $error[] = $this->translator->trans("You can't edit this status");
             $response->setStatusCode(Response::HTTP_FORBIDDEN);
         }
@@ -353,7 +352,7 @@ class TaskController extends AbstractController
      * @Route("/api/task/{id<\d+>}", name="task_delete_ajax", methods={"DELETE"})
      */
 
-    public function taskDeleteAjax(
+    public function taskDeleteApi(
         int $id,
         TaskRepository $taskRepository
     ): JsonResponse
@@ -361,7 +360,7 @@ class TaskController extends AbstractController
         $error = [];
         $response = new JsonResponse();
 
-        if(!$this->isGranted('IS_AUTHENTICATED_FULLY')){
+        if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
             $error[] = $this->translator->trans("You can't edit this status");
             $response->setStatusCode(Response::HTTP_FORBIDDEN);
         }
@@ -430,7 +429,7 @@ class TaskController extends AbstractController
      * @Route("/api/task/board/{id<\d+>}", name="task_board_ajax", methods={"DELETE"})
      */
 
-    public function taskBoardDeleteAjax(
+    public function taskBoardDeleteApi(
         int $id,
         Request $request,
         TaskStatusRepository $taskStatusRepository
@@ -439,7 +438,7 @@ class TaskController extends AbstractController
         $error = [];
         $response = new JsonResponse();
 
-        if(!$this->isGranted('IS_AUTHENTICATED_FULLY')){
+        if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
             $error[] = $this->translator->trans("You can't edit this status");
             $response->setStatusCode(Response::HTTP_FORBIDDEN);
         }
