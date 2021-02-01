@@ -14,6 +14,7 @@ export class DoodleView {
             .then(response => response.json().then(data => {
                 if (response.status < 300) {
                     commentDiv.parentNode.insertBefore(Utils.createElementFromHTML(data.content), commentDiv.nextSibling);
+                    button.classList.add('d-none');
                 }
 
                 Utils.hideLoadingOverlay();
