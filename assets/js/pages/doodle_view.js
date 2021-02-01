@@ -2,27 +2,22 @@ import {Utils} from "./../utils";
 
 export class DoodleView {
     generateForm(e){
+        Utils.showLoadingOverlay();
         e.preventDefault();
-        const xhr = new XMLHttpRequest();
         let button = e.currentTarget;
         let id = button.getAttribute('data-id');
         let forId = button.getAttribute('data-for');
         let forDiv = document.getElementById(forId);
+        let commentDiv = button.parentNode;
 
-        xhr.onreadystatechange = e => {
-            if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                let response = JSON.parse(xhr.response);
-
-                if( response.status === true ){
-                    forDiv.innerHTML += response.content;
+        fetch(`/api/doodle/comment/${id}/manage`, {method: 'GET'})
+            .then(response => response.json().then(data => {
+                if (response.status < 300) {
+                    commentDiv.parentNode.insertBefore(Utils.createElementFromHTML(data.content), commentDiv.nextSibling);
                 }
-            }else{
-            }
-        };
 
-        xhr.open("POST", "/doodle_comment_ajax" , true);
-        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhr.send('id=' + id);
+                Utils.hideLoadingOverlay();
+            }));
     }
 }
 

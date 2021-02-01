@@ -220,19 +220,16 @@ class DoodleController extends AbstractController
     }
 
     /**
-     * @Route("/doodle_comment_ajax", name="doodle_comment_ajax")
-     * @param Request $request
+     * @Route("/api/doodle/comment/{id<\d+>}/manage", name="doodle_comment_ajax", methods={"GET"})
      * @return JsonResponse
      * @throws \Exception
      */
     public function doodle_comment_ajax(
-        Request $request,
+        int $id,
         DoodleRepository $doodleRepository,
         DoodleCommentRepository $doodleCommentRepository
-    )
+    ): JsonResponse
     {
-        $id = $request->get('id');
-
         $parentDoodleComment = $doodleCommentRepository->findOneBy(['id' => $id]);
         $doodleComment = new DoodleComment();
 
@@ -242,10 +239,7 @@ class DoodleController extends AbstractController
         $commentForm = $this->createForm(DoodleCommentFormType::class, $doodleComment);
         $content = $this->renderView('doodle/comment_form.html.twig', ['form' => $commentForm->createView()]);
 
-        $jsonData['status'] = true;
-        $jsonData['content'] = $content;
-
-        return new JsonResponse($jsonData);
+        return new JsonResponse(['content' => $content]);
     }
 
     /**
