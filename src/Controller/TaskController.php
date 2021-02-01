@@ -43,48 +43,39 @@ class TaskController extends AbstractController
     }
 
     /**
-     * @Route("/task/status_change_modal_view", name="task_status_change_modal_view")
+     * @Route("/api/task/status/{id<\d+>}/edit", name="task_status_change_modal_view", methods={"GET"}, defaults={"id": null})
      * @throws \Exception
      */
 
-    public function statusChangeModalView(Request $request, TaskRepository $taskRepository,
-                                          TaskStatusRepository $taskStatusRepository)
+    public function statusChangeModalView(?int $id, Request $request, TaskRepository $taskRepository,
+                                          TaskStatusRepository $taskStatusRepository): JsonResponse
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
-        $user = $this->getUser();
-
         $error = [];
-        $jsonData['status'] = true;
+        $response = new JsonResponse();
 
-        if (!$request->isXmlHttpRequest()) {
-            return new JsonResponse(
-                [
-                    'status' => false,
-                    'message' => 'Error! Not Xml Http Request'
-                ],
-                400);
+        if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            $error[] = $this->translator->trans("You can't edit this status");
+            $response->setStatusCode(Response::HTTP_FORBIDDEN);
         }
 
-        $id = $request->get('id');
+        $user = $this->getUser();
 
         if (!is_numeric($id)) {
             $jsonData['status'] = false;
             $error[] = 'Wrong id';
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
         } else {
             $task = $taskRepository->findOne($id);
         }
 
         $taskStatuses = $taskStatusRepository->getUserStatuses($user);
 
-        $jsonData['content'] = $this->renderView('task/status_change_modal.html.twig', [
+        return new JsonResponse(['content' => $this->renderView('task/status_change_modal.html.twig', [
             'error' => $error,
             'id' => $id,
             'task' => $task,
             'taskStatuses' => $taskStatuses,
-        ]);
-
-        return new JsonResponse($jsonData);
+        ])]);
     }
 
     /**
@@ -132,27 +123,21 @@ class TaskController extends AbstractController
     }
 
     /**
-     * @Route("/task/manage_modal_view", name="task_manage_modal_view")
+     * @Route("/api/task/{id<\d+>}/manage", name="task_manage_modal_view", methods={"GET"}, defaults={"id": null})
+     * @Route("/api/task/manage", name="task_add_modal_view", methods={"GET"}, defaults={"id": null})
      * @throws \Exception
      */
 
-    public function taskManageModalView(Request $request, TaskRepository $taskRepository)
+    public function taskManageModalView(?int $id, Request $request, TaskRepository $taskRepository)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
         $error = [];
-        $jsonData['status'] = true;
+        $response = new JsonResponse();
 
-        if (!$request->isXmlHttpRequest()) {
-            return new JsonResponse(
-                [
-                    'status' => false,
-                    'message' => 'Error! Not Xml Http Request'
-                ],
-                400);
+        if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            $error[] = $this->translator->trans("You can't edit this status");
+            $response->setStatusCode(Response::HTTP_FORBIDDEN);
         }
 
-        $id = $request->get('id');
         $user = $this->getUser();
 
         if (is_numeric($id)) {
@@ -161,16 +146,15 @@ class TaskController extends AbstractController
             $task = new Task();
             if ($user != $task->getUser()) {
                 $error[] = $this->translator->trans("You can't edit this task");
+                $response->setStatusCode(Response::HTTP_BAD_REQUEST);
             }
         }
 
-        $jsonData['content'] = $this->renderView('task/manage_modal.html.twig', [
+        return new JsonResponse(['content' => $this->renderView('task/manage_modal.html.twig', [
             'error' => $error,
             'id' => $id,
             'task' => $task,
-        ]);
-
-        return new JsonResponse($jsonData);
+        ])]);
     }
 
     /**
@@ -225,40 +209,30 @@ class TaskController extends AbstractController
     }
 
     /**
-     * @Route("/task/manage_board_modal_view", name="task_board_manage_modal_view")
+     * @Route("/api/task/board/{id<\d+>}/manage", name="task_board_edit_modal_view", methods={"GET"}, defaults={"id": null})
+     * @Route("/api/task/board/manage", name="task_board_add_modal_view", methods={"GET"}, defaults={"id": null})
      * @throws \Exception
      */
 
-    public function taskBoardManageModalView(Request $request, TaskStatusRepository $taskStatusRepository)
+    public function taskBoardManageModalView(?int $id, Request $request, TaskStatusRepository $taskStatusRepository)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
         $error = [];
-        $jsonData['status'] = true;
+        $response = new JsonResponse();
 
-        if (!$request->isXmlHttpRequest()) {
-            return new JsonResponse([
-                'status' => false,
-                'message' => 'Error! Not Xml Http Request'
-            ],
-                400);
+        if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            $error[] = $this->translator->trans("You can't edit this status");
+            $response->setStatusCode(Response::HTTP_FORBIDDEN);
         }
 
-        $id = $request->get('id');
+        $taskStatus = (is_numeric($id))
+            ? $taskStatusRepository->findOne($id)
+            : $taskStatus = new TaskStatus();
 
-        if (is_numeric($id)) {
-            $taskStatus = $taskStatusRepository->findOne($id);
-        } else {
-            $taskStatus = new TaskStatus();
-        }
-
-        $jsonData['content'] = $this->renderView('task/manage_board_modal.html.twig', [
+        return new JsonResponse(['content' => $this->renderView('task/manage_board_modal.html.twig', [
             'error' => $error,
             'id' => $id,
             'status' => $taskStatus,
-        ]);
-
-        return new JsonResponse($jsonData);
+        ])]);
     }
 
     /**
@@ -311,41 +285,34 @@ class TaskController extends AbstractController
     }
 
     /**
-     * @Route("/task/delete_modal_view", name="task_delete_modal_view")
+     * @Route("/api/task/{id<\d+>}/delete", name="task_delete_modal_view", methods={"GET"})
      * @throws \Exception
      */
 
-    public function taskDeleteModalView(Request $request, TaskRepository $taskRepository)
+    public function taskDeleteModalView(int $id, Request $request, TaskRepository $taskRepository)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
         $error = [];
-        $jsonData['status'] = true;
+        $response = new JsonResponse();
 
-        if (!$request->isXmlHttpRequest()) {
-            return new JsonResponse(
-                [
-                    'status' => false,
-                    'message' => 'Error! Not Xml Http Request'
-                ],
-                400);
+        if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            $error[] = $this->translator->trans("You can't edit this status");
+            $response->setStatusCode(Response::HTTP_FORBIDDEN);
         }
 
-        $id = $request->get('id');
+        $user = $this->getUser();
 
         if (!is_numeric($id)) {
             $error[] = $this->translator->trans("Wrong id");
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
         } else {
             $task = $taskRepository->findOne($id);
         }
 
-        $jsonData['content'] = $this->renderView('task/delete_modal.html.twig', [
+        return new JsonResponse(['content' => $this->renderView('task/delete_modal.html.twig', [
             'error' => $error,
             'id' => $id,
             'task' => $task,
-        ]);
-
-        return new JsonResponse($jsonData);
+        ])]);
     }
 
     /**
@@ -388,41 +355,40 @@ class TaskController extends AbstractController
     }
 
     /**
-     * @Route("/task/delete_board_modal_view", name="task_board_delete_modal_view")
+     * @Route("/api/task/board/{id<\d+>}/delete", name="task_board_delete_view", methods={"GET"})
      * @throws \Exception
      */
 
-    public function taskBoardDeleteModalView(Request $request, TaskStatusRepository $taskStatusRepository)
+    public function taskBoardDeleteView(int $id, TaskStatusRepository $taskStatusRepository): JsonResponse
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
         $error = [];
-        $jsonData['status'] = true;
+        $response = new JsonResponse();
 
-        if (!$request->isXmlHttpRequest()) {
-            return new JsonResponse(
-                [
-                    'status' => false,
-                    'message' => 'Error! Not Xml Http Request'
-                ],
-                400);
+        if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            $error[] = $this->translator->trans("You can't edit this status");
+            $response->setStatusCode(Response::HTTP_FORBIDDEN);
+        } else {
+            $user = $this->getUser();
         }
-
-        $id = $request->get('id');
 
         if (!is_numeric($id)) {
             $error[] = $this->translator->trans("Wrong id");
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
         } else {
             $taskStatus = $taskStatusRepository->findOne($id);
+            if ($taskStatus && $user != $taskStatus->getUser()) {
+                $error[] = $this->translator->trans("You can't edit this task");
+                $response->setStatusCode(Response::HTTP_FORBIDDEN);
+            }
         }
 
-        $jsonData['content'] = $this->renderView('task/delete_board_modal.html.twig', [
-            'error' => $error,
-            'id' => $id,
-            'taskStatus' => $taskStatus,
+        return new JsonResponse([
+            'content' => $this->renderView('task/delete_board_modal.html.twig', [
+                'error' => $error,
+                'id' => $id,
+                'taskStatus' => $taskStatus,
+            ])
         ]);
-
-        return new JsonResponse($jsonData);
     }
 
     /**

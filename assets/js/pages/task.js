@@ -4,27 +4,18 @@ import {Utils} from "./../utils";
 export class Task {
     changTaskStatusShowModal(e) {
         Utils.showLoadingOverlay();
-        const xhr = new XMLHttpRequest();
         let button = e.relatedTarget;
         let id = button.dataset.id;
+        let manage_task_modal_body = document.getElementById('change-task-status-modal-body');
 
-        xhr.onreadystatechange = e => {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                let response = JSON.parse(xhr.response);
-                let change_task_status_modal_body = document.getElementById('change-task-status-modal-body');
-
-                if (response.status === true) {
-                    change_task_status_modal_body.innerHTML = response.content;
-                } else {
+        fetch(`/api/task/status/${id}/edit`, {method: 'GET'})
+            .then(response => response.json().then(data => {
+                if (response.status < 300) {
+                    manage_task_modal_body.innerHTML = data.content;
                 }
 
                 Utils.hideLoadingOverlay();
-            } else {
-            }
-        };
-        xhr.open("GET", "/task/status_change_modal_view?id=" + id, false);
-        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-        xhr.send(null);
+            }));
     }
 
     changeTaskStatus(e) {
@@ -52,28 +43,18 @@ export class Task {
 
     manageTaskShowModal(e) {
         Utils.showLoadingOverlay();
-        const xhr = new XMLHttpRequest();
-        let obj = e.currentTarget;
         let button = e.relatedTarget;
         let id = button.dataset.id;
+        let manage_task_modal_body = document.getElementById('mange-task-modal-body');
 
-        xhr.onreadystatechange = e => {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                let response = JSON.parse(xhr.response);
-                let manage_task_modal_body = document.getElementById('mange-task-modal-body');
-
-                if (response.status === true) {
-                    manage_task_modal_body.innerHTML = response.content;
-                } else {
+        fetch(`/api/task${((id.length > 0) ? `/${id}` : ``)}/manage`, {method: 'GET'})
+            .then(response => response.json().then(data => {
+                if (response.status < 300) {
+                    manage_task_modal_body.innerHTML = data.content;
                 }
 
                 Utils.hideLoadingOverlay();
-            } else {
-            }
-        };
-        xhr.open("GET", "/task/manage_modal_view?id=" + id, false);
-        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-        xhr.send(null);
+            }));
     }
 
     manageTask(e) {
@@ -108,28 +89,18 @@ export class Task {
 
     manageTaskBoardShowModal(e) {
         Utils.showLoadingOverlay();
-        const xhr = new XMLHttpRequest();
-        let obj = e.currentTarget;
         let button = e.relatedTarget;
         let id = button.dataset.id;
+        let manage_task_modal_body = document.getElementById('mange-task-board-modal-body');
 
-        xhr.onreadystatechange = e => {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                let response = JSON.parse(xhr.response);
-                let manage_task_modal_body = document.getElementById('mange-task-board-modal-body');
-
-                if (response.status === true) {
-                    manage_task_modal_body.innerHTML = response.content;
-                } else {
+        fetch(`/api/task/board${((id.length > 0) ? `/${id}` : ``)}/manage`, {method: 'GET'})
+            .then(response => response.json().then(data => {
+                if (response.status < 300) {
+                    manage_task_modal_body.innerHTML = data.content;
                 }
 
                 Utils.hideLoadingOverlay();
-            } else {
-            }
-        };
-        xhr.open("GET", "/task/manage_board_modal_view?id=" + id, false);
-        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-        xhr.send(null);
+            }));
     }
 
     manageTaskBoard(e) {
@@ -164,33 +135,21 @@ export class Task {
 
     deleteTaskShowModal(e) {
         Utils.showLoadingOverlay();
-        const xhr = new XMLHttpRequest();
-        let obj = e.currentTarget;
         let button = e.relatedTarget;
         let id = button.dataset.id;
+        let manage_task_modal_body = document.getElementById('delete-task-modal-body');
 
-        xhr.onreadystatechange = e => {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                let response = JSON.parse(xhr.response);
-                let manage_task_modal_body = document.getElementById('delete-task-modal-body');
-
-                if (response.status === true) {
-                    manage_task_modal_body.innerHTML = response.content;
-                } else {
+        fetch("/api/task/" + id + '/delete', {method: 'GET'})
+            .then(response => response.json().then(data => {
+                if (response.status < 300) {
+                    manage_task_modal_body.innerHTML = data.content;
                 }
 
                 Utils.hideLoadingOverlay();
-            } else {
-            }
-        };
-        xhr.open("GET", "/task/delete_modal_view?id=" + id, false);
-        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-        xhr.send(null);
+            }));
     }
 
     deleteTask(e) {
-        const xhr = new XMLHttpRequest();
-        let button = e.currentTarget;
         let formElement = document.getElementById('delete-task-modal-form');
         let formData = new FormData(formElement);
         let error_element = document.getElementById('delete-task-modal-error');
@@ -213,28 +172,18 @@ export class Task {
 
     deleteTaskBoardShowModal(e) {
         Utils.showLoadingOverlay();
-        const xhr = new XMLHttpRequest();
-        let obj = e.currentTarget;
         let button = e.relatedTarget;
         let id = button.dataset.id;
+        let manage_task_modal_body = document.getElementById('delete-task-board-modal-body');
 
-        xhr.onreadystatechange = e => {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                let response = JSON.parse(xhr.response);
-                let manage_task_modal_body = document.getElementById('delete-task-board-modal-body');
-
-                if (response.status === true) {
-                    manage_task_modal_body.innerHTML = response.content;
-                } else {
+        fetch("/api/task/board/" + id + '/delete', {method: 'GET'})
+            .then(response => response.json().then(data => {
+                if (response.status < 300) {
+                    manage_task_modal_body.innerHTML = data.content;
                 }
 
                 Utils.hideLoadingOverlay();
-            } else {
-            }
-        };
-        xhr.open("GET", "/task/delete_board_modal_view?id=" + id, false);
-        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-        xhr.send(null);
+            }));
     }
 
     deleteTaskBoard(e) {
