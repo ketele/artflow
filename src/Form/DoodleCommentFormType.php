@@ -44,6 +44,7 @@ class DoodleCommentFormType extends AbstractType
                 'attr' => [
                     'class' => 'd-none',
                 ],
+                'label' => false,
             ])
             ->add('content', TextareaType::class,
                 [
