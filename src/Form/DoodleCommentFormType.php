@@ -5,16 +5,13 @@ namespace App\Form;
 use App\Entity\DoodleComment;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Event\PreSubmitEvent;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Validator\Constraints\Callback;
-use Symfony\Component\Validator\Constraints\IsNull;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -48,13 +45,13 @@ class DoodleCommentFormType extends AbstractType
             ])
             ->add('content', TextareaType::class,
                 [
-                    'label'  => false,
+                    'label' => false,
                     'required' => true,
                 ])
             ->add('save', SubmitType::class, [
-                    'attr' => ['class' => 'btn-artflow mt-4 float-right'],
-                    'label' => $this->translator->trans('Add comment')
-                ]);
+                'attr' => ['class' => 'btn-artflow mt-4 float-right'],
+                'label' => $this->translator->trans('Add comment')
+            ]);
     }
 
     /**
@@ -62,7 +59,7 @@ class DoodleCommentFormType extends AbstractType
      */
     public function validate($data, ExecutionContextInterface $context): void
     {
-        if ( $this->authorization->isGranted('ROLE_USER') == false ) {
+        if ($this->authorization->isGranted('ROLE_USER') == false) {
             $context->buildViolation($this->translator->trans('You have to be logged to add comment'))
                 ->atPath('content')
                 ->addViolation();
