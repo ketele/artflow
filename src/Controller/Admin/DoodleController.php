@@ -89,68 +89,65 @@ class DoodleController extends AbstractController
     }
 
     /**
-     * @Route("/admin/status_change_modal_view", name="admin_status_change_modal_view")
+     * @Route("/api/doodle/status/{id<\d+>}/edit", name="admin_status_change_modal_view", methods={"GET"}, defaults={"id": null})
      * @param Request $request
      * @throws \Exception
      */
 
-    public function statusChangeModalView(Request $request, DoodleRepository $doodleRepository,
-                                          DoodleStatusRepository $doodleStatusRepository)
+    public function statusChangeModalView(int $id, Request $request, DoodleRepository $doodleRepository,
+                                          DoodleStatusRepository $doodleStatusRepository): JsonResponse
     {
-
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
-
         $error = [];
-        $jsonData['status'] = true;
+        $response = new JsonResponse();
 
-        if (!$request->isXmlHttpRequest()) {
-            return new JsonResponse(array(
-                'status' => false,
-                'message' => 'Error! Not Xml Http Request'),
-                400);
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            $error[] = $this->translator->trans("You can't edit this status");
+            $response->setStatusCode(Response::HTTP_FORBIDDEN);
         }
 
-        $id = $request->get('id');
-
         if (!is_numeric($id)) {
-            $jsonData['status'] = false;
             $error[] = 'Wrong id';
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
         } else {
             $doodle = $doodleRepository->findOne($id);
         }
 
         $doodleStatuses = $doodleStatusRepository->getStatuses();
 
-        $jsonData['content'] = $this->renderView('admin/doodle/status_change_modal.html.twig', [
+        return new JsonResponse(['content' => $this->renderView('admin/doodle/status_change_modal.html.twig', [
             'error' => $error,
             'id' => $id,
             'doodle' => $doodle,
             'doodleStatuses' => $doodleStatuses,
-        ]);
-
-        return new JsonResponse($jsonData);
+        ])]);
     }
 
     /**
-     * @Route("admin/status_change_ajax", name="admin_status_change_ajax")
+     * @Route("api/doodle/status/{id<\d+>}", name="admin_status_change_ajax", methods={"PUT|POST"}, defaults={"id": null}))
      */
 
-    public function statusChangeAjax(Request $request, DoodleRepository $doodleRepository, DoodleStatusRepository $doodleStatusRepository): Response
+    public function statusChangeAjax(?int $id, Request $request, DoodleRepository $doodleRepository,
+                                     DoodleStatusRepository $doodleStatusRepository
+    ): JsonResponse
     {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
-
         $error = [];
-        $jsonData['status'] = true;
+        $response = new JsonResponse();
 
-        $id = $request->get('id');
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            $error[] = $this->translator->trans("You can't edit this status");
+            $response->setStatusCode(Response::HTTP_FORBIDDEN);
+        }
+
         $statusId = $request->get('statusId');
 
         if (!is_numeric($id)) {
-            $error[] = 'Wrong input data';
+            $error[] = 'Wrong id';
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
         }
 
         if (!is_numeric($statusId)) {
-            $error[] = 'Wrong input data';
+            $error[] = 'Wrong status id';
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
         }
 
         if (empty($error)) {
@@ -160,10 +157,6 @@ class DoodleController extends AbstractController
             $doodleRepository->save($doodle);
         }
 
-        $jsonData['id'] = $id;
-        $jsonData['statusId'] = $statusId;
-        $jsonData['error'] = $error;
-
-        return new JsonResponse($jsonData);
+        return new JsonResponse(['error' => $error]);
     }
 }

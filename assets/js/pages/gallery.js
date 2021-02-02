@@ -4,57 +4,48 @@ import {Utils} from "./../utils";
 export class Gallery {
     changDoodleStatusShowModal(e){
         Utils.showLoadingOverlay();
-        const xhr = new XMLHttpRequest();
-        let obj = e.currentTarget;
         let button = e.relatedTarget;
         let id = button.dataset.id;
+        let manage_task_modal_body = document.getElementById('change-doodle-status-modal-body');
 
-        xhr.onreadystatechange = e => {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                let response = JSON.parse(xhr.response);
-                let change_doodle_status_modal_body = document.getElementById('change-doodle-status-modal-body');
-
-                if( response.status === true ){
-                    change_doodle_status_modal_body.innerHTML = response.content;
-                } else {
+        fetch(`/api/doodle/status/${id}/edit`, {method: 'GET'})
+            .then(response => response.json().then(data => {
+                if (response.status < 300) {
+                    manage_task_modal_body.innerHTML = data.content;
                 }
 
                 Utils.hideLoadingOverlay();
-            }else{
-            }
-        };
-        xhr.open("GET", "/admin/status_change_modal_view?id=" + id , false);
-        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-        xhr.send(null);
+            }));
     }
 
     changDoodleStatus(e){
-        const xhr = new XMLHttpRequest();
-        let button = e.currentTarget;
         let formElement = document.getElementById('change-doodle-status-modal-form');
         let formData = new FormData(formElement);
+        let error_element = document.getElementById('change-doodle-status-modal-error');
+        let fetchApi;
 
-        xhr.onreadystatechange = e => {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                let response = JSON.parse(xhr.response);
-                let error_element = document.getElementById('change-doodle-status-modal-error');
+        if (formData.get('id')) {
+            fetchApi = fetch("/api/doodle/status/" + formData.get('id') + "?" + new URLSearchParams(formData).toString(), {method: 'PUT'});
+        } else {
+            fetchApi = fetch("/api/doodle/status", {
+                method: 'POST',
+                body: formData
+            });
+        }
 
-                if( response.status === true ){
-                    error_element.classList.add('d-none');
-                    window.location.reload(true);
+        fetchApi.then(response => response.json().then(data => {
+            if (response.status < 300) {
+                error_element.classList.add('d-none');
+                window.location.reload(true);
+            } else {
+                if (data.error && data.error.length > 0) {
+                    error_element.innerHTML = Utils.generateListHTML(data.error);
                 } else {
-                    error_element.innerHTML = "Something went wrong";
-                    error_element.classList.remove('d-none');
+                    error_element.innerHTML = 'Error: ' + response.statusText + ' ' + response.status;
                 }
-
-                Utils.hideLoadingOverlay();
-            }else{
+                error_element.classList.remove('d-none');
             }
-        };
-
-        xhr.open("POST", "/admin/status_change_ajax" , false);
-        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-        xhr.send(formData);
+        }));
     }
 }
 
