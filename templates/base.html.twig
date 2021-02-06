@@ -48,20 +48,12 @@
                         <a class="nav-link" href="{{ path('home') }}">{{ 'Home'|trans }} <span
                                     class="sr-only"></span></a>
                     </li>
-                    <!--li class="nav-item {% if app.request.get('_route') == 'news' %}active{% endif %}">
-                                <a class="nav-link" href="{{ path('news') }}">{{ 'News'|trans }}</a>
-                            </li-->
                     <li class="nav-item {% if app.request.get('_route') == 'doodle' %}active{% endif %}">
                         <a class="nav-link" href="{{ path('doodle') }}">{{ 'Doodle'|trans }}</a>
                     </li>
                     <li class="nav-item {% if app.request.get('_route') == 'doodle_gallery' %}active{% endif %}">
                         <a class="nav-link" href="{{ path('doodle_gallery') }}">{{ 'Gallery'|trans }}</a>
                     </li>
-                    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                        <li class="nav-item {% if app.request.get('_route') == 'task' %}active{% endif %}">
-                            <a class="nav-link" href="{{ path('task') }}">{{ 'Tasks'|trans }}</a>
-                        </li>
-                    {% endif %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
