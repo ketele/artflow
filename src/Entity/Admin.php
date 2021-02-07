@@ -70,22 +70,10 @@ class Admin implements UserInterface
      */
     private $locale;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Task::class, mappedBy="user")
-     */
-    private $tasks;
-
-    /**
-     * @ORM\OneToMany(targetEntity=TaskStatus::class, mappedBy="user", orphanRemoval=true)
-     */
-    private $taskStatuses;
-
     public function __construct()
     {
         $this->doodles = new ArrayCollection();
         $this->doodleComments = new ArrayCollection();
-        $this->tasks = new ArrayCollection();
-        $this->taskStatuses = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -314,66 +302,6 @@ class Admin implements UserInterface
     public function setLocale(string $locale): self
     {
         $this->locale = $locale;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Task[]
-     */
-    public function getTasks(): Collection
-    {
-        return $this->tasks;
-    }
-
-    public function addTask(Task $task): self
-    {
-        if (!$this->tasks->contains($task)) {
-            $this->tasks[] = $task;
-            $task->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTask(Task $task): self
-    {
-        if ($this->tasks->removeElement($task)) {
-            // set the owning side to null (unless already changed)
-            if ($task->getUser() === $this) {
-                $task->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|TaskStatus[]
-     */
-    public function getTaskStatuses(): Collection
-    {
-        return $this->taskStatuses;
-    }
-
-    public function addTaskStatus(TaskStatus $taskStatus): self
-    {
-        if (!$this->taskStatuses->contains($taskStatus)) {
-            $this->taskStatuses[] = $taskStatus;
-            $taskStatus->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTaskStatus(TaskStatus $taskStatus): self
-    {
-        if ($this->taskStatuses->removeElement($taskStatus)) {
-            // set the owning side to null (unless already changed)
-            if ($taskStatus->getUser() === $this) {
-                $taskStatus->setUser(null);
-            }
-        }
 
         return $this;
     }
