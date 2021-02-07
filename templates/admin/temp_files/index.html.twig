@@ -24,7 +24,7 @@
         <div class="row mt-4">
             <div class="col-sm">
                 <h6>{{ 'Gallery'|upper }}</h6>
-                <button class="btn btn-danger float-right"
+                <button class="btn btn-danger float-right" data-year="{{ year }}" data-month="{{ month }}"
                         data-bs-toggle="modal"
                         data-bs-target="#delete-temp-files-modal">
                     {{ "Delete temp files from" }} {{ year }}-{{ month }}
@@ -76,7 +76,7 @@
         </div>
     </div>
     <!-- Modal -->
-    <div class="modal fade" id="delete-temp-files-modal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div id="delete-temp-files-modal" class="modal fade" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -90,12 +90,16 @@
                         A simple danger alert—check it out!
                     </div>
                     Are you sure you want to delete temp files from month {{ year }}-{{ month }}?
+                    <form id="delete-temp-files-form" action="" class="js-delete-temp-files-form">
+                        <input type="hidden" name="month" value="{{ month }}">
+                        <input type="hidden" name="year" value="{{ year }}">
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <a class="btn btn-primary" id="delete-temp-files" data-year="{{ year }}" data-month="{{ month }}">
+                    <button type="submit" class="btn btn-primary" form="delete-temp-files-form">
                         Yes
-                    </a>
+                    </button>
                 </div>
             </div>
         </div>

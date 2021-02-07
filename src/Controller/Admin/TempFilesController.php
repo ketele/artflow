@@ -92,46 +92,61 @@ class TempFilesController extends AbstractController
     }
 
     /**
-     * @Route("admin/temp_files_delete_ajax", name="temp_files_delete_ajax")
+     * @Route("api/tempfiles", name="temp_files_search_api", methods={"GET"}, defaults={"query": null})
      */
 
-    public function deleteTempFiles(Request $request): Response
+    public function searchTempFiles(Request $request): JsonResponse
     {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        $error = [];
+        $files = [];
+        $response = new JsonResponse();
 
-        $jsonData['status'] = true;
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            $error[] = $this->translator->trans("You can't edit this status");
+            $response->setStatusCode(Response::HTTP_FORBIDDEN);
+        }
+
+        $query = $request->query->all();
 
         $filesystem = new Filesystem();
         $finder = new Finder();
         $tempPath = sys_get_temp_dir();
 
-        $year = $request->get('year');
-        $month = $request->get('month');
-
-        if (is_numeric($year) && is_numeric($month)) {
-            $finder->files()
-                ->date('>= ' . $year . '-' . $month . '-01')
-                ->date('<= ' . date('Y-m-t', strtotime($year . '-' . $month . '-30')))
-                ->name(['*.png', '*.jpg', '*.jpeg'])
+        $tempFilesFinder = $finder->files();
+        if( count($query['date']) > 0 ) {
+            if (strlen($query['date']['gte']) > 0) {
+                $tempFilesFinder->date('>= ' . $query['date']['gte']);
+            }
+            if (strlen($query['date']['lte']) > 0) {
+                $tempFilesFinder->date('<= ' . $query['date']['lte']);
+            }
+        }
+        $tempFilesFinder->name(['*.png', '*.jpg', '*.jpeg'])
                 ->sortByModifiedTime()
                 ->reverseSorting()
                 ->in($tempPath);
 
-            if ($finder->hasResults()) {
-                foreach ($finder as $file) {
-                    $relativePath = $file->getRelativePath();
+        if ($finder->hasResults()) {
+            foreach ($finder as $file) {
+                $relativePath = $file->getRelativePath();
+                $aTime = $file->getATime();
+                $cTime = $file->getCTime();
+                $fileName = $file->getFileName();
 
-                    $file_path = $tempPath . '/' . $relativePath . '/' . $file->getFileName();
+                $files[] = [
+                    'relativePath' => $relativePath,
+                    'aTime' => $aTime,
+                    'cTime' => $cTime,
+                    'fileName' => $fileName,
+                ];
+
+                if($query['action'] == 'delete') {
+                    $file_path = $tempPath . '/' . $relativePath . '/' . $fileName;
                     $filesystem->remove($file_path);
                 }
             }
-        } else {
-            $jsonData['status'] = false;
         }
 
-        $jsonData['year'] = $year;
-        $jsonData['month'] = $month;
-
-        return new JsonResponse($jsonData);
+        return (count($error) > 0) ? $response->setData(['error' => $error]) : $response->setData($files);
     }
 }
