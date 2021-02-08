@@ -2,11 +2,11 @@ import {Doodle} from "./doodle/doodle";
 import {Workspace} from "./sketchbook/workspace";
 import {Utils} from "./utils";
 
-CanvasRenderingContext2D.prototype.drawCircle = function (centerX, centerY, angle_begin = 0, angle_end = 2 * Math.PI, radius = 50) {
+CanvasRenderingContext2D.prototype.drawCircle = function (centerX, centerY, angleBegin = 0, angleEnd = 2 * Math.PI, radius = 50) {
     this.radius = radius;
     this.beginPath();
     this.strokeStyle = '#8ED6FF';
-    this.arc(centerX, centerY, radius, angle_begin, angle_end, false);
+    this.arc(centerX, centerY, radius, angleBegin, angleEnd, false);
     this.restore();
     this.stroke();
     this.strokeStyle = 'black';
@@ -63,97 +63,97 @@ class DoodleSketchbook {
 
     }
 
-    getImageFile(img_data_array = []) {
-        let temp_canvas = document.createElement("canvas");
-        temp_canvas.width = this.workspace.width;
-        temp_canvas.height = this.workspace.height;
-        let ctx = temp_canvas.getContext('2d');
+    getImageFile(imgDataArray = []) {
+        let tempCanvas = document.createElement("canvas");
+        tempCanvas.width = this.workspace.width;
+        tempCanvas.height = this.workspace.height;
+        let ctx = tempCanvas.getContext('2d');
 
         let imageData = ctx.getImageData(0, 0, this.workspace.width, this.workspace.height);
         let data = imageData.data;
 
-        const flatten_canvases = new Promise((resolve, reject) => {
-            img_data_array.forEach((img_data) => {
+        const flattenCanvases = new Promise((resolve, reject) => {
+            imgDataArray.forEach((imgData) => {
                 data.forEach((d, i) => {
-                    data[i] = d + img_data[i];
+                    data[i] = d + imgData[i];
                 });
             });
 
             resolve(data);
         });
 
-        return flatten_canvases.then((flatten_data) => {
-            for (let i = 0; i < flatten_data.length * 4; i += 4) {
+        return flattenCanvases.then((flattenData) => {
+            for (let i = 0; i < flattenData.length * 4; i += 4) {
                 if (this.workspace.data[i + 3] === 255) {
-                    flatten_data[i] = this.workspace.data[i];
-                    flatten_data[i + 1] = this.workspace.data[i + 1];
-                    flatten_data[i + 2] = this.workspace.data[i + 2];
-                    flatten_data[i + 3] = this.workspace.data[i + 3];
+                    flattenData[i] = this.workspace.data[i];
+                    flattenData[i + 1] = this.workspace.data[i + 1];
+                    flattenData[i + 2] = this.workspace.data[i + 2];
+                    flattenData[i + 3] = this.workspace.data[i + 3];
                 } else if (this.workspace.data[i + 3] === 0) {
 
                 } else {
-                    let max_opacity = (flatten_data[i + 3] + this.workspace.data[i + 3] <= 255)
-                        ? flatten_data[i + 3] + this.workspace.data[i + 3] : 255;
-                    let top_wage = (this.workspace.data[i + 3] / max_opacity);
-                    let base_wage = 1 - top_wage;
-                    flatten_data[i] = ((base_wage * flatten_data[i]) + (top_wage * this.workspace.data[i]));
-                    flatten_data[i + 1] = ((base_wage * flatten_data[i + 1]) + (top_wage * this.workspace.data[i + 1]));
-                    flatten_data[i + 2] = ((base_wage * flatten_data[i + 2]) + (top_wage * this.workspace.data[i + 2]));
-                    flatten_data[i + 3] = flatten_data[i + 3] + this.workspace.data[i + 3];
+                    let maxOpacity = (flattenData[i + 3] + this.workspace.data[i + 3] <= 255)
+                        ? flattenData[i + 3] + this.workspace.data[i + 3] : 255;
+                    let topWage = (this.workspace.data[i + 3] / maxOpacity);
+                    let baseWage = 1 - topWage;
+                    flattenData[i] = ((baseWage * flattenData[i]) + (topWage * this.workspace.data[i]));
+                    flattenData[i + 1] = ((baseWage * flattenData[i + 1]) + (topWage * this.workspace.data[i + 1]));
+                    flattenData[i + 2] = ((baseWage * flattenData[i + 2]) + (topWage * this.workspace.data[i + 2]));
+                    flattenData[i + 3] = flattenData[i + 3] + this.workspace.data[i + 3];
                 }
             }
 
             ctx.putImageData(imageData, 0, 0);
 
-            return temp_canvas.toDataURL("image/png");
+            return tempCanvas.toDataURL("image/png");
         });
     }
 
     putImage() {
-        const get_image_file = new Promise((resolve, reject) => {
+        const getImageFile = new Promise((resolve, reject) => {
             let image = this.getImageFile([this.data]);
             resolve(image);
         });
 
-        get_image_file.then((image) => {
+        getImageFile.then((image) => {
             window.location.href = image;
         });
     }
 
     saveImageToTemp() {
-        let source_doodle_id = document.getElementById('id').value;
-        let source_doodle = JSON.stringify({
+        let sourceDoodleId = document.getElementById('id').value;
+        let sourceDoodle = JSON.stringify({
             'size': this.size,
             'doodle': this.doodle.curves
         });
 
-        source_doodle = encodeURIComponent(source_doodle);
+        sourceDoodle = encodeURIComponent(sourceDoodle);
 
         Utils.showLoadingOverlay();
-        const get_image_file = new Promise((resolve, reject) => {
+        const getImageFile = new Promise((resolve, reject) => {
             let image = this.getImageFile([this.data]);
             resolve(image);
         });
 
-        get_image_file.then((image) => {
+        getImageFile.then((image) => {
             const xhr = new XMLHttpRequest();
 
             xhr.onreadystatechange = e => {
                 if (xhr.readyState === 4 && xhr.status === 200) {
                     let response = JSON.parse(xhr.response);
 
-                    const temp_form = document.createElement('form');
-                    temp_form.method = "POST";
-                    temp_form.target = "_blank";
-                    temp_form.action = `/${Utils.getUrlParam(0)}/add_doodle`;
-                    temp_form.setAttribute('name', 'doodle');
-                    temp_form.innerHTML = `
+                    const tempForm = document.createElement('form');
+                    tempForm.method = "POST";
+                    tempForm.target = "_blank";
+                    tempForm.action = `/${Utils.getUrlParam(0)}/add_doodle`;
+                    tempForm.setAttribute('name', 'doodle');
+                    tempForm.innerHTML = `
 <input type="text" name="temp_dir" value="${response.temp_dir}" />
-<input type="text" name="source_doodle" value="${source_doodle}" />
-<input type="text" name="source_doodle_id" value="${source_doodle_id}" />
+<input type="text" name="source_doodle" value="${sourceDoodle}" />
+<input type="text" name="source_doodle_id" value="${sourceDoodleId}" />
 `;
-                    let formObj = document.body.appendChild(temp_form);
-                    temp_form.submit();
+                    let formObj = document.body.appendChild(tempForm);
+                    tempForm.submit();
                     formObj.remove();
 
                     Utils.hideLoadingOverlay();
@@ -171,45 +171,45 @@ window.addEventListener('load', e => {
     let coordinatesJson = document.getElementById('coordinates').value;
     coordinatesJson = (typeof coordinatesJson !== "undefined" && coordinatesJson !== "") ? JSON.parse(coordinatesJson) : null;
 
-    let doodle_sketchbook = new DoodleSketchbook();
-    doodle_sketchbook.loadDoodle(null, coordinatesJson);
-    doodle_sketchbook.loadSketchbook();
+    let doodleSketchbook = new DoodleSketchbook();
+    doodleSketchbook.loadDoodle(null, coordinatesJson);
+    doodleSketchbook.loadSketchbook();
 
     document.getElementById('refresh-doodle').addEventListener('click', e => {
         document.getElementById('coordinates').value = "";
         document.getElementById('id').value = "";
-        doodle_sketchbook.doodle.clearCanvas(doodle_sketchbook.ctx);
-        doodle_sketchbook.loadDoodle("unbalancedNodes");
+        doodleSketchbook.doodle.clearCanvas(doodleSketchbook.ctx);
+        doodleSketchbook.loadDoodle("unbalancedNodes");
     });
 
     document.getElementById('refresh-symmetrical-doodle').addEventListener('click', e => {
         document.getElementById('coordinates').value = "";
         document.getElementById('id').value = "";
-        doodle_sketchbook.doodle.clearCanvas(doodle_sketchbook.ctx);
-        doodle_sketchbook.loadDoodle("symmetricalNodes");
+        doodleSketchbook.doodle.clearCanvas(doodleSketchbook.ctx);
+        doodleSketchbook.loadDoodle("symmetricalNodes");
     });
 
     document.getElementById('clear-sketchbook').addEventListener('click', e => {
-        doodle_sketchbook.workspace.clearCanvas();
+        doodleSketchbook.workspace.clearCanvas();
     });
 
     document.getElementById('save-image').addEventListener('click', e => {
-        doodle_sketchbook.saveImageToTemp();
+        doodleSketchbook.saveImageToTemp();
     });
 
     document.getElementById('pencil').addEventListener('click', e => {
-        doodle_sketchbook.workspace.setTool('pencil');
+        doodleSketchbook.workspace.setTool('pencil');
     });
 
     document.getElementById('eraser').addEventListener('click', e => {
-        doodle_sketchbook.workspace.setTool('eraser');
+        doodleSketchbook.workspace.setTool('eraser');
     });
 
     document.getElementById('opacity').addEventListener('change', e => {
-        doodle_sketchbook.workspace.setToolOpacity(e.target.value);
+        doodleSketchbook.workspace.setToolOpacity(e.target.value);
     });
 
     document.getElementById('size').addEventListener('change', e => {
-        doodle_sketchbook.workspace.setToolSize(e.target.value);
+        doodleSketchbook.workspace.setToolSize(e.target.value);
     });
 });
