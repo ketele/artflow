@@ -6,6 +6,7 @@ use App\Entity\Doodle;
 use App\Entity\DoodleComment;
 use App\Entity\DoodleStatus;
 use App\Form\DoodleCommentFormType;
+use App\Form\DoodleFormType;
 use App\Repository\AdminRepository;
 use App\Repository\DoodleCommentRepository;
 use App\Repository\DoodleRepository;
@@ -17,7 +18,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
@@ -211,7 +211,6 @@ class DoodleController extends AbstractController
                 'status_rejected' => $doodle->getStatus()->getId() == DoodleStatus::STATUS_REJECTED,
                 'status_new' => $doodle->getStatus()->getId() == DoodleStatus::STATUS_NEW,
                 'file_url' => $glide->generateUrl($doodleFolder . $id, $fileName, []),
-                'id' => $id,
                 'doodles' => $doodles,
                 'commentForm' => $commentForm->createView(),
                 'doodleComments' => $doodleComments,
@@ -320,20 +319,11 @@ class DoodleController extends AbstractController
         $defaultData['sourceDoodle'] = $sourceDoodle;
         $defaultData['sourceDoodleId'] = $sourceDoodleId;
 
-        $form = $this->createFormBuilder($defaultData)
-            ->add('title', TextType::class)
-            ->add('description', TextareaType::class)
-            ->add('tempDir', HiddenType::class)
-            ->add('sourceDoodle', HiddenType::class)
-            ->add('sourceDoodleId', HiddenType::class)
-            ->add('submit', SubmitType::class, [
-                'attr' => ['class' => 'btn-artflow mt-4 float-right'],
-            ])
-            ->getForm();
+        $form = $this->createForm(DoodleFormType::class, $defaultData);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $form_data = $request->get('form');
+            $form_data = $request->get('doodle_form');
             $tempPath = sys_get_temp_dir() . '/' . $form_data['tempDir'] . '/';
             $finder->files()->in($tempPath);
             $sourceDoodle = json_decode(urldecode($form_data['sourceDoodle']), true);
@@ -365,8 +355,7 @@ class DoodleController extends AbstractController
 
             $notifier->send(new Notification('Your doodle will be posted after moderation.', ['browser']));
 
-            return $this->redirectToRoute('doodle_view',
-                ['id' => $doodle->getId()]);
+            return $this->redirectToRoute('doodle_view', ['id' => $doodle->getId()]);
         } else {
             if (empty($tempDir)) {
                 return new Response('Doodle data is empty');
@@ -477,13 +466,7 @@ class DoodleController extends AbstractController
                 ['id' => $doodle->getId()]);
         }
 
-        $form = $this->createFormBuilder($doodle)
-            ->add('title', TextType::class)
-            ->add('description', TextareaType::class)
-            ->add('submit', SubmitType::class, [
-                'attr' => ['class' => 'btn-artflow mt-4 float-right'],
-            ])
-            ->getForm();
+        $form = $this->createForm(DoodleFormType::class, $doodle);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {

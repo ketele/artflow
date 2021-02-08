@@ -63,13 +63,13 @@
             </dl>
             <div class="row">
                 <div class="col-sm">
-                    <a href="{{ path('doodle_gallery', {order: 'popularity',id : id}) }}" class="btn btn-secondary">{{ 'Similar doodles'|trans }}</a>
-                    {% if id != 2 %}
-                    <a href="{{ path('doodle', {id : id}) }}" class="btn btn-secondary">{{ 'Use shape'|trans }}</a>
+                    <a href="{{ path('doodle_gallery', {order: 'popularity',id : doodle.id}) }}" class="btn btn-secondary">{{ 'Similar doodles'|trans }}</a>
+                    {% if doodle.id != 2 %}
+                    <a href="{{ path('doodle', {id : doodle.id}) }}" class="btn btn-secondary">{{ 'Use shape'|trans }}</a>
                     {% endif %}
                     {% if doodle.user == app.user %}
-                    <a href="{{ path('user_doodle_edit', {id : id}) }}" class="btn btn-secondary">{{ 'Edit'|trans }}</a>
-                    <a href="{{ path('user_doodle_delete', {id : id}) }}" class="btn btn-secondary">{{ 'Delete'|trans }}</a>
+                    <a href="{{ path('user_doodle_edit', {id : doodle.id}) }}" class="btn btn-secondary">{{ 'Edit'|trans }}</a>
+                    <a href="{{ path('user_doodle_delete', {id : doodle.id}) }}" class="btn btn-secondary">{{ 'Delete'|trans }}</a>
                     {% endif %}
                 </div>
             </div>
