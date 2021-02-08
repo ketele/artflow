@@ -6,12 +6,12 @@ import {Utils} from "../utils";
  */
 
 export class Doodle {
-    constructor( centerX = 200, centerY = 250,  radius = 100 ){
+    constructor(centerX = 200, centerY = 250, radius = 100) {
         this.centerX = centerX;
         this.centerY = centerY;
         this.angleMin = 0.1;
         this.angleMax = 2.9;
-        this.angle = Utils.getRandomFloat( this.angleMin, this.angleMax );
+        this.angle = Utils.getRandomFloat(this.angleMin, this.angleMax);
         this.radius = radius;
         this.curves = [];
         this.length = 0;
@@ -19,11 +19,11 @@ export class Doodle {
         this.height = 0;
     }
 
-    setwWidth( width ){
+    setwWidth(width) {
         this.width = width;
     }
 
-    setwHeight( height ){
+    setwHeight(height) {
         this.height = height;
     }
 
@@ -32,40 +32,39 @@ export class Doodle {
      * @param angleMax
      */
 
-    generateNodes( angleMax = 2 * Math.PI ){
+    generateNodes(angleMax = 2 * Math.PI) {
         this.resetCurves();
         let x, y;
-        let startX = this.centerX + Utils.getRandomInt(-this.radius,this.radius), startY = this.centerY + Utils.getRandomInt(-this.radius,this.radius);
+        let startX = this.centerX + Utils.getRandomInt(-this.radius, this.radius),
+            startY = this.centerY + Utils.getRandomInt(-this.radius, this.radius);
         let newX = startX, newY = startY;
 
-        this.curves.push( new Curve( newX, newY, newX, newY, newX, newY, this.angle ));
+        this.curves.push(new Curve(newX, newY, newX, newY, newX, newY, this.angle));
         this.length = 1;
 
-        while ( this.angle <= angleMax )
-        {
+        while (this.angle <= angleMax) {
             // calculate x, y from a vector with known length and angle
-            x = this.radius * Math.cos (this.angle);
-            y = this.radius * Math.sin (this.angle);
-            newX = this.centerX  + x;
+            x = this.radius * Math.cos(this.angle);
+            y = this.radius * Math.sin(this.angle);
+            newX = this.centerX + x;
             newY = this.centerY + y;
 
-            this.curves.push( new Curve( newX, newY, newX, newY, newX, newY, this.angle ) );
-            this.angle += Utils.getRandomFloat( this.angleMin, this.angleMax );
+            this.curves.push(new Curve(newX, newY, newX, newY, newX, newY, this.angle));
+            this.angle += Utils.getRandomFloat(this.angleMin, this.angleMax);
             this.length++;
         }
     }
 
-    setNodes( coordinates ){
+    setNodes(coordinates) {
         let transformationFactorX = 1;
         let transformationFactorY = 1;
 
-        if( coordinates.size !== this.width ) {
+        if (coordinates.size !== this.width) {
             transformationFactorX = this.width / coordinates.size;
             transformationFactorY = this.height / coordinates.size;
         }
 
-        for( let i = 0; i < coordinates.doodle.length; i++ )
-        {
+        for (let i = 0; i < coordinates.doodle.length; i++) {
             this.curves.push(
                 new Curve(
                     coordinates.doodle[i].cp1X * transformationFactorX,
@@ -81,8 +80,8 @@ export class Doodle {
         this.length = coordinates.doodle.length;
     }
 
-    generateSymmetricalNodes(){
-        this.generateNodes( Math.PI );
+    generateSymmetricalNodes() {
+        this.generateNodes(Math.PI);
         this.generateCoordinates();
         this.updateCoordinates();
 
@@ -103,11 +102,9 @@ export class Doodle {
         let isFirstRound = true;
 
         let i = 0;
-        while( i < this.curves.length)
-        {
-            if( typeof this.curves[i] === "undefined" || this.curves[i].x <= this.centerX || !isFirstRound )
-            {
-                if( addedNodes && typeof this.curves[i] !== "undefined" ) {
+        while (i < this.curves.length) {
+            if (typeof this.curves[i] === "undefined" || this.curves[i].x <= this.centerX || !isFirstRound) {
+                if (addedNodes && typeof this.curves[i] !== "undefined") {
                     isFirstRound = false;
 
                     tempCp1X = this.curves[i].cp1X;
@@ -119,7 +116,7 @@ export class Doodle {
                 this.curves.splice(i, 1);
                 this.length--;
             } else {
-                if( addedNodes === false ){
+                if (addedNodes === false) {
                     this.curves[i].cp1X = this.centerX - (this.curves[i].cp2X - this.centerX);
                     this.curves[i].cp1Y = this.curves[i].cp2Y;
                 }
@@ -131,24 +128,23 @@ export class Doodle {
 
         length = this.curves.length;
 
-        if( isFirstRound && typeof tempCp1X === "undefined" && this.curves.length > 0 ){
+        if (isFirstRound && typeof tempCp1X === "undefined" && this.curves.length > 0) {
             tempCp1X = this.curves[length - 1].cp1X;
             tempCp1Y = this.curves[length - 1].cp1Y;
             tempCp2X = this.centerX - (this.curves[length - 1].cp1X - this.centerX);
             tempCp2Y = tempCp1Y;
         }
 
-        for(let i = 0; i < length; i++)
-        {
+        for (let i = 0; i < length; i++) {
             let opposedI = length - i - 1;
             x = this.centerX - (this.curves[opposedI].x - this.centerX);
             y = this.curves[opposedI].y;
-            if( i === 0 ) {
+            if (i === 0) {
                 cp1X = tempCp1X;
                 cp1Y = tempCp1Y;
                 cp2X = tempCp2X;
                 cp2Y = tempCp2Y;
-            }else{
+            } else {
                 cp2X = this.centerX - (this.curves[opposedI + 1].cp1X - this.centerX);
                 cp2Y = this.curves[opposedI + 1].cp1Y;
                 cp1X = this.centerX - (this.curves[opposedI + 1].cp2X - this.centerX);
@@ -163,76 +159,76 @@ export class Doodle {
 
         this.length = this.curves.length;
 
-        if( this.curves.length < 3 )
-        {
+        if (this.curves.length < 3) {
             this.generateSymmetricalNodes();
         }
     }
 
-    generateUnbalancedNodes(){
+    generateUnbalancedNodes() {
         this.generateNodes();
         this.generateCoordinates();
         this.updateCoordinates();
     }
 
-    generateCoordinates(){
-        for(var i = 0; i < this.length; i++){
-            this.curves[i].genSecondCoordinates(this.curves[ (i + this.length - 1) % this.length ], this.radius);
+    generateCoordinates() {
+        for (var i = 0; i < this.length; i++) {
+            this.curves[i].genSecondCoordinates(this.curves[(i + this.length - 1) % this.length], this.radius);
         }
 
-        for(var i = 0; i < this.length; i++){
-            this.curves[i].getFirstSmoothCurve( this.curves[ (i + this.length - 1) % this.length ] );
+        for (var i = 0; i < this.length; i++) {
+            this.curves[i].getFirstSmoothCurve(this.curves[(i + this.length - 1) % this.length]);
         }
     }
 
-    updateCoordinates(ctx){
-        for(var i = 0; i < this.curves.length; i++)
-            this.curves[i].checkLineIntersection( this.curves[ (i + this.curves.length - 1) % this.curves.length ] );
+    updateCoordinates(ctx) {
+        for (var i = 0; i < this.curves.length; i++) {
+            this.curves[i].checkLineIntersection(this.curves[(i + this.curves.length - 1) % this.curves.length]);
+        }
     }
 
-    resetCurves(){
+    resetCurves() {
         //this.curves = [];
-        this.angle = Utils.getRandomFloat( this.angleMin, this.angleMax );
-        this.curves.splice(0,this.curves.length);
+        this.angle = Utils.getRandomFloat(this.angleMin, this.angleMax);
+        this.curves.splice(0, this.curves.length);
         this.length = 0;
     }
 
-    drawInfo(ctx){
+    drawInfo(ctx) {
         ctx.beginPath();
-        ctx.moveTo( this.curves[ this.length - 1 ].x, this.curves[ this.length - 1 ].y );
-        for(var i = 0; i < this.length; i++){
-            ctx.lineTo(this.curves[i].cp1X,this.curves[i].cp1Y);
-            ctx.lineTo(this.curves[i].cp2X,this.curves[i].cp2Y);
-            ctx.lineTo(this.curves[i].x,this.curves[i].y);
+        ctx.moveTo(this.curves[this.length - 1].x, this.curves[this.length - 1].y);
+        for (var i = 0; i < this.length; i++) {
+            ctx.lineTo(this.curves[i].cp1X, this.curves[i].cp1Y);
+            ctx.lineTo(this.curves[i].cp2X, this.curves[i].cp2Y);
+            ctx.lineTo(this.curves[i].x, this.curves[i].y);
             ctx.fillStyle = "#8899ff";
             ctx.font = "15px Arial";
-            ctx.fillText( "cp1: " + i + 1 + ". ("+Math.round(this.curves[i].cp1X)+","+Math.round(this.curves[i].cp1Y)+")",this.curves[i].cp1X,this.curves[i].cp1Y);
+            ctx.fillText("cp1: " + i + 1 + ". (" + Math.round(this.curves[i].cp1X) + "," + Math.round(this.curves[i].cp1Y) + ")", this.curves[i].cp1X, this.curves[i].cp1Y);
             ctx.fillStyle = "#00cc22";
-            ctx.fillText( "cp2: " + i + 2 + ". ("+Math.round(this.curves[i].cp2X)+","+Math.round(this.curves[i].cp2Y)+")",this.curves[i].cp2X,this.curves[i].cp2Y);
+            ctx.fillText("cp2: " + i + 2 + ". (" + Math.round(this.curves[i].cp2X) + "," + Math.round(this.curves[i].cp2Y) + ")", this.curves[i].cp2X, this.curves[i].cp2Y);
             ctx.fillStyle = "#ff8899";
             ctx.fillText(
                 "xy: " + parseInt(i)
-                + ". ("+Math.round(this.curves[i].x)
+                + ". (" + Math.round(this.curves[i].x)
                 + ","
                 + Math.round(this.curves[i].y)
-                + ")",this.curves[i].x, ((this.curves[i].x <= this.centerX)?this.curves[i].y + 10 : this.curves[i].y)
+                + ")", this.curves[i].x, ((this.curves[i].x <= this.centerX) ? this.curves[i].y + 10 : this.curves[i].y)
             );
         }
         ctx.strokeStyle = '#8899ff';
         ctx.stroke();
     }
 
-    drawAngles(ctx){
-        for(let i = 0; i < this.length; i++){
-            ctx.drawCircle( this.curves[i].x, this.curves[i].y, this.curves[i].angle + Math.PI, this.curves[i].angle + ( 2 * Math.PI ) );
+    drawAngles(ctx) {
+        for (let i = 0; i < this.length; i++) {
+            ctx.drawCircle(this.curves[i].x, this.curves[i].y, this.curves[i].angle + Math.PI, this.curves[i].angle + (2 * Math.PI));
         }
     }
 
-    draw(ctx){
+    draw(ctx) {
         ctx.beginPath();
-        ctx.moveTo( this.curves[ this.length - 1 ].x, this.curves[ this.length - 1 ].y );
+        ctx.moveTo(this.curves[this.length - 1].x, this.curves[this.length - 1].y);
 
-        for(let i = 0; i < this.length; i++){
+        for (let i = 0; i < this.length; i++) {
             ctx.bezierCurveTo(
                 this.curves[i].cp1X,
                 this.curves[i].cp1Y,
@@ -249,9 +245,8 @@ export class Doodle {
         ctx.fill('nonzero');
     }
 
-    prinCurvesParam(){
-        for(let i=0; i < this.length; i++)
-        {
+    prinCurvesParam() {
+        for (let i = 0; i < this.length; i++) {
             console.log(
                 'test: '
                 + ' cp1x:' + this.curves[i].cp1X
@@ -266,11 +261,11 @@ export class Doodle {
         }
     }
 
-    drawCenter(ctx){
-        ctx.drawCircle( this.centerX, this.centerY, 0, 2 * Math.PI, 10 );
+    drawCenter(ctx) {
+        ctx.drawCircle(this.centerX, this.centerY, 0, 2 * Math.PI, 10);
     }
 
-    clearCanvas(ctx){
-        ctx.clearRect(0,0, ctx.canvas.width, ctx.canvas.height);
+    clearCanvas(ctx) {
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     }
 }
