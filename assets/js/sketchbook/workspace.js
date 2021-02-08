@@ -1,10 +1,10 @@
 import {Utils} from "../utils";
 
 export class Workspace {
-    constructor (canvas) {
+    constructor(canvas) {
 
-        this.mousePos1 = { x: 0, y: 0};
-        this.mousePos2 = { x: 0, y: 0};
+        this.mousePos1 = {x: 0, y: 0};
+        this.mousePos2 = {x: 0, y: 0};
         this.draw = false;
         this.canvas = canvas;
         this.isIOS = Utils.iOS();
@@ -13,10 +13,10 @@ export class Workspace {
 
         this.size = 600;
 
-        if( this.canvas.parentElement.offsetWidth < this.size )
+        if (this.canvas.parentElement.offsetWidth < this.size)
             this.size = this.canvas.parentElement.offsetWidth;
 
-        this.ctx.canvas.width  = this.size;
+        this.ctx.canvas.width = this.size;
         this.ctx.canvas.height = this.size;
 
         this.width = this.size;
@@ -26,10 +26,10 @@ export class Workspace {
         this.data = this.imageData.data;
 
         this.imageLayer = [...this.data];
-        this.toolLayer = new Array( this.width * this.height * 4 ).fill(0);
+        this.toolLayer = new Array(this.width * this.height * 4).fill(0);
 
         this.toolSize = 1;
-        this.lineColor = { r: 0, g: 0, b:0, a: 255};
+        this.lineColor = {r: 0, g: 0, b: 0, a: 255};
         this.tool = 'pencil';
     }
 
@@ -45,31 +45,29 @@ export class Workspace {
      * @constructor
      */
 
-    BresenhamLine(x1, y1, x2, y2) {
+    bresenhamLine(x1, y1, x2, y2) {
         let d, dx, dy, ai, bi, xi, yi;
         let x = x1, y = y1;
-
 
         if (x1 < x2) {
             xi = 1;
             dx = x2 - x1;
-        }
-        else {
+        } else {
             xi = -1;
             dx = x1 - x2;
         }
-        // ustalenie kierunku rysowania
+        // checking the direction of drawing
         if (y1 < y2) {
             yi = 1;
             dy = y2 - y1;
-        }
-        else {
+        } else {
             yi = -1;
             dy = y1 - y2;
         }
 
-        if( x < 0 || x >= this.width )
+        if (x < 0 || x >= this.width) {
             return null;
+        }
 
         this.updateLine(x, y);
 
@@ -88,14 +86,13 @@ export class Workspace {
                     x += xi;
                 }
 
-                if( x < 0 || x >= this.width )
+                if (x < 0 || x >= this.width) {
                     return null;
+                }
 
                 this.updateLine(x, y);
             }
-        }
-
-        else {
+        } else {
             ai = (dx - dy) * 2;
             bi = dx * 2;
             d = bi - dy;
@@ -106,53 +103,47 @@ export class Workspace {
                     x += xi;
                     y += yi;
                     d += ai;
-                }
-                else {
+                } else {
                     d += bi;
                     y += yi;
                 }
 
-                if( x < 0 || x >= this.width )
+                if (x < 0 || x >= this.width) {
                     return null;
+                }
 
                 this.updateLine(x, y);
             }
         }
 
-        if( this.tool === 'pencil' ) {
+        if (this.tool === 'pencil') {
             this.imageLayer.forEach((data, i) => {
                 this.data[i] = data + this.toolLayer[i];
             });
-        }else{
-            this.imageLayer.forEach( (data, i) => {
+        } else {
+            this.imageLayer.forEach((data, i) => {
                 this.data[i] = data - this.toolLayer[i];
             });
         }
     }
 
-    updateLine(x, y){
+    updateLine(x, y) {
         let index = (y * this.width + x) * 4;
-        let tool_x = 0;
-        let tool_index = 0;
+        let toolX = 0;
+        let toolIndex = 0;
 
-        if( this.toolSize > 1 ){
-                for(let tx = 0; tx < this.toolSize * 4; tx+=4)
-                    for(let ty = 0; ty < this.toolSize; ty++)
-                    {
-                        tool_x = tx - ( Math.floor(this.toolSize / 2) * 4);
-                        tool_index =  index + ( ( ty - Math.floor(this.toolSize / 2) ) * this.width * 4 ) + tool_x;
-                        //this.toolLayer[tool_index] = this.lineColor.r;
-                        //this.toolLayer[tool_index + 1] = this.lineColor.g;
-                        //this.toolLayer[tool_index + 2] = this.lineColor.b;
-                        if( x + tool_x > 0 && x + tool_x < this.width )
-                            this.toolLayer[tool_index + 3] = this.lineColor.a;
+        if (this.toolSize > 1) {
+            for (let tx = 0; tx < this.toolSize * 4; tx += 4)
+                for (let ty = 0; ty < this.toolSize; ty++) {
+                    toolX = tx - (Math.floor(this.toolSize / 2) * 4);
+                    toolIndex = index + ((ty - Math.floor(this.toolSize / 2)) * this.width * 4) + toolX;
+                    if (x + toolX > 0 && x + toolX < this.width) {
+                        this.toolLayer[toolIndex + 3] = this.lineColor.a;
                     }
-            }else{
-                //this.toolLayer[index] = this.lineColor.r;
-                //this.toolLayer[index + 1] = this.lineColor.g;
-                //this.toolLayer[index + 2] = this.lineColor.b;
-                this.toolLayer[index + 3] = this.lineColor.a;
-            }
+                }
+        } else {
+            this.toolLayer[index + 3] = this.lineColor.a;
+        }
     }
 
     getMousePos(evt) {
@@ -208,10 +199,10 @@ export class Workspace {
         this.toolLayer.fill(0);
     }
 
-    run(){
+    run() {
         this.loop();
 
-        if( this.isIOS ){
+        if (this.isIOS) {
             this.canvas.addEventListener('mousemove', evt => this.drag(evt), false);
             this.canvas.addEventListener('mousedown', evt => this.dragStart(evt), false);
             document.addEventListener('mouseup', evt => this.dragStop(evt), false);
@@ -219,7 +210,7 @@ export class Workspace {
             this.canvas.addEventListener('touchmove', evt => this.toucheDrag(evt), false);
             this.canvas.addEventListener('touchstart', evt => this.toucheDragStart(evt), false);
             document.addEventListener('touchend', evt => this.dragStop(evt), false);
-        }else{
+        } else {
             this.canvas.addEventListener('touchcancel', evt => evt.preventDefault(), false);
             this.canvas.addEventListener('touchmove', evt => evt.preventDefault(), false);
             this.canvas.addEventListener('touchstart', evt => evt.preventDefault(), false);
@@ -231,42 +222,38 @@ export class Workspace {
         }
     }
 
-    loop(){
-        if(this.draw){
-            this.BresenhamLine(parseInt(this.mousePos2.x),parseInt(this.mousePos2.y),parseInt(this.mousePos1.x),parseInt(this.mousePos1.y) );
+    loop() {
+        if (this.draw) {
+            this.bresenhamLine(parseInt(this.mousePos2.x), parseInt(this.mousePos2.y), parseInt(this.mousePos1.x), parseInt(this.mousePos1.y));
             this.ctx.putImageData(this.imageData, 0, 0);
-            //this.ctx.fillStyle = 'red';
-            //this.ctx.fillText(this.mousePos2.x + " , " + this.mousePos2.y,this.mousePos2.x,this.mousePos2.y);
         }
-
 
         this.mousePos2 = this.mousePos1;
 
         window.requestAnimationFrame(() => this.loop());
     }
 
-    clearCanvas(){
+    clearCanvas() {
         this.imageData.data.fill(0);
         this.ctx.putImageData(this.imageData, 0, 0);
         this.imageLayer = [...this.imageData.data];
     }
 
-    setTool(tool){
+    setTool(tool) {
         this.tool = tool;
     }
 
-    setToolSize(tool_size){
-        this.toolSize = parseInt(tool_size) * 2 - 1;
+    setToolSize(toolSize) {
+        this.toolSize = parseInt(toolSize) * 2 - 1;
     }
 
-    setToolOpacity(tool_opacity){
-        this.lineColor.a = parseInt(tool_opacity);
+    setToolOpacity(toolOpacity) {
+        this.lineColor.a = parseInt(toolOpacity);
     }
 
-    putWorkspaceImage(){
-        let image = this.canvas.toDataURL("image/png");//.replace("image/png", "image/octet-stream");
+    putWorkspaceImage() {
+        const workspaceImage = this.canvas.toDataURL("image/png");
 
-        window.location.href = image;
+        window.location.href = workspaceImage;
     }
-
 }

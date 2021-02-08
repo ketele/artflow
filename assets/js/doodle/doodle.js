@@ -50,7 +50,7 @@ export class Doodle {
             newY = this.centerY + y;
 
             this.curves.push( new Curve( newX, newY, newX, newY, newX, newY, this.angle ) );
-            this.angle += Utils.getRandomFloat( this.angleMin, this.angleMax );// angle_stepsize;
+            this.angle += Utils.getRandomFloat( this.angleMin, this.angleMax );
             this.length++;
         }
     }
@@ -99,8 +99,6 @@ export class Doodle {
         let tempCp2X;
         let tempCp2Y;
 
-        //console.log([...this.curves]);
-
         let addedNodes = false;
         let isFirstRound = true;
 
@@ -116,28 +114,7 @@ export class Doodle {
                     tempCp1Y = this.curves[i].cp1Y;
                     tempCp2X = this.centerX - (this.curves[i].cp1X - this.centerX);
                     tempCp2Y = tempCp1Y;
-                    //tempCp2X = this.curves[i].cp1X;
-                    //tempCp2Y = this.curves[i].cp1Y;
-
-                    //console.log(
-                    //    "isFirstRound: " +
-                    //    tempCp1X + ", " +
-                    //    tempCp1Y + ", " +
-                    //    tempCp2X + ", " +
-                    //    tempCp2Y + ", "
-                    //);
                 }
-
-                //console.log(
-                //    "delete: " +
-                //    ( ( typeof this.curves[i] !== "undefined") ? this.curves[i].cp1X + ", " +
-                //        this.curves[i].cp1Y + ", " +
-                //        this.curves[i].cp2X + ", " +
-                //        this.curves[i].cp2Y + ", " +
-                //        this.curves[i].x + ", " +
-                //        this.curves[i].y + ", "
-                //        : '' )
-                //);
 
                 this.curves.splice(i, 1);
                 this.length--;
@@ -145,19 +122,7 @@ export class Doodle {
                 if( addedNodes === false ){
                     this.curves[i].cp1X = this.centerX - (this.curves[i].cp2X - this.centerX);
                     this.curves[i].cp1Y = this.curves[i].cp2Y;
-                    //this.curves[i].cp2X = this.centerX - (this.curves[i].cp1X - this.centerX);
-                    //this.curves[i].cp2Y = this.curves[i].cp1Y;
                 }
-
-                //console.log(
-                //    "leave: " +
-                //    ( (typeof this.curves[i] !== "undefined") ? this.curves[i].cp1X + ", " +
-                //    this.curves[i].cp1Y + ", " +
-                //    this.curves[i].cp2X + ", " +
-                //    this.curves[i].cp2Y + ", " +
-                //        this.curves[i].x + ", " +
-                //        this.curves[i].y + ", "  : '' )
-                //);
 
                 addedNodes = true;
                 i++;
@@ -171,16 +136,8 @@ export class Doodle {
             tempCp1Y = this.curves[length - 1].cp1Y;
             tempCp2X = this.centerX - (this.curves[length - 1].cp1X - this.centerX);
             tempCp2Y = tempCp1Y;
-            //console.log(
-            //    "isFirstRound error: " +
-            //    tempCp1X + ", " +
-            //    tempCp1Y + ", " +
-            //    tempCp2X + ", " +
-            //    tempCp2Y + ", "
-            //);
         }
 
-        //for(let i = length - 1; i >= 0; i--)
         for(let i = 0; i < length; i++)
         {
             let opposedI = length - i - 1;
@@ -191,36 +148,20 @@ export class Doodle {
                 cp1Y = tempCp1Y;
                 cp2X = tempCp2X;
                 cp2Y = tempCp2Y;
-                //console.log(
-                //    "i === 0: " +
-                //    cp1X + ", " +
-                //    cp1Y + ", " +
-                //    cp2X + ", " +
-                //    cp2Y + ", "
-                //);
             }else{
                 cp2X = this.centerX - (this.curves[opposedI + 1].cp1X - this.centerX);
                 cp2Y = this.curves[opposedI + 1].cp1Y;
                 cp1X = this.centerX - (this.curves[opposedI + 1].cp2X - this.centerX);
                 cp1Y = this.curves[opposedI + 1].cp2Y;
-                //console.log(
-                //    "else: " +
-                //    cp1X + ", " +
-                //    cp1Y + ", " +
-                //    cp2X + ", " +
-                //    cp2Y + ", "
-                //);
             }
             angle = this.curves[opposedI].angle;
 
             this.curves.push(new Curve(cp1X, cp1Y, cp2X, cp2Y, x, y, angle));
-            //this.curves.push(new Curve(cp1X, this.curves[i].cp1Y, cp2X, this.curves[i].cp2Y, x, this.curves[i].y, this.curves[i].angle));
-            //unshift
+
             this.length++;
         }
 
         this.length = this.curves.length;
-        //this.updateCoordinates();
 
         if( this.curves.length < 3 )
         {
@@ -304,20 +245,8 @@ export class Doodle {
 
         ctx.fillStyle = "#bbd2d2";
         ctx.strokeStyle = "#bbd2d2";
-        //ctx.mozFillRule = 'nonzero';
-        //ctx.fillRule = 'nonzero';
         ctx.stroke();
         ctx.fill('nonzero');
-        //ctx.fill('evenodd');
-
-        //this.drawInfo(ctx);
-
-        //console.log({
-        //    'length': this.length,
-        //    'centerX': this.centerX,
-        //    'centerY': this.centerY,
-        //    'curves': this.curves
-        //});
     }
 
     prinCurvesParam(){
