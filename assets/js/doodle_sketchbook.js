@@ -145,7 +145,7 @@ class DoodleSketchbook {
                     const temp_form = document.createElement('form');
                     temp_form.method = "POST";
                     temp_form.target = "_blank";
-                    temp_form.action = "/" + Utils.getUrlParam(0) + "/add_doodle";
+                    temp_form.action = `/${Utils.getUrlParam(0)}/add_doodle`;
                     temp_form.setAttribute('name', 'doodle');
                     temp_form.innerHTML = `
 <input type="text" name="temp_dir" value="${response.temp_dir}" />
