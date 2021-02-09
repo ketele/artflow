@@ -2,10 +2,8 @@
 
 namespace App\Service;
 
-use App\Entity\Admin;
 use App\Repository\NotificationRepository;
 use Symfony\Component\Security\Core\Security;
-use Symfony\Component\Security\Core\User\User;
 
 class Notification
 {

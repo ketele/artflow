@@ -12,13 +12,10 @@ use App\Repository\DoodleCommentRepository;
 use App\Repository\DoodleRepository;
 use App\Security\Glide;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Notifier\Notification\Notification;
@@ -117,60 +114,21 @@ class DoodleController extends AbstractController
      * @return Response
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function view(int $id, string $doodleFolder,
+    public function view(int $id,
                          DoodleRepository $doodleRepository,
                          DoodleCommentRepository $doodleCommentRepository,
                          Request $request,
                          \App\Service\Notification $notificationService
     )
     {
-        $glide = new Glide();
         $doodleComment = new DoodleComment();
         $doodle = $doodleRepository->findOne($id);
-        $fileName = $doodle->getFileName();
         $user = $this->getUser();
 
-        $otherDoodlesCount = 3;
         $doodle->setViews($doodle->getViews() + 1);
         $doodleRepository->save($doodle);
 
-        $doodles = $doodleRepository->getDoodles([
-            'where' => [
-                'd.id != :parentDoodle',
-                '( d.ipTree LIKE :parentDoodleIpTreeBegin OR d.ipTree LIKE :parentDoodleIpTree )',
-                'd.status = 1',
-            ],
-            'parameters' => [
-                'parentDoodle' => '' . $id . '',
-                'parentDoodleIpTreeBegin' => '%.' . $id . '.%',
-                'parentDoodleIpTree' => '' . $id . '.%',
-            ],
-            'maxResults' => $otherDoodlesCount,
-        ]);
-
-        if (count($doodles) < $otherDoodlesCount) {
-            $doodlesTemp = $doodleRepository->getDoodles([
-                'select' => 'd, ABS(DATE_DIFF( d.createdAt, :parentCreatedAt )) AS HIDDEN score',
-                'where' => [
-                    'd.id NOT IN(:doodles)',
-                    'd.status = 1',
-                ],
-                'parameters' => [
-                    'doodles' => '' . $id . (count($doodles) > 0 ? ',' . implode(array_map(function ($v) {
-                                return $v->getId();
-                            }, $doodles)) : '') . '',
-                    'parentCreatedAt' => $doodle->getCreatedAt(),
-                ],
-                'maxResults' => $otherDoodlesCount - count($doodles),
-                'order' => [['score', 'ASC']],
-            ]);
-
-            $doodles = array_merge($doodles, $doodlesTemp);
-        }
-
-        foreach ($doodles AS $doodles_key => $d) {
-            $d->setUrl($glide->generateUrl($doodleFolder . $d->getId(), $d->getFileName()));
-        }
+        $doodles = $doodleRepository->getRecommended($id);
 
         $doodleComment->setDoodle($doodle);
         $commentForm = $this->createForm(DoodleCommentFormType::class, $doodleComment);
@@ -210,7 +168,6 @@ class DoodleController extends AbstractController
                 'doodle' => $doodle,
                 'status_rejected' => $doodle->getStatus()->getId() == DoodleStatus::STATUS_REJECTED,
                 'status_new' => $doodle->getStatus()->getId() == DoodleStatus::STATUS_NEW,
-                'file_url' => $glide->generateUrl($doodleFolder . $id, $fileName, []),
                 'doodles' => $doodles,
                 'commentForm' => $commentForm->createView(),
                 'doodleComments' => $doodleComments,
@@ -255,8 +212,6 @@ class DoodleController extends AbstractController
      */
     public function gallery(string $order, ?int $id, DoodleRepository $doodleRepository, string $doodleFolder)
     {
-        $glide = new Glide();
-
         $where = ['d.status = ' . DoodleStatus::STATUS_PUBLISHED];
         $parameters = [];
 
@@ -277,10 +232,6 @@ class DoodleController extends AbstractController
             'where' => $where,
             'parameters' => $parameters,
         ]);
-
-        foreach ($doodles AS $doodles_key => $d) {
-            $d->setUrl($glide->generateUrl($doodleFolder . $d->getId(), $d->getFileName()));
-        }
 
         return $this->render('doodle/gallery.html.twig', [
             'controller_name' => 'DoodleController',
@@ -350,7 +301,7 @@ class DoodleController extends AbstractController
             try {
                 $filesystem->mirror($tempPath, $doodlePath);
             } catch (FileException $e) {
-                // unable to upload the photo, give up
+                //ToDo: Add exception action
             }
 
             $notifier->send(new Notification('Your doodle will be posted after moderation.', ['browser']));
@@ -450,15 +401,12 @@ class DoodleController extends AbstractController
     public function editDoodle(
         int $id,
         DoodleRepository $doodleRepository,
-        string $doodleFolder,
         Request $request
     )
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $glide = new Glide();
         $doodle = $doodleRepository->findOne($id);
-        $fileName = $doodle->getFileName();
         $user = $this->getUser();
 
         if ($user != $doodle->getUser()) {
@@ -471,7 +419,7 @@ class DoodleController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $form_data = $request->get('form');
+            $form_data = $request->get('doodle_form');
 
             $doodle->setDescription($form_data['description']);
             $doodle->setTitle($form_data['title']);
@@ -485,7 +433,6 @@ class DoodleController extends AbstractController
                 'doodle' => $doodle,
                 'user' => $user,
                 'form' => $form->createView(),
-                'file_url' => $glide->generateUrl($doodleFolder . $id, $fileName, []),
             ]);
         }
     }
@@ -504,8 +451,7 @@ class DoodleController extends AbstractController
         int $id,
         bool $confirmed,
         DoodleRepository $doodleRepository,
-        string $doodleFolder,
-        Request $request
+        string $doodleFolder
     )
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
@@ -532,7 +478,6 @@ class DoodleController extends AbstractController
                 'controller_name' => 'DoodleController',
                 'doodle' => $doodle,
                 'user' => $user,
-                'file_url' => $glide->generateUrl($doodleFolder . $id, $fileName, []),
             ]);
         }
     }
@@ -554,11 +499,9 @@ class DoodleController extends AbstractController
         string $username,
         string $order,
         DoodleRepository $doodleRepository,
-        string $doodleFolder,
         AdminRepository $adminRepository
     )
     {
-        $glide = new Glide();
         $user = $adminRepository->findOneBy(['username' => $username]);
 
         $where[] = 'd.user = ' . $user->getId();
@@ -570,10 +513,6 @@ class DoodleController extends AbstractController
             'where' => $where,
             'parameters' => $parameters,
         ]);
-
-        foreach ($doodles AS $doodles_key => $d) {
-            $d->setUrl($glide->generateUrl($doodleFolder . $d->getId(), $d->getFileName()));
-        }
 
         return $this->render('user/doodle_gallery.html.twig', [
             'controller_name' => 'DoodleController',

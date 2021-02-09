@@ -2,9 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\DoodleStatus;
 use App\Repository\DoodleRepository;
-use App\Security\Glide;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -23,20 +21,11 @@ class HomePageController extends AbstractController
      */
     public function index(DoodleRepository $doodleRepository, string $doodleDir, string $doodleFolder)
     {
-        $glide = new Glide();
         $doodles = $doodleRepository->getDoodles();
-
-        foreach ($doodles AS $doodles_key => $doodle) {
-            $doodle->setUrl($glide->generateUrl($doodleFolder . $doodle->getId(), $doodle->getFileName()));
-        }
 
         $new_doodles = $doodleRepository->getDoodles([
             'order' => [['d.createdAt', 'DESC']],
         ]);
-
-        foreach ($new_doodles AS $doodles_key => $doodle) {
-            $doodle->setUrl($glide->generateUrl($doodleFolder . $doodle->getId(), $doodle->getFileName()));
-        }
 
         return $this->render('home_page/index.html.twig', [
             'controller_name' => 'HomePageController',
@@ -44,7 +33,6 @@ class HomePageController extends AbstractController
             'new_doodles' => $new_doodles,
             'doodleDir' => $doodleDir,
             'doodleFolder' => $doodleFolder,
-            'glide' => $glide,
         ]);
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Doodle;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -24,7 +25,7 @@ class DoodleFormType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        if (isset($options['data']['id']) && is_numeric($options['data']['id'])) {
+        if ($options['data'] instanceof Doodle && is_numeric($options['data']->getId())) {
             $builder
                 ->add('id', HiddenType::class);
         } else {

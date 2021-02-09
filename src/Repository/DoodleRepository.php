@@ -196,4 +196,45 @@ class DoodleRepository extends ServiceEntityRepository
         $doodleIpTreeArray[] = $doodleId;
         return $doodleIpTreeArray;
     }
+
+    public function getRecommended(int $id, ?int $doodlesCount = 3)
+    {
+        $doodle = $this->findOne($id);
+
+        $doodles = $this->getDoodles([
+            'where' => [
+                'd.id != :parentDoodle',
+                '( d.ipTree LIKE :parentDoodleIpTreeBegin OR d.ipTree LIKE :parentDoodleIpTree )',
+                'd.status = 1',
+            ],
+            'parameters' => [
+                'parentDoodle' => '' . $id . '',
+                'parentDoodleIpTreeBegin' => '%.' . $id . '.%',
+                'parentDoodleIpTree' => '' . $id . '.%',
+            ],
+            'maxResults' => $doodlesCount,
+        ]);
+
+        if (count($doodles) < $doodlesCount) {
+            $doodlesTemp = $this->getDoodles([
+                'select' => 'd, ABS(DATE_DIFF( d.createdAt, :parentCreatedAt )) AS HIDDEN score',
+                'where' => [
+                    'd.id NOT IN(:doodles)',
+                    'd.status = 1',
+                ],
+                'parameters' => [
+                    'doodles' => '' . $id . (count($doodles) > 0 ? ',' . implode(array_map(function ($v) {
+                                return $v->getId();
+                            }, $doodles)) : '') . '',
+                    'parentCreatedAt' => $doodle->getCreatedAt(),
+                ],
+                'maxResults' => $doodlesCount - count($doodles),
+                'order' => [['score', 'ASC']],
+            ]);
+
+            $doodles = array_merge($doodles, $doodlesTemp);
+        }
+
+        return $doodles;
+    }
 }

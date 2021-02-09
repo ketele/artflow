@@ -2,10 +2,8 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Doodle;
 use App\Repository\DoodleRepository;
 use App\Repository\DoodleStatusRepository;
-use App\Security\Glide;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -46,7 +44,6 @@ class DoodleController extends AbstractController
 
         $order = $request->get('order', 'createdAt');
         $status = $request->get('status');
-        $glide = new Glide();
         $where = [];
 
         $parameters = [];
@@ -74,10 +71,6 @@ class DoodleController extends AbstractController
         ]);
 
         $doodleStatuses = $doodleStatusRepository->getStatuses();
-
-        foreach ($doodles AS $doodles_key => $d) {
-            $d->setUrl($glide->generateUrl($doodleFolder . $d->getId(), $d->getFileName()));
-        }
 
         return $this->render('admin/doodle/index.html.twig', [
             'controller_name' => 'DoodleController',

@@ -5,13 +5,11 @@ namespace App\Controller;
 use App\Repository\AdminRepository;
 use App\Repository\DoodleRepository;
 use App\Repository\NotificationRepository;
-use App\Security\Glide;
 use App\Service\Notification;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Routing\Router;
 use Symfony\Component\Routing\RouterInterface;
 
 class UserController extends AbstractController
@@ -27,20 +25,13 @@ class UserController extends AbstractController
         string $doodleFolder
     ): Response
     {
-        $glide = new Glide();
         $user = $adminRepository->findOneBy(['username' => $username]);
-
         $doodles = $doodleRepository->getDoodles(['where' => ['d.user = ' . $user->getId()]]);
-        foreach ($doodles AS $doodles_key => $doodle) {
-            $doodle->setUrl($glide->generateUrl($doodleFolder . $doodle->getId(), $doodle->getFileName()));
-        }
+
         $new_doodles = $doodleRepository->getDoodles([
             'where' => ['d.user = ' . $user->getId()],
             'order' => [['d.createdAt', 'DESC']],
         ]);
-        foreach ($new_doodles AS $doodles_key => $doodle) {
-            $doodle->setUrl($glide->generateUrl($doodleFolder . $doodle->getId(), $doodle->getFileName()));
-        }
 
         return $this->render('user/index.html.twig', [
             'controller_name' => 'UserController',
@@ -49,7 +40,6 @@ class UserController extends AbstractController
             'new_doodles' => $new_doodles,
             'doodleDir' => $doodleDir,
             'doodleFolder' => $doodleFolder,
-            'glide' => $glide,
         ]);
     }
 
