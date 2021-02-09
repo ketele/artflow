@@ -41,6 +41,10 @@ class DoodleController extends AbstractController
      *     name="doodle",
      *     defaults={"id": null}
      * )
+     * @param int|null $id
+     * @param DoodleRepository $doodleRepository
+     * @return Response
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function index(?int $id, DoodleRepository $doodleRepository)
     {
@@ -106,7 +110,6 @@ class DoodleController extends AbstractController
      *     name="doodle_view"
      * )
      * @param int $id
-     * @param string $doodleFolder
      * @param DoodleRepository $doodleRepository
      * @param DoodleCommentRepository $doodleCommentRepository
      * @param Request $request
@@ -136,7 +139,6 @@ class DoodleController extends AbstractController
 
         if ($commentForm->isSubmitted() && $commentForm->isValid()) {
             $form_data = $request->get('doodle_comment_form');
-            $doodleId = $form_data['doodleId'];
 
             $doodleComment->setUser($user);
             $doodleCommentRepository->save($doodleComment);
@@ -177,8 +179,11 @@ class DoodleController extends AbstractController
 
     /**
      * @Route("/api/doodle/comment/{id<\d+>}/manage", name="doodle_comment_ajax", methods={"GET"})
+     * @param int $id
+     * @param DoodleRepository $doodleRepository
+     * @param DoodleCommentRepository $doodleCommentRepository
      * @return JsonResponse
-     * @throws \Exception
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function doodle_comment_ajax(
         int $id,
@@ -207,10 +212,9 @@ class DoodleController extends AbstractController
      * @param string $order
      * @param int|null $id
      * @param DoodleRepository $doodleRepository
-     * @param string $doodleFolder
      * @return Response
      */
-    public function gallery(string $order, ?int $id, DoodleRepository $doodleRepository, string $doodleFolder)
+    public function gallery(string $order, ?int $id, DoodleRepository $doodleRepository)
     {
         $where = ['d.status = ' . DoodleStatus::STATUS_PUBLISHED];
         $parameters = [];
@@ -246,9 +250,12 @@ class DoodleController extends AbstractController
      * @param NotifierInterface $notifier
      * @param string $doodleDir
      * @param string $doodleFolder
+     * @param DoodleRepository $doodleRepository
      * @return Response
      */
-    public function add_doodle(Request $request, NotifierInterface $notifier, string $doodleDir, string $doodleFolder, DoodleRepository $doodleRepository)
+    public function add_doodle(Request $request, NotifierInterface $notifier, string $doodleDir, string $doodleFolder,
+                               DoodleRepository $doodleRepository
+    )
     {
         if ($this->isGranted('ROLE_USER') == false) {
             $this->addFlash('warning', $this->translator->trans('You need to be logged to save doodle'));
@@ -394,9 +401,11 @@ class DoodleController extends AbstractController
      *     "/{_locale<%app.supported_locales%>}/user/doodle/edit/{id}",
      *     name="user_doodle_edit"
      * )
+     * @param int $id
      * @param DoodleRepository $doodleRepository
-     * @param string $doodleFolder
+     * @param Request $request
      * @return Response
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function editDoodle(
         int $id,
@@ -442,9 +451,11 @@ class DoodleController extends AbstractController
      *     name="user_doodle_delete",
      *     defaults={"confirmed": false}
      * )
+     * @param int $id
+     * @param bool $confirmed
      * @param DoodleRepository $doodleRepository
-     * @param string $doodleFolder
      * @return Response
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function deleteDoodle(
         int $id,
@@ -487,7 +498,6 @@ class DoodleController extends AbstractController
      * @param string $username
      * @param string $order
      * @param DoodleRepository $doodleRepository
-     * @param string $doodleFolder
      * @param AdminRepository $adminRepository
      * @return Response
      */
