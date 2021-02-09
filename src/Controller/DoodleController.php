@@ -418,7 +418,6 @@ class DoodleController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-
             $form_data = $request->get('doodle_form');
 
             $doodle->setDescription($form_data['description']);
@@ -450,15 +449,12 @@ class DoodleController extends AbstractController
     public function deleteDoodle(
         int $id,
         bool $confirmed,
-        DoodleRepository $doodleRepository,
-        string $doodleFolder
+        DoodleRepository $doodleRepository
     )
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $glide = new Glide();
         $doodle = $doodleRepository->findOne($id);
-        $fileName = $doodle->getFileName();
         $user = $this->getUser();
 
         if ($user != $doodle->getUser()) {
