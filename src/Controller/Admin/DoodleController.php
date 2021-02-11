@@ -42,7 +42,7 @@ class DoodleController extends AbstractController
 
         $doodles = $doodleRepository->findByFilter($request->query->all());
 
-        $doodleStatuses = $doodleStatusRepository->getStatuses();
+        $doodleStatuses = $doodleStatusRepository->findAll();
 
         return $this->render('admin/doodle/index.html.twig', [
             'controller_name' => 'DoodleController',
@@ -76,7 +76,7 @@ class DoodleController extends AbstractController
             $doodle = $doodleRepository->findOne($id);
         }
 
-        $doodleStatuses = $doodleStatusRepository->getStatuses();
+        $doodleStatuses = $doodleStatusRepository->findAll();
 
         return new JsonResponse(['content' => $this->renderView('admin/doodle/status_change_modal.html.twig', [
             'error' => $error,
