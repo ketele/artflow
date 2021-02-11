@@ -83,8 +83,14 @@
                                         <span class="badge bg-success">{{ user_notification_count }}</span>
                                     {% endif %}
                                 </a>
-                                <a class="dropdown-item"
-                                   href="{{ path('user', {username: app.user.username}) }}">{{ 'Your profile'|trans }}</a>
+                                <a class="dropdown-item" href="{{ path('user', {username: app.user.username}) }}">
+                                    {{ 'Your profile'|trans }}
+                                </a>
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    <a class="dropdown-item" href="{{ path('admin') }}">
+                                        {{ 'Admin panel'|trans }}
+                                    </a>
+                                {% endif %}
                                 <hr class="dropdown-divider">
                                 <a class="dropdown-item" href="{{ path('app_logout') }}">{{ 'Logout'|trans }}</a>
                             </div>

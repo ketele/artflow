@@ -47,6 +47,11 @@ class UserController extends AbstractController
 
     /**
      * @Route("/locale/change/{locale}", name="user_locale_change")
+     * @param string $locale
+     * @param AdminRepository $adminRepository
+     * @param Request $request
+     * @param RouterInterface $router
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function changeLocale(
         string $locale,
