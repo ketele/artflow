@@ -133,7 +133,7 @@ class DoodleController extends AbstractController
         $doodle->setViews($doodle->getViews() + 1);
         $doodleRepository->save($doodle);
 
-        $doodles = $doodleRepository->getRecommended($id);
+        $doodles = $doodleRepository->findRecommended($id);
 
         $doodleComment->setDoodle($doodle);
         $commentForm = $this->createForm(DoodleCommentFormType::class, $doodleComment);
@@ -218,26 +218,11 @@ class DoodleController extends AbstractController
      */
     public function gallery(string $order, ?int $id, DoodleRepository $doodleRepository)
     {
-        $where = ['d.status = ' . DoodleStatus::STATUS_PUBLISHED];
-        $parameters = [];
-
         if (is_numeric($id)) {
-            $rootDoodle = $doodleRepository->findOne($id);
-            $ipTree = $rootDoodle->getIpTree();
-            $rootId = explode('.', $ipTree)[0];
-            $where[] = '( d.id = :doodleId OR d.ipTree LIKE :doodleIdBegin OR d.ipTree LIKE :doodleIdInner OR d.ipTree LIKE :doodleIdEnd)';
-            $parameters['doodleId'] = $rootId;
-            $parameters['doodleIdBegin'] = $rootId . '.%';
-            $parameters['doodleIdInner'] = '%.' . $rootId . '.%';
-            $parameters['doodleIdEnd'] = '%.' . $rootId;
+            $doodles = $doodleRepository->findSimilar($id, [['d.' . $order, 'DESC']]);
+        } else {
+            $doodles = $doodleRepository->findPublished([['d.' . $order, 'DESC']]);
         }
-
-        $doodles = $doodleRepository->getDoodles([
-            'order' => [['d.' . $order, 'DESC']],
-            'maxResults' => 50,
-            'where' => $where,
-            'parameters' => $parameters,
-        ]);
 
         return $this->render('doodle/gallery.html.twig', [
             'controller_name' => 'DoodleController',

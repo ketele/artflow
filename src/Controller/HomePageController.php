@@ -21,11 +21,9 @@ class HomePageController extends AbstractController
      */
     public function index(DoodleRepository $doodleRepository, string $doodleDir, string $doodleFolder)
     {
-        $doodles = $doodleRepository->getDoodles();
+        $doodles = $doodleRepository->findPublished(null, 3);
 
-        $new_doodles = $doodleRepository->getDoodles([
-            'order' => [['d.createdAt', 'DESC']],
-        ]);
+        $new_doodles = $doodleRepository->findPublished([['d.createdAt', 'DESC']], 3);
 
         return $this->render('home_page/index.html.twig', [
             'controller_name' => 'HomePageController',

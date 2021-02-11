@@ -110,6 +110,30 @@ class DoodleRepository extends ServiceEntityRepository
         return $query->getResult();
     }
 
+    public function findPublished(?array $order = [['d.popularity', 'DESC']],?int $maxResults = null,int $firstResult = 0)
+    {
+        $queryBuilder = $this->createQueryBuilder('d');
+
+        $queryBuilder->select('d')
+            ->where('d.status = ' . DoodleStatus::STATUS_PUBLISHED);
+
+        if (!empty($order)) {
+            foreach ($order AS $o) {
+                $queryBuilder->orderBy($o[0], $o[1]);
+            }
+        }
+
+        $queryBuilder->setFirstResult($firstResult);
+
+        if(is_numeric($maxResults)) {
+            $queryBuilder->setMaxResults($maxResults);
+        }
+
+        $query = $queryBuilder->getQuery();
+
+        return $query->getResult();
+    }
+
     public function save(Doodle $doodle)
     {
         $metadata = $this->entityManager->getClassMetadata(get_class($doodle));
@@ -199,35 +223,35 @@ class DoodleRepository extends ServiceEntityRepository
         return $doodleIpTreeArray;
     }
 
-    public function getRecommended(int $id, ?int $doodlesCount = 3)
+    public function findRecommended(int $id, ?int $doodlesCount = 3)
     {
         $doodle = $this->findOne($id);
 
-        $queryBuilder = $this->createQueryBuilder('d');
-        $queryBuilder->select('d');
-        $queryBuilder->where('d.id != :parentDoodle');
-        $queryBuilder->andWhere('( d.ipTree LIKE :parentDoodleIpTreeBegin OR d.ipTree LIKE :parentDoodleIpTree )');
-        $queryBuilder->andWhere('d.status = ' . DoodleStatus::STATUS_PUBLISHED);
-        $queryBuilder->setParameter('parentDoodle', $id);
-        $queryBuilder->setParameter('parentDoodleIpTreeBegin', $id);
-        $queryBuilder->setParameter('parentDoodleIpTree', $id);
-        $queryBuilder->orderBy('d.popularity', 'DESC');
-        $queryBuilder->setMaxResults($doodlesCount);
+        $queryBuilder = $this->createQueryBuilder('d')
+            ->select('d')
+            ->where('d.id != :parentDoodle')
+            ->andWhere('( d.ipTree LIKE :parentDoodleIpTreeBegin OR d.ipTree LIKE :parentDoodleIpTree )')
+            ->andWhere('d.status = ' . DoodleStatus::STATUS_PUBLISHED)
+            ->setParameter('parentDoodle', $id)
+            ->setParameter('parentDoodleIpTreeBegin', $id)
+            ->setParameter('parentDoodleIpTree', $id)
+            ->orderBy('d.popularity', 'DESC')
+            ->setMaxResults($doodlesCount);
         $query = $queryBuilder->getQuery();
         $doodles = $query->getResult();
         unset($queryBuilder);
 
         if (count($doodles) < $doodlesCount) {
-            $queryBuilder = $this->createQueryBuilder('d');
-            $queryBuilder->select('d, ABS(DATE_DIFF( d.createdAt, :parentCreatedAt )) AS HIDDEN score');
-            $queryBuilder->where('d.id NOT IN(:doodles)');
-            $queryBuilder->andWhere('d.status = ' . DoodleStatus::STATUS_PUBLISHED);
-            $queryBuilder->setParameter('doodles', $id . (count($doodles) > 0 ? ',' . implode(array_map(function ($v) {
+            $queryBuilder = $this->createQueryBuilder('d')
+                ->select('d, ABS(DATE_DIFF( d.createdAt, :parentCreatedAt )) AS HIDDEN score')
+                ->where('d.id NOT IN(:doodles)')
+                ->andWhere('d.status = ' . DoodleStatus::STATUS_PUBLISHED)
+                ->setParameter('doodles', $id . (count($doodles) > 0 ? ',' . implode(array_map(function ($v) {
                         return $v->getId();
-                    }, $doodles)) : ''));
-            $queryBuilder->setParameter('parentCreatedAt', $doodle->getCreatedAt());
-            $queryBuilder->orderBy('score', 'ASC');
-            $queryBuilder->setMaxResults($doodlesCount- count($doodles));
+                    }, $doodles)) : ''))
+                ->setParameter('parentCreatedAt', $doodle->getCreatedAt())
+                ->orderBy('score', 'ASC')
+                ->setMaxResults($doodlesCount- count($doodles));
             $query = $queryBuilder->getQuery();
             $doodlesTemp = $query->getResult();
 
@@ -235,5 +259,38 @@ class DoodleRepository extends ServiceEntityRepository
         }
 
         return $doodles;
+    }
+
+    public function findSimilar($id, ?array $order = [['d.popularity', 'DESC']],?int $maxResults = null,int $firstResult = 0)
+    {
+        $queryBuilder = $this->createQueryBuilder('d');
+
+        $rootDoodle = $this->findOne($id);
+        $ipTree = $rootDoodle->getIpTree();
+        $rootId = explode('.', $ipTree)[0];
+
+        $queryBuilder->select('d')
+            ->where('d.status = ' . DoodleStatus::STATUS_PUBLISHED)
+            ->andWhere('( d.id = :doodleId OR d.ipTree LIKE :doodleIdBegin OR d.ipTree LIKE :doodleIdInner OR d.ipTree LIKE :doodleIdEnd)')
+            ->setParameter('doodleId', $rootId)
+            ->setParameter('doodleIdBegin', $rootId . '.%')
+            ->setParameter('doodleIdInner', '%.' . $rootId . '.%')
+            ->setParameter('doodleIdEnd', '%.' . $rootId);
+
+        if (!empty($order)) {
+            foreach ($order AS $o) {
+                $queryBuilder->orderBy($o[0], $o[1]);
+            }
+        }
+
+        $queryBuilder->setFirstResult($firstResult);
+
+        if(is_numeric($maxResults)) {
+            $queryBuilder->setMaxResults($maxResults);
+        }
+
+        $query = $queryBuilder->getQuery();
+
+        return $query->getResult();
     }
 }
