@@ -67,7 +67,7 @@ class DoodleController extends AbstractController
     }
 
     /**
-     * @Route("/store_doodle_temp_ajax", name="store_doodle_temp_ajax")
+     * @Route("/api/store_doodle_temp", name="store_doodle_temp")
      * @param Request $request
      * @return JsonResponse
      * @throws \Exception

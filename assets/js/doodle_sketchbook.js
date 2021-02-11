@@ -136,33 +136,34 @@ class DoodleSketchbook {
         });
 
         getImageFile.then((image) => {
-            const xhr = new XMLHttpRequest();
+            fetch(`/api/store_doodle_temp`, {
+                method: 'POST',
+                body: 'imgBase64=' + image,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Content-type': 'application/x-www-form-urlencoded',
+                }
+            })
+                .then(response => response.json().then(data => {
+                    if (response.status < 300) {
 
-            xhr.onreadystatechange = e => {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    let response = JSON.parse(xhr.response);
-
-                    const tempForm = document.createElement('form');
-                    tempForm.method = "POST";
-                    tempForm.target = "_blank";
-                    tempForm.action = `/${Utils.getUrlParam(0)}/add_doodle`;
-                    tempForm.setAttribute('name', 'doodle');
-                    tempForm.innerHTML = `
-<input type="text" name="tempDir" value="${response.tempDir}" />
+                        const tempForm = document.createElement('form');
+                        tempForm.method = "POST";
+                        tempForm.target = "_blank";
+                        tempForm.action = `/${Utils.getUrlParam(0)}/add_doodle`;
+                        tempForm.setAttribute('name', 'doodle');
+                        tempForm.innerHTML = `
+<input type="text" name="tempDir" value="${data.tempDir}" />
 <input type="text" name="sourceDoodle" value="${sourceDoodle}" />
 <input type="text" name="sourceDoodleId" value="${sourceDoodleId}" />
 `;
-                    let formObj = document.body.appendChild(tempForm);
-                    tempForm.submit();
-                    formObj.remove();
+                        let formObj = document.body.appendChild(tempForm);
+                        tempForm.submit();
+                        formObj.remove();
+                    }
 
                     Utils.hideLoadingOverlay();
-                }
-            };
-            xhr.open("POST", "/store_doodle_temp_ajax", true);
-            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-            xhr.send('imgBase64=' + image);
+                }));
         });
     }
 }
