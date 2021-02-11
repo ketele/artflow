@@ -75,7 +75,7 @@ class DoodleRepository extends ServiceEntityRepository
 
         $queryBuilder->select('d');
 
-        if(isset($params['status']) && is_numeric($params['status'])) {
+        if (isset($params['status']) && is_numeric($params['status'])) {
             $where[] = 'd.status = ' . $params['status'];
         }
 
@@ -93,7 +93,7 @@ class DoodleRepository extends ServiceEntityRepository
             $queryBuilder->orderBy($order[0], $order[1]);
         }
 
-        if(isset($params['maxResults']) && is_numeric($params['maxResults'])) {
+        if (isset($params['maxResults']) && is_numeric($params['maxResults'])) {
             $queryBuilder->setMaxResults($params['maxResults']);
         }
 
@@ -102,7 +102,7 @@ class DoodleRepository extends ServiceEntityRepository
         return $query->getResult();
     }
 
-    public function findPublished(?array $order = [['d.popularity', 'DESC']],?int $maxResults = null,int $firstResult = 0)
+    public function findPublished(?array $order = [['d.popularity', 'DESC']], ?int $maxResults = null, int $firstResult = 0)
     {
         $queryBuilder = $this->createQueryBuilder('d');
 
@@ -117,7 +117,7 @@ class DoodleRepository extends ServiceEntityRepository
 
         $queryBuilder->setFirstResult($firstResult);
 
-        if(is_numeric($maxResults)) {
+        if (is_numeric($maxResults)) {
             $queryBuilder->setMaxResults($maxResults);
         }
 
@@ -239,11 +239,11 @@ class DoodleRepository extends ServiceEntityRepository
                 ->where('d.id NOT IN(:doodles)')
                 ->andWhere('d.status = ' . DoodleStatus::STATUS_PUBLISHED)
                 ->setParameter('doodles', $id . (count($doodles) > 0 ? ',' . implode(array_map(function ($v) {
-                        return $v->getId();
-                    }, $doodles)) : ''))
+                            return $v->getId();
+                        }, $doodles)) : ''))
                 ->setParameter('parentCreatedAt', $doodle->getCreatedAt())
                 ->orderBy('score', 'ASC')
-                ->setMaxResults($doodlesCount- count($doodles));
+                ->setMaxResults($doodlesCount - count($doodles));
             $query = $queryBuilder->getQuery();
             $doodlesTemp = $query->getResult();
 
@@ -253,7 +253,7 @@ class DoodleRepository extends ServiceEntityRepository
         return $doodles;
     }
 
-    public function findSimilar(int $id, ?array $order = [['d.popularity', 'DESC']],?int $maxResults = null,int $firstResult = 0)
+    public function findSimilar(int $id, ?array $order = [['d.popularity', 'DESC']], ?int $maxResults = null, int $firstResult = 0)
     {
         $queryBuilder = $this->createQueryBuilder('d');
 
@@ -277,7 +277,7 @@ class DoodleRepository extends ServiceEntityRepository
 
         $queryBuilder->setFirstResult($firstResult);
 
-        if(is_numeric($maxResults)) {
+        if (is_numeric($maxResults)) {
             $queryBuilder->setMaxResults($maxResults);
         }
 
@@ -286,7 +286,7 @@ class DoodleRepository extends ServiceEntityRepository
         return $query->getResult();
     }
 
-    public function findUsers(Admin $user, ?array $order = [['d.popularity', 'DESC']],?int $maxResults = null,int $firstResult = 0)
+    public function findUsers(Admin $user, ?array $order = [['d.popularity', 'DESC']], ?int $maxResults = null, int $firstResult = 0)
     {
         $queryBuilder = $this->createQueryBuilder('d');
 
@@ -301,7 +301,7 @@ class DoodleRepository extends ServiceEntityRepository
 
         $queryBuilder->setFirstResult($firstResult);
 
-        if(is_numeric($maxResults)) {
+        if (is_numeric($maxResults)) {
             $queryBuilder->setMaxResults($maxResults);
         }
 
