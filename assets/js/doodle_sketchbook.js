@@ -38,6 +38,7 @@ class DoodleSketchbook {
         this.doodle.setwWidth(this.size);
         this.doodle.setwHeight(this.size);
 
+        //ToDo: define canvas size holding in mind that after diving shape canvas, and sb canvas have to be the same
         this.imageData = this.ctx.getImageData(0, 0, this.canvas.offsetWidth / 2 * 2, this.canvas.offsetHeight / 2 * 2);
         this.data = this.imageData.data;
         this.imageData.data.fill(255);
