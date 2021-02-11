@@ -10,7 +10,7 @@ use App\Form\DoodleFormType;
 use App\Repository\AdminRepository;
 use App\Repository\DoodleCommentRepository;
 use App\Repository\DoodleRepository;
-use App\Security\Glide;
+use App\Image\Glide;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
@@ -19,6 +19,7 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Notifier\Notification\Notification;
+use Symfony\Component\Notifier\Notification\NotificationManager;
 use Symfony\Component\Notifier\NotifierInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -74,12 +75,13 @@ class DoodleController extends AbstractController
     public function store_doodle_temp_ajax(Request $request)
     {
         if (!$request->isXmlHttpRequest()) {
-            return new JsonResponse(array(
+            return new JsonResponse([
                 'status' => false,
-                'message' => 'Error'),
+                'message' => 'Error'
+            ],
                 400);
         }
-
+        //ToDo: Add fileSystem service
         $filesystem = new Filesystem();
 
         $img = $request->get('imgBase64');
@@ -113,7 +115,7 @@ class DoodleController extends AbstractController
      * @param DoodleRepository $doodleRepository
      * @param DoodleCommentRepository $doodleCommentRepository
      * @param Request $request
-     * @param \App\Service\Notification $notificationService
+     * @param \App\Notification\Notification $notificationService
      * @return Response
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
@@ -121,7 +123,7 @@ class DoodleController extends AbstractController
                          DoodleRepository $doodleRepository,
                          DoodleCommentRepository $doodleCommentRepository,
                          Request $request,
-                         \App\Service\Notification $notificationService
+                         \App\Notification\NotificationManager $notificationManager
     )
     {
         $doodleComment = new DoodleComment();
@@ -147,7 +149,7 @@ class DoodleController extends AbstractController
 
             if ($doodle->getUser() != $user) {
                 $doodleUser = $doodle->getUser();
-                $notificationService->addNotification([
+                $notificationManager->addNotification([
                     'users' => [$doodleUser],
                     'content' => $this->translator->trans('You have new comment in doodle', [], null, $doodleUser->getLocale())
                         . ' "' . $doodle->getTitle() . '"

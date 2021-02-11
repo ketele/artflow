@@ -2,7 +2,7 @@
 
 namespace App\Controller\Admin;
 
-use App\Security\Glide;
+use App\Image\Glide;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
@@ -102,7 +102,7 @@ class TempFilesController extends AbstractController
         $response = new JsonResponse();
 
         if (!$this->isGranted('ROLE_ADMIN')) {
-            $error[] = $this->translator->trans("You can't edit this status");
+            $error[] = "You can't edit this status";
             $response->setStatusCode(Response::HTTP_FORBIDDEN);
         }
 

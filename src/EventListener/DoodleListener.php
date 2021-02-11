@@ -2,9 +2,8 @@
 namespace App\EventListener;
 
 use App\Entity\Doodle;
-use App\Security\Glide;
+use App\Image\Glide;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\Event\LifecycleEventArgs;
 
 class DoodleListener
 {
@@ -17,11 +16,11 @@ class DoodleListener
         $this->doodleFolder = $doodleFolder;
     }
 
-    public function postLoad(Doodle $doodle, LifecycleEventArgs $event): void
+    public function postLoad(Doodle $doodle): void
     {
-        //ToDo: D violation
         $glide = new Glide();
+        $url = $glide->generateUrl($this->doodleFolder . $doodle->getId(), $doodle->getFileName());
 
-        $doodle->setUrl($glide->generateUrl($this->doodleFolder . $doodle->getId(), $doodle->getFileName()));
+        $doodle->setUrl($url);
     }
 }

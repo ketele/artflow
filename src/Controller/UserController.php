@@ -5,7 +5,8 @@ namespace App\Controller;
 use App\Repository\AdminRepository;
 use App\Repository\DoodleRepository;
 use App\Repository\NotificationRepository;
-use App\Service\Notification;
+use App\Notification\Notification;
+use App\Notification\NotificationManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -80,13 +81,13 @@ class UserController extends AbstractController
      */
     public function notifications(
         NotificationRepository $notificationRepository,
-        Notification $notification
+        NotificationManager $notificationManager
     ): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $user = $this->getUser();
-        $notifications = $notificationRepository->findBy(['user' => $user->getId()], ['createdAt' => 'ASC']);
+        $notifications = $notificationRepository->findBy(['user' => $user->getId()], ['createdAt' => 'DESC']);
 
         $view = $this->render('user/notifications.html.twig', [
             'controller_name' => 'UserController',
@@ -94,7 +95,7 @@ class UserController extends AbstractController
             'notifications' => $notifications,
         ]);
 
-        $notification->setAsRead($notifications);
+        $notificationManager->setAsRead($notifications);
 
         return $view;
     }

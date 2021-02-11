@@ -137,7 +137,9 @@ class DoodleRepository extends ServiceEntityRepository
                 $this->entityManager->flush();
 
                 unset($doodle);
-                $doodle = $this->findWrongIpTreeRow(array((!empty($updated_doodles)) ? 'child.id NOT IN ( ' . implode(',', $updated_doodles) . ' )' : 'child.id = child.id'));
+                $doodle = $this->findWrongIpTreeRow(array((!empty($updated_doodles))
+                    ? 'child.id NOT IN ( ' . implode(',', $updated_doodles) . ' )'
+                    : 'child.id = child.id'));
             }
         }
 
@@ -201,36 +203,33 @@ class DoodleRepository extends ServiceEntityRepository
     {
         $doodle = $this->findOne($id);
 
-        $doodles = $this->getDoodles([
-            'where' => [
-                'd.id != :parentDoodle',
-                '( d.ipTree LIKE :parentDoodleIpTreeBegin OR d.ipTree LIKE :parentDoodleIpTree )',
-                'd.status = 1',
-            ],
-            'parameters' => [
-                'parentDoodle' => '' . $id . '',
-                'parentDoodleIpTreeBegin' => '%.' . $id . '.%',
-                'parentDoodleIpTree' => '' . $id . '.%',
-            ],
-            'maxResults' => $doodlesCount,
-        ]);
+        $queryBuilder = $this->createQueryBuilder('d');
+        $queryBuilder->select('d');
+        $queryBuilder->where('d.id != :parentDoodle');
+        $queryBuilder->andWhere('( d.ipTree LIKE :parentDoodleIpTreeBegin OR d.ipTree LIKE :parentDoodleIpTree )');
+        $queryBuilder->andWhere('d.status = ' . DoodleStatus::STATUS_PUBLISHED);
+        $queryBuilder->setParameter('parentDoodle', $id);
+        $queryBuilder->setParameter('parentDoodleIpTreeBegin', $id);
+        $queryBuilder->setParameter('parentDoodleIpTree', $id);
+        $queryBuilder->orderBy('d.popularity', 'DESC');
+        $queryBuilder->setMaxResults($doodlesCount);
+        $query = $queryBuilder->getQuery();
+        $doodles = $query->getResult();
+        unset($queryBuilder);
 
         if (count($doodles) < $doodlesCount) {
-            $doodlesTemp = $this->getDoodles([
-                'select' => 'd, ABS(DATE_DIFF( d.createdAt, :parentCreatedAt )) AS HIDDEN score',
-                'where' => [
-                    'd.id NOT IN(:doodles)',
-                    'd.status = 1',
-                ],
-                'parameters' => [
-                    'doodles' => '' . $id . (count($doodles) > 0 ? ',' . implode(array_map(function ($v) {
-                                return $v->getId();
-                            }, $doodles)) : '') . '',
-                    'parentCreatedAt' => $doodle->getCreatedAt(),
-                ],
-                'maxResults' => $doodlesCount - count($doodles),
-                'order' => [['score', 'ASC']],
-            ]);
+            $queryBuilder = $this->createQueryBuilder('d');
+            $queryBuilder->select('d, ABS(DATE_DIFF( d.createdAt, :parentCreatedAt )) AS HIDDEN score');
+            $queryBuilder->where('d.id NOT IN(:doodles)');
+            $queryBuilder->andWhere('d.status = ' . DoodleStatus::STATUS_PUBLISHED);
+            $queryBuilder->setParameter('doodles', $id . (count($doodles) > 0 ? ',' . implode(array_map(function ($v) {
+                        return $v->getId();
+                    }, $doodles)) : ''));
+            $queryBuilder->setParameter('parentCreatedAt', $doodle->getCreatedAt());
+            $queryBuilder->orderBy('score', 'ASC');
+            $queryBuilder->setMaxResults($doodlesCount- count($doodles));
+            $query = $queryBuilder->getQuery();
+            $doodlesTemp = $query->getResult();
 
             $doodles = array_merge($doodles, $doodlesTemp);
         }
