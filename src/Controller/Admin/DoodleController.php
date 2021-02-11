@@ -28,7 +28,6 @@ class DoodleController extends AbstractController
      * )
      * @param int|null $id
      * @param DoodleRepository $doodleRepository
-     * @param string $doodleFolder
      * @param Request $request
      * @return Response
      * @throws \Doctrine\ORM\NonUniqueResultException
@@ -36,39 +35,12 @@ class DoodleController extends AbstractController
     public function gallery(?int $id,
                             DoodleRepository $doodleRepository,
                             DoodleStatusRepository $doodleStatusRepository,
-                            string $doodleFolder,
                             Request $request
     )
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
-        $order = $request->get('order', 'createdAt');
-        $status = $request->get('status');
-        $where = [];
-
-        $parameters = [];
-
-        if (is_numeric($status)) {
-            $where[] = 'd.status = ' . $status;
-        }
-
-        if (is_numeric($id)) {
-            $rootDoodle = $doodleRepository->findOne($id);
-            $ipTree = $rootDoodle->getIpTree();
-            $rootId = explode('.', $ipTree)[0];
-            $where[] = '( d.id = :doodleId OR d.ipTree LIKE :doodleIdBegin OR d.ipTree LIKE :doodleIdInner OR d.ipTree LIKE :doodleIdEnd)';
-            $parameters['doodleId'] = $rootId;
-            $parameters['doodleIdBegin'] = $rootId . '.%';
-            $parameters['doodleIdInner'] = '%.' . $rootId . '.%';
-            $parameters['doodleIdEnd'] = '%.' . $rootId;
-        }
-
-        $doodles = $doodleRepository->getDoodles([
-            'order' => [['d.' . $order, 'DESC']],
-            'maxResults' => 50,
-            'where' => $where,
-            'parameters' => $parameters,
-        ]);
+        $doodles = $doodleRepository->findByFilter($request->query->all());
 
         $doodleStatuses = $doodleStatusRepository->getStatuses();
 
@@ -77,7 +49,6 @@ class DoodleController extends AbstractController
             'doodles' => $doodles,
             'doodle_statuses' => $doodleStatuses,
             'id' => $id,
-            'status' => $status,
         ]);
     }
 

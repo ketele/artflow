@@ -68,44 +68,35 @@ class DoodleRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function getDoodles($params = false)
+    public function findByFilter(?array $params)
     {
+        $where = [];
         $queryBuilder = $this->createQueryBuilder('d');
 
-        $opt = [
-            'select' => 'd',
-            'where' => ['d.status = ' . DoodleStatus::STATUS_PUBLISHED],
-            'parameters' => [],
-            'order' => [['d.popularity', 'DESC']],
-            'maxResults' => 3,
-        ];
+        $queryBuilder->select('d');
 
-        if (!empty($params))
-            $opt = array_merge($opt, $params);
-
-        extract($opt);
-
-        $queryBuilder->select($select);
+        if(isset($params['status']) && is_numeric($params['status'])) {
+            $where[] = 'd.status = ' . $params['status'];
+        }
 
         if (!empty($where)) {
-            foreach ($where AS $w) {
+            foreach ($where as $w) {
                 $queryBuilder->andWhere($w);
             }
         }
 
-        if (!empty($parameters)) {
-            foreach ($parameters AS $p_key => $p) {
-                $queryBuilder->setParameter($p_key, $p);
-            }
+        if (empty($params['order'])) {
+            $params['order'] = [['d.popularity', 'DESC']];
         }
 
-        if (!empty($order)) {
-            foreach ($order AS $o) {
-                $queryBuilder->orderBy($o[0], $o[1]);
-            }
+        foreach ($params['order'] as $order) {
+            $queryBuilder->orderBy($order[0], $order[1]);
         }
 
-        $queryBuilder->setMaxResults($maxResults);
+        if(isset($params['maxResults']) && is_numeric($params['maxResults'])) {
+            $queryBuilder->setMaxResults($params['maxResults']);
+        }
+
         $query = $queryBuilder->getQuery();
 
         return $query->getResult();
@@ -119,7 +110,7 @@ class DoodleRepository extends ServiceEntityRepository
             ->where('d.status = ' . DoodleStatus::STATUS_PUBLISHED);
 
         if (!empty($order)) {
-            foreach ($order AS $o) {
+            foreach ($order as $o) {
                 $queryBuilder->orderBy($o[0], $o[1]);
             }
         }
@@ -176,7 +167,7 @@ class DoodleRepository extends ServiceEntityRepository
         $queryBuilder = $this->entityManager->createQueryBuilder();
 
         if (!empty($where)) {
-            foreach ($where AS $w) {
+            foreach ($where as $w) {
                 $queryBuilder->andWhere($w);
             }
         }
@@ -207,15 +198,15 @@ class DoodleRepository extends ServiceEntityRepository
         $sourceDoodleId = $doodleData->getSourceDoodleId();
 
         if (is_numeric($sourceDoodleId)
-            AND $sourceDoodleId > 0
-            AND (!in_array($sourceDoodleId, $doodleIpTreeArray))
+            && $sourceDoodleId > 0
+            && (!in_array($sourceDoodleId, $doodleIpTreeArray))
         ) {
             $doodleIpTreeArray = $this->generateDoodleIpTree($sourceDoodleId);
             $doodleIpTreeArray[] = $doodleId;
             return $doodleIpTreeArray;
         } else if (is_numeric($sourceDoodleId)
-            AND $sourceDoodleId > 0
-            AND (in_array($sourceDoodleId, $doodleIpTreeArray))
+            && $sourceDoodleId > 0
+            && (in_array($sourceDoodleId, $doodleIpTreeArray))
         ) {
             $this->logger->error('Loop in doodle ip tree structure for ip ' . $sourceDoodleId . '.' . implode('.', $doodleIpTreeArray));
         }
@@ -279,7 +270,7 @@ class DoodleRepository extends ServiceEntityRepository
             ->setParameter('doodleIdEnd', '%.' . $rootId);
 
         if (!empty($order)) {
-            foreach ($order AS $o) {
+            foreach ($order as $o) {
                 $queryBuilder->orderBy($o[0], $o[1]);
             }
         }
@@ -303,7 +294,7 @@ class DoodleRepository extends ServiceEntityRepository
             ->where('d.user = ' . $user->getId());
 
         if (!empty($order)) {
-            foreach ($order AS $o) {
+            foreach ($order as $o) {
                 $queryBuilder->orderBy($o[0], $o[1]);
             }
         }

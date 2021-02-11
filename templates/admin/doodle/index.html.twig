@@ -1,36 +1,47 @@
 {% extends 'admin/base.html.twig' %}
 
 {% block leftmenu %}
-<ul class="nav flex-column">
-    <li class="nav-item">
-        {{ 'Status' }}
-        <ul class="nav flex-column">
-            {% for doodle_status in doodle_statuses %}
-            <li class="nav-item">
-                <a class="nav-link {% if app.request.get('status') == doodle_status.id %}active{% endif %}"
-                   href="{{ path('admin_doodle_gallery', {order: 'popularity',id : id, status : doodle_status.id}) }}">
-                    {{ doodle_status.name }}
-                </a>
-            </li>
-            {% endfor %}
-        </ul>
-    </li>
-    <li class="nav-item">
-        {{ 'Order by' }}
-        <ul class="nav flex-column">
-            <li class="nav-item">
-                <a class="nav-link {% if app.request.get('order') == 'popularity' %}active{% endif %}" href="{{ path('admin_doodle_gallery', {order: 'popularity',id : id, status : status}) }}">
-                    {{ 'Popularity' }}
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {% if app.request.get('order') == 'createdAt' %}active{% endif %}" href="{{ path('admin_doodle_gallery', {order: 'createdAt',id : id, status : status}) }}">
-                    {{ 'Add date' }}
-                </a>
-            </li>
-        </ul>
-    </li>
-</ul>
+    <ul class="nav flex-column">
+        <li class="nav-item">
+            {{ 'Status' }}
+            <ul class="nav flex-column">
+                {% for doodle_status in doodle_statuses %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if app.request.get('status') == doodle_status.id %}active{% endif %}"
+                           href="{{ path('admin_doodle_gallery',
+                               {order: app.request.get('order'), id : id, status : doodle_status.id}) }}"
+                        >
+                            {{ doodle_status.name }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </li>
+        <li class="nav-item">
+            {{ 'Order by' }}
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link {% if app.request.get('order')[0][0] is defined
+                        and app.request.get('order')[0][0] == 'd.popularity' %}active{% endif %}"
+                       href="{{ path('admin_doodle_gallery',
+                           {order : [['d.popularity','DESC']], id : id, status : app.request.get('status')}
+                       ) }}"
+                    >
+                        {{ 'Popularity' }}
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if app.request.get('order')[0][0] is defined
+                        and app.request.get('order')[0][0] == 'd.createdAt' %}active{% endif %}"
+                       href="{{ path('admin_doodle_gallery',
+                           {order: [['d.createdAt','DESC']], id : id, status : app.request.get('status')}) }}"
+                    >
+                        {{ 'Add date' }}
+                    </a>
+                </li>
+            </ul>
+        </li>
+    </ul>
 {% endblock %}
 
 {% block body %}
@@ -86,7 +97,7 @@
                     <div class="card h-100"></div>
                 </div>
                 <div class="col">
-                    <div class="card h-100"> </div>
+                    <div class="card h-100"></div>
                 </div>
             {% elseif (doodles|length) % 3 == 2 %}
                 <div class="col">
@@ -97,7 +108,8 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="change-doodle-status-modal" tabindex="-1" aria-labelledby="change-doodle-status-modal" aria-hidden="true">
+    <div class="modal fade" id="change-doodle-status-modal" tabindex="-1" aria-labelledby="change-doodle-status-modal"
+         aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -108,7 +120,8 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ "Close" }}</button>
-                    <button type="button" class="btn btn-primary" id="change-doodle-status-modal-submit">{{ "Change" }}</button>
+                    <button type="button" class="btn btn-primary"
+                            id="change-doodle-status-modal-submit">{{ "Change" }}</button>
                 </div>
             </div>
         </div>
