@@ -42,4 +42,27 @@ class NotificationRepository extends ServiceEntityRepository
             ->getQuery()
             ->getSingleScalarResult();
     }
+
+    public function addNotification(array $options): void
+    {
+        foreach ($options['users'] AS $user) {
+            $notification = new Notification();
+            $notification->setUser($user);
+            $notification->setContent($options['content']);
+            $this->save($notification);
+        }
+    }
+
+    public function setAsRead(?array $notifications)
+    {
+        $dateTime = new \DateTime();
+        $readAt = $dateTime->getTimestamp();
+
+        foreach ($notifications AS $notification) {
+            if (empty($notification->getReadAt())) {
+                $notification->setReadAt($readAt);
+                $this->save($notification);
+            }
+        }
+    }
 }

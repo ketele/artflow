@@ -11,6 +11,7 @@ use App\Repository\AdminRepository;
 use App\Repository\DoodleCommentRepository;
 use App\Repository\DoodleRepository;
 use App\Image\Glide;
+use App\Repository\NotificationRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
@@ -19,7 +20,6 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Notifier\Notification\Notification;
-use Symfony\Component\Notifier\Notification\NotificationManager;
 use Symfony\Component\Notifier\NotifierInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -115,7 +115,7 @@ class DoodleController extends AbstractController
      * @param DoodleRepository $doodleRepository
      * @param DoodleCommentRepository $doodleCommentRepository
      * @param Request $request
-     * @param \App\Notification\Notification $notificationService
+     * @param NotificationRepository $notificationRepository
      * @return Response
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
@@ -123,7 +123,7 @@ class DoodleController extends AbstractController
                          DoodleRepository $doodleRepository,
                          DoodleCommentRepository $doodleCommentRepository,
                          Request $request,
-                         \App\Notification\NotificationManager $notificationManager
+                         NotificationRepository $notificationRepository
     )
     {
         $doodleComment = new DoodleComment();
@@ -149,7 +149,7 @@ class DoodleController extends AbstractController
 
             if ($doodle->getUser() != $user) {
                 $doodleUser = $doodle->getUser();
-                $notificationManager->addNotification([
+                $notificationRepository->addNotification([
                     'users' => [$doodleUser],
                     'content' => $this->translator->trans('You have new comment in doodle', [], null, $doodleUser->getLocale())
                         . ' "' . $doodle->getTitle() . '"

@@ -5,8 +5,6 @@ namespace App\Controller;
 use App\Repository\AdminRepository;
 use App\Repository\DoodleRepository;
 use App\Repository\NotificationRepository;
-use App\Notification\Notification;
-use App\Notification\NotificationManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -81,10 +79,11 @@ class UserController extends AbstractController
 
     /**
      * @Route("/{_locale<%app.supported_locales%>}/user/notifications", name="user_notifications")
+     * @param NotificationRepository $notificationRepository
+     * @return Response
      */
     public function notifications(
-        NotificationRepository $notificationRepository,
-        NotificationManager $notificationManager
+        NotificationRepository $notificationRepository
     ): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
@@ -98,7 +97,7 @@ class UserController extends AbstractController
             'notifications' => $notifications,
         ]);
 
-        $notificationManager->setAsRead($notifications);
+        $notificationRepository->setAsRead($notifications);
 
         return $view;
     }
