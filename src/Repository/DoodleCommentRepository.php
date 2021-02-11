@@ -36,37 +36,13 @@ class DoodleCommentRepository extends ServiceEntityRepository
         $this->entityManager->flush();
     }
 
-    public function getDoodlesComments($params = false)
+    public function findRootByDoodleId(int $id, ?array $order = [['dc.createdAt', 'DESC']], ?int $maxResults = null, int $firstResult = 0)
     {
-        $queryBuilder = $this->createQueryBuilder('d');
+        $queryBuilder = $this->createQueryBuilder('dc');
 
-        $opt = [
-            'select' => 'd',
-            'where' => [],
-            'parameters' => [],
-            'order' => [['d.createdAt', 'DESC']],
-            'maxResults' => null,
-        ];
-
-        if (!empty($params)) {
-            $opt = array_merge($opt, $params);
-        }
-
-        extract($opt);
-
-        $queryBuilder->select($select);
-
-        if (!empty($where)) {
-            foreach ($where AS $w) {
-                $queryBuilder->andWhere($w);
-            }
-        }
-
-        if (!empty($parameters)) {
-            foreach ($parameters AS $p_key => $p) {
-                $queryBuilder->setParameter($p_key, $p);
-            }
-        }
+        $queryBuilder->select('dc')
+            ->where('dc.doodle = ' . $id)
+            ->andWhere('dc.parent is NULL');
 
         if (!empty($order)) {
             foreach ($order AS $o) {
@@ -75,6 +51,12 @@ class DoodleCommentRepository extends ServiceEntityRepository
         }
 
         if ($maxResults >= 0) {
+            $queryBuilder->setMaxResults($maxResults);
+        }
+
+        $queryBuilder->setFirstResult($firstResult);
+
+        if (is_numeric($maxResults)) {
             $queryBuilder->setMaxResults($maxResults);
         }
 

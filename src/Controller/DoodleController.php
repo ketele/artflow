@@ -162,16 +162,13 @@ class DoodleController extends AbstractController
             return $this->redirectToRoute('doodle_view',
                 ['id' => $doodle->getId()]);
         } else {
-            $doodleComments = $doodleCommentRepository->getDoodlesComments(['where' => [
-                'd.doodle = ' . $id,
-                'd.parent is NULL',
-            ]]);
+            $doodleComments = $doodleCommentRepository->findRootByDoodleId($id);
 
             return $this->render('doodle/view.html.twig', [
                 'controller_name' => 'DoodleController',
                 'doodle' => $doodle,
-                'status_rejected' => $doodle->getStatus()->getId() == DoodleStatus::STATUS_REJECTED,
-                'status_new' => $doodle->getStatus()->getId() == DoodleStatus::STATUS_NEW,
+                'is_rejected' => $doodle->getStatus()->getId() == DoodleStatus::STATUS_REJECTED,
+                'is_new' => $doodle->getStatus()->getId() == DoodleStatus::STATUS_NEW,
                 'doodles' => $doodles,
                 'commentForm' => $commentForm->createView(),
                 'doodleComments' => $doodleComments,
