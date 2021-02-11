@@ -27,12 +27,9 @@ class UserController extends AbstractController
     ): Response
     {
         $user = $adminRepository->findOneBy(['username' => $username]);
-        $doodles = $doodleRepository->getDoodles(['where' => ['d.user = ' . $user->getId()]]);
+        $doodles = $doodleRepository->findUsers($user, null, 3);
 
-        $new_doodles = $doodleRepository->getDoodles([
-            'where' => ['d.user = ' . $user->getId()],
-            'order' => [['d.createdAt', 'DESC']],
-        ]);
+        $new_doodles = $doodleRepository->findUsers($user, [['d.createdAt', 'DESC']], 3);
 
         return $this->render('user/index.html.twig', [
             'controller_name' => 'UserController',

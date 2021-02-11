@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Admin;
 use App\Entity\Doodle;
 use App\Entity\DoodleStatus;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -261,7 +262,7 @@ class DoodleRepository extends ServiceEntityRepository
         return $doodles;
     }
 
-    public function findSimilar($id, ?array $order = [['d.popularity', 'DESC']],?int $maxResults = null,int $firstResult = 0)
+    public function findSimilar(int $id, ?array $order = [['d.popularity', 'DESC']],?int $maxResults = null,int $firstResult = 0)
     {
         $queryBuilder = $this->createQueryBuilder('d');
 
@@ -276,6 +277,30 @@ class DoodleRepository extends ServiceEntityRepository
             ->setParameter('doodleIdBegin', $rootId . '.%')
             ->setParameter('doodleIdInner', '%.' . $rootId . '.%')
             ->setParameter('doodleIdEnd', '%.' . $rootId);
+
+        if (!empty($order)) {
+            foreach ($order AS $o) {
+                $queryBuilder->orderBy($o[0], $o[1]);
+            }
+        }
+
+        $queryBuilder->setFirstResult($firstResult);
+
+        if(is_numeric($maxResults)) {
+            $queryBuilder->setMaxResults($maxResults);
+        }
+
+        $query = $queryBuilder->getQuery();
+
+        return $query->getResult();
+    }
+
+    public function findUsers(Admin $user, ?array $order = [['d.popularity', 'DESC']],?int $maxResults = null,int $firstResult = 0)
+    {
+        $queryBuilder = $this->createQueryBuilder('d');
+
+        $queryBuilder->select('d')
+            ->where('d.user = ' . $user->getId());
 
         if (!empty($order)) {
             foreach ($order AS $o) {
