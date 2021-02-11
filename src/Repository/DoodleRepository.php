@@ -286,7 +286,7 @@ class DoodleRepository extends ServiceEntityRepository
         return $query->getResult();
     }
 
-    public function findUsers(Admin $user, ?array $order = [['d.popularity', 'DESC']], ?int $maxResults = null, int $firstResult = 0)
+    public function findByUser(Admin $user, ?array $order = [['d.popularity', 'DESC']], ?int $maxResults = null, int $firstResult = 0)
     {
         $queryBuilder = $this->createQueryBuilder('d');
 

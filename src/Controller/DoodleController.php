@@ -494,7 +494,7 @@ class DoodleController extends AbstractController
     {
         $user = $adminRepository->findOneBy(['username' => $username]);
 
-        $doodles = $doodleRepository->findUsers($user, [['d.' . $order, 'DESC']]);
+        $doodles = $doodleRepository->findByUser($user, [['d.' . $order, 'DESC']]);
 
         return $this->render('user/doodle_gallery.html.twig', [
             'controller_name' => 'DoodleController',

@@ -17,6 +17,12 @@ class UserController extends AbstractController
 {
     /**
      * @Route("/{_locale<%app.supported_locales%>}/profile/{username}", name="user")
+     * @param string $username
+     * @param AdminRepository $adminRepository
+     * @param DoodleRepository $doodleRepository
+     * @param string $doodleDir
+     * @param string $doodleFolder
+     * @return Response
      */
     public function index(
         string $username,
@@ -27,9 +33,9 @@ class UserController extends AbstractController
     ): Response
     {
         $user = $adminRepository->findOneBy(['username' => $username]);
-        $doodles = $doodleRepository->findUsers($user, null, 3);
+        $doodles = $doodleRepository->findByUser($user, null, 3);
 
-        $new_doodles = $doodleRepository->findUsers($user, [['d.createdAt', 'DESC']], 3);
+        $new_doodles = $doodleRepository->findByUser($user, [['d.createdAt', 'DESC']], 3);
 
         return $this->render('user/index.html.twig', [
             'controller_name' => 'UserController',
