@@ -148,9 +148,9 @@ class DoodleSketchbook {
                     tempForm.action = `/${Utils.getUrlParam(0)}/add_doodle`;
                     tempForm.setAttribute('name', 'doodle');
                     tempForm.innerHTML = `
-<input type="text" name="temp_dir" value="${response.temp_dir}" />
-<input type="text" name="source_doodle" value="${sourceDoodle}" />
-<input type="text" name="source_doodle_id" value="${sourceDoodleId}" />
+<input type="text" name="tempDir" value="${response.tempDir}" />
+<input type="text" name="sourceDoodle" value="${sourceDoodle}" />
+<input type="text" name="sourceDoodleId" value="${sourceDoodleId}" />
 `;
                     let formObj = document.body.appendChild(tempForm);
                     tempForm.submit();

@@ -88,20 +88,19 @@ class DoodleController extends AbstractController
         $img = str_replace('data:image/png;base64,', '', $img);
         $img = str_replace(' ', '+', $img);
         $data = base64_decode($img);
-        $file_name = uniqid() . '.png';
-        $temp_dir = md5(random_int(0, 1000) . date('U'));
-        $path = sys_get_temp_dir() . '/' . $temp_dir;
+        $fileName = uniqid() . '.png';
+        $tempDir = md5(random_int(0, 1000) . date('U'));
+        $path = sys_get_temp_dir() . '/' . $tempDir;
 
         try {
             $filesystem->mkdir($path);
-            $filesystem->dumpFile($path . '/' . $file_name, $data);
+            $filesystem->dumpFile($path . '/' . $fileName, $data);
         } catch (IOExceptionInterface $exception) {
             echo "An error occurred while creating your directory at " . $exception->getPath();
         }
 
         $jsonData['status'] = true;
-        $jsonData['temp_dir'] = $temp_dir;
-        $jsonData['file_name'] = $file_name;
+        $jsonData['tempDir'] = $tempDir;
 
         return new JsonResponse($jsonData);
     }
@@ -246,9 +245,9 @@ class DoodleController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-        $tempDir = $request->get('temp_dir');
-        $sourceDoodle = $request->get('source_doodle');
-        $sourceDoodleId = $request->get('source_doodle_id');
+        $tempDir = $request->get('tempDir');
+        $sourceDoodle = $request->get('sourceDoodle');
+        $sourceDoodleId = $request->get('sourceDoodleId');
 
         $filesystem = new Filesystem();
         $finder = new Finder();
@@ -264,12 +263,13 @@ class DoodleController extends AbstractController
         $form = $this->createForm(DoodleFormType::class, $defaultData);
 
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $form_data = $request->get('doodle_form');
-            $tempPath = sys_get_temp_dir() . '/' . $form_data['tempDir'] . '/';
-            $finder->files()->in($tempPath);
             $sourceDoodle = json_decode(urldecode($form_data['sourceDoodle']), true);
             $sourceDoodleId = $form_data['sourceDoodleId'];
+            $tempPath = sys_get_temp_dir() . '/' . $form_data['tempDir'] . '/';
+            $finder->files()->in($tempPath);
 
             if ($finder->hasResults()) {
                 $iterator = $finder->getIterator();
@@ -313,12 +313,12 @@ class DoodleController extends AbstractController
                 $fileName = $firstFile->getRelativePathname();
             }
 
+            $doodle->setUrl($glide->generateUrl($tempDir, $fileName, []));
+
             return $this->render('doodle/add.html.twig', [
                 'controller_name' => 'DoodleController',
                 'form' => $form->createView(),
-                'tempDir' => $tempDir,
-                'file_name' => $fileName,
-                'file_url' => $glide->generateUrl($tempDir, $fileName, []),
+                'doodle' => $doodle,
             ]);
         }
     }
