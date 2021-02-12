@@ -111,6 +111,9 @@
     "league/mime-type-detection": {
         "version": "1.5.0"
     },
+    "lorenzo/pinky": {
+        "version": "1.0.5"
+    },
     "monolog/monolog": {
         "version": "2.1.1"
     },
@@ -574,8 +577,17 @@
     "symfonycasts/verify-email-bundle": {
         "version": "v1.1.0"
     },
+    "tijsverkoyen/css-to-inline-styles": {
+        "version": "2.2.3"
+    },
+    "twig/cssinliner-extra": {
+        "version": "v3.3.0"
+    },
     "twig/extra-bundle": {
         "version": "v3.0.5"
+    },
+    "twig/inky-extra": {
+        "version": "v3.3.0"
     },
     "twig/twig": {
         "version": "v3.0.5"
