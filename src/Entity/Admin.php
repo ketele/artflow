@@ -68,7 +68,7 @@ class Admin implements UserInterface
     /**
      * @ORM\Column(type="string", length=3)
      */
-    private $locale;
+    private $locale = 'en';
 
     public function __construct()
     {
