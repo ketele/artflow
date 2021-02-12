@@ -11,7 +11,7 @@ CanvasRenderingContext2D.prototype.drawCircle = function (centerX, centerY, angl
     this.stroke();
     this.strokeStyle = 'black';
 };
-
+//ToDo: Think about Doodle js refactoring
 class DoodleSketchbook {
     loadDoodle(type, coordinates) {
         if (typeof type === "undefined" || type === null) {
