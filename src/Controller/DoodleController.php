@@ -72,7 +72,7 @@ class DoodleController extends AbstractController
      * @return JsonResponse
      * @throws \Exception
      */
-    public function store_doodle_temp_ajax(Request $request)
+    public function storeDoodleTempApi(Request $request)
     {
         if (!$request->isXmlHttpRequest()) {
             return new JsonResponse([
@@ -81,7 +81,7 @@ class DoodleController extends AbstractController
             ],
                 400);
         }
-        //ToDo: Add fileSystem service
+
         $filesystem = new Filesystem();
 
         $img = $request->get('imgBase64');
@@ -183,7 +183,7 @@ class DoodleController extends AbstractController
      * @return JsonResponse
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function doodle_comment_ajax(
+    public function doodleCommentAjax(
         int $id,
         DoodleRepository $doodleRepository,
         DoodleCommentRepository $doodleCommentRepository
@@ -236,7 +236,7 @@ class DoodleController extends AbstractController
      * @param DoodleRepository $doodleRepository
      * @return Response
      */
-    public function add_doodle(Request $request, NotifierInterface $notifier, string $doodleDir, string $doodleFolder,
+    public function addDoodle(Request $request, NotifierInterface $notifier, string $doodleDir, string $doodleFolder,
                                DoodleRepository $doodleRepository
     )
     {
@@ -292,7 +292,7 @@ class DoodleController extends AbstractController
             try {
                 $filesystem->mirror($tempPath, $doodlePath);
             } catch (FileException $e) {
-                //ToDo: Add exception action
+                return new Response($e->getMessage());
             }
 
             $notifier->send(new Notification('Your doodle will be posted after moderation.', ['browser']));
@@ -332,7 +332,7 @@ class DoodleController extends AbstractController
      * @param Request $request
      * @return mixed|Response
      */
-    public function doodle_img(string $folder, string $file_name, string $doodleDir, string $doodleCache, Request $request)
+    public function doodleImg(string $folder, string $file_name, string $doodleDir, string $doodleCache, Request $request)
     {
         $glide = new Glide();
         $path = $folder . '/' . $file_name;
@@ -360,7 +360,7 @@ class DoodleController extends AbstractController
      * @param Request $request
      * @return mixed|Response
      */
-    public function doodle_temp_img(string $folder, string $file_name, string $tempCache, Request $request)
+    public function doodleTempImg(string $folder, string $file_name, string $tempCache, Request $request)
     {
         $glide = new Glide();
         $data = $request->query->all();
