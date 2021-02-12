@@ -1,8 +1,4 @@
 framework:
-    mailer:
-        dsn: '%env(MAILER_DSN)%'
-        envelope:
-            sender: '%env(MAILER_DSN)%'
     notifier:
         #chatter_transports:
         #    slack: '%env(SLACK_DSN)%'
