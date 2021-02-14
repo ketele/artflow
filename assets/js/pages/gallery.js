@@ -1,6 +1,7 @@
-import {Utils} from "../utils";
-import {GalleryManager} from "../doodle/gallery_manager";
+import {Utils} from '../utils';
+import {GalleryManager} from '../doodle/gallery_manager';
 
-Utils.ready(function() {
+Utils.ready(function () {
     const galleryManager = new GalleryManager();
+    galleryManager.bindUIEvents();
 });

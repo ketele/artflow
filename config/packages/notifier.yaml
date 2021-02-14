@@ -1,9 +1,14 @@
 framework:
+    mailer:
+        dsn: '%env(MAILER_DSN)%'
+        envelope:
+            sender: '%env(VIOLATIONS_MAIL)%'
     notifier:
         #chatter_transports:
         #    slack: '%env(SLACK_DSN)%'
         #    telegram: '%env(TELEGRAM_DSN)%'
-        #texter_transports:
+        texter_transports:
+            panel: ''
         #    twilio: '%env(TWILIO_DSN)%'
         #    nexmo: '%env(NEXMO_DSN)%'
         channel_policy:

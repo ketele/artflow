@@ -1,28 +1,22 @@
-import {Utils} from "./../utils";
+import {Utils} from './../utils';
 
 export class DoodleManager {
-    constructor() {
-        this.bindUIEvents();
-    }
-
     bindUIEvents() {
-        let doodleComments = document.getElementsByClassName("doodle-comment-reply");
+        const doodleComments = document.getElementsByClassName('doodle-comment-reply');
 
         for (let i = 0; i < doodleComments.length; i++) {
             doodleComments[i].addEventListener('click', e => {
                 this.generateForm(e);
-            } );
+            });
         }
     }
 
-    generateForm(e){
+    generateForm(e) {
         Utils.showLoadingOverlay();
         e.preventDefault();
-        let button = e.currentTarget;
-        let id = button.getAttribute('data-id');
-        let forId = button.getAttribute('data-for');
-        let forDiv = document.getElementById(forId);
-        let commentDiv = button.parentNode;
+        const button = e.currentTarget;
+        const id = button.getAttribute('data-id');
+        const commentDiv = button.parentNode;
 
         fetch(`/api/doodle/comment/${id}/manage`, {method: 'GET'})
             .then(response => response.json().then(data => {

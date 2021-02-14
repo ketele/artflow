@@ -1,21 +1,12 @@
-import {Doodle} from "./doodle/doodle";
-import {Workspace} from "./sketchbook/workspace";
-import {Utils} from "./utils";
+import {Doodle} from './doodle/doodle';
+import {Workspace} from './sketchbook/workspace';
+import {Utils} from './utils';
 
-CanvasRenderingContext2D.prototype.drawCircle = function (centerX, centerY, angleBegin = 0, angleEnd = 2 * Math.PI, radius = 50) {
-    this.radius = radius;
-    this.beginPath();
-    this.strokeStyle = '#8ED6FF';
-    this.arc(centerX, centerY, radius, angleBegin, angleEnd, false);
-    this.restore();
-    this.stroke();
-    this.strokeStyle = 'black';
-};
-//ToDo: Think about Doodle js refactoring
+// ToDo: Think about Doodle js refactoring
 class DoodleSketchbook {
     loadDoodle(type, coordinates) {
-        if (typeof type === "undefined" || type === null) {
-            if (typeof coordinates !== "undefined" && coordinates !== null && coordinates !== "") {
+        if (typeof type === 'undefined' || type === null) {
+            if (typeof coordinates !== 'undefined' && coordinates !== null && coordinates !== '') {
                 type = 'definedNodes';
             } else {
                 type = 'unbalancedNodes';
@@ -38,15 +29,15 @@ class DoodleSketchbook {
         this.doodle.setwWidth(this.size);
         this.doodle.setwHeight(this.size);
 
-        //ToDo: define canvas size holding in mind that after diving shape canvas, and sb canvas have to be the same
+        // ToDo: define canvas size holding in mind that after diving shape canvas, and sb canvas have to be the same
         this.imageData = this.ctx.getImageData(0, 0, this.canvas.offsetWidth / 2 * 2, this.canvas.offsetHeight / 2 * 2);
         this.data = this.imageData.data;
         this.imageData.data.fill(255);
         this.ctx.putImageData(this.imageData, 0, 0);
 
-        if (type === "definedNodes") {
+        if (type === 'definedNodes') {
             this.doodle.setNodes(coordinates);
-        } else if (type === "symmetricalNodes") {
+        } else if (type === 'symmetricalNodes') {
             this.doodle.generateSymmetricalNodes();
         } else {
             this.doodle.generateUnbalancedNodes();
@@ -61,17 +52,16 @@ class DoodleSketchbook {
         this.canvas_sketchbook = document.getElementById('sketchbook');
         this.workspace = new Workspace(this.canvas_sketchbook);
         this.workspace.run();
-
     }
 
     getImageFile(imgDataArray = []) {
-        let tempCanvas = document.createElement("canvas");
+        const tempCanvas = document.createElement('canvas');
         tempCanvas.width = this.workspace.width;
         tempCanvas.height = this.workspace.height;
-        let ctx = tempCanvas.getContext('2d');
+        const ctx = tempCanvas.getContext('2d');
 
-        let imageData = ctx.getImageData(0, 0, this.workspace.width, this.workspace.height);
-        let data = imageData.data;
+        const imageData = ctx.getImageData(0, 0, this.workspace.width, this.workspace.height);
+        const data = imageData.data;
 
         const flattenCanvases = new Promise((resolve, reject) => {
             imgDataArray.forEach((imgData) => {
@@ -90,13 +80,13 @@ class DoodleSketchbook {
                     flattenData[i + 1] = this.workspace.data[i + 1];
                     flattenData[i + 2] = this.workspace.data[i + 2];
                     flattenData[i + 3] = this.workspace.data[i + 3];
-                } else if (this.workspace.data[i + 3] === 0) {
+                } else if (this.workspace.data[i + 3] !== 0) {
+                    const maxOpacity = (flattenData[i + 3] + this.workspace.data[i + 3] <= 255)
+                        ? flattenData[i + 3] + this.workspace.data[i + 3]
+                        : 255;
+                    const topWage = (this.workspace.data[i + 3] / maxOpacity);
+                    const baseWage = 1 - topWage;
 
-                } else {
-                    let maxOpacity = (flattenData[i + 3] + this.workspace.data[i + 3] <= 255)
-                        ? flattenData[i + 3] + this.workspace.data[i + 3] : 255;
-                    let topWage = (this.workspace.data[i + 3] / maxOpacity);
-                    let baseWage = 1 - topWage;
                     flattenData[i] = ((baseWage * flattenData[i]) + (topWage * this.workspace.data[i]));
                     flattenData[i + 1] = ((baseWage * flattenData[i + 1]) + (topWage * this.workspace.data[i + 1]));
                     flattenData[i + 2] = ((baseWage * flattenData[i + 2]) + (topWage * this.workspace.data[i + 2]));
@@ -106,89 +96,77 @@ class DoodleSketchbook {
 
             ctx.putImageData(imageData, 0, 0);
 
-            return tempCanvas.toDataURL("image/png");
-        });
-    }
-
-    putImage() {
-        const getImageFile = new Promise((resolve, reject) => {
-            let image = this.getImageFile([this.data]);
-            resolve(image);
-        });
-
-        getImageFile.then((image) => {
-            window.location.href = image;
+            return tempCanvas.toDataURL('image/png');
         });
     }
 
     saveImageToTemp() {
-        let sourceDoodleId = document.getElementById('id').value;
+        const sourceDoodleId = document.getElementById('id').value;
         let sourceDoodle = JSON.stringify({
-            'size': this.size,
-            'doodle': this.doodle.curves
+            size: this.size,
+            doodle: this.doodle.curves
         });
 
         sourceDoodle = encodeURIComponent(sourceDoodle);
 
         Utils.showLoadingOverlay();
         const getImageFile = new Promise((resolve, reject) => {
-            let image = this.getImageFile([this.data]);
+            const image = this.getImageFile([this.data]);
             resolve(image);
         });
 
         getImageFile.then((image) => {
-            fetch(`/api/store_doodle_temp`, {
+            fetch('/api/store_doodle_temp', {
                 method: 'POST',
                 body: 'imgBase64=' + image,
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',
-                    'Content-type': 'application/x-www-form-urlencoded',
+                    'Content-type': 'application/x-www-form-urlencoded'
                 }
-            })
-                .then(response => response.json().then(data => {
-                    if (response.status < 300) {
+            }).then(response => response.json().then(data => {
+                if (response.status < 300) {
+                    const tempForm = document.createElement('form');
+                    tempForm.method = 'POST';
+                    tempForm.target = '_blank';
+                    tempForm.action = `/${Utils.getUrlParam(0)}/add_doodle`;
+                    tempForm.setAttribute('name', 'doodle');
+                    tempForm.innerHTML = `
+                        <input type="text" name="tempDir" value="${data.tempDir}" />
+                        <input type="text" name="sourceDoodle" value="${sourceDoodle}" />
+                        <input type="text" name="sourceDoodleId" value="${sourceDoodleId}" />
+                    `;
 
-                        const tempForm = document.createElement('form');
-                        tempForm.method = "POST";
-                        tempForm.target = "_blank";
-                        tempForm.action = `/${Utils.getUrlParam(0)}/add_doodle`;
-                        tempForm.setAttribute('name', 'doodle');
-                        tempForm.innerHTML = `
-<input type="text" name="tempDir" value="${data.tempDir}" />
-<input type="text" name="sourceDoodle" value="${sourceDoodle}" />
-<input type="text" name="sourceDoodleId" value="${sourceDoodleId}" />
-`;
-                        let formObj = document.body.appendChild(tempForm);
-                        tempForm.submit();
-                        formObj.remove();
-                    }
+                    const formObj = document.body.appendChild(tempForm);
+                    tempForm.submit();
+                    formObj.remove();
+                }
 
-                    Utils.hideLoadingOverlay();
-                }));
+                Utils.hideLoadingOverlay();
+            }));
         });
     }
 }
 
-window.addEventListener('load', e => {
+Utils.ready(() => {
     let coordinatesJson = document.getElementById('coordinates').value;
-    coordinatesJson = (typeof coordinatesJson !== "undefined" && coordinatesJson !== "") ? JSON.parse(coordinatesJson) : null;
+    coordinatesJson = (typeof coordinatesJson !== 'undefined' && coordinatesJson !== '') ? JSON.parse(coordinatesJson) : null;
 
-    let doodleSketchbook = new DoodleSketchbook();
+    const doodleSketchbook = new DoodleSketchbook();
     doodleSketchbook.loadDoodle(null, coordinatesJson);
     doodleSketchbook.loadSketchbook();
 
     document.getElementById('refresh-doodle').addEventListener('click', e => {
-        document.getElementById('coordinates').value = "";
-        document.getElementById('id').value = "";
+        document.getElementById('coordinates').value = '';
+        document.getElementById('id').value = '';
         doodleSketchbook.doodle.clearCanvas(doodleSketchbook.ctx);
-        doodleSketchbook.loadDoodle("unbalancedNodes");
+        doodleSketchbook.loadDoodle('unbalancedNodes');
     });
 
     document.getElementById('refresh-symmetrical-doodle').addEventListener('click', e => {
-        document.getElementById('coordinates').value = "";
-        document.getElementById('id').value = "";
+        document.getElementById('coordinates').value = '';
+        document.getElementById('id').value = '';
         doodleSketchbook.doodle.clearCanvas(doodleSketchbook.ctx);
-        doodleSketchbook.loadDoodle("symmetricalNodes");
+        doodleSketchbook.loadDoodle('symmetricalNodes');
     });
 
     document.getElementById('clear-sketchbook').addEventListener('click', e => {

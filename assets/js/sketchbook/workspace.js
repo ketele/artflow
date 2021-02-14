@@ -1,8 +1,7 @@
-import {Utils} from "../utils";
+import {Utils} from '../utils';
 
 export class Workspace {
     constructor(canvas) {
-
         this.mousePos1 = {x: 0, y: 0};
         this.mousePos2 = {x: 0, y: 0};
         this.draw = false;
@@ -13,8 +12,9 @@ export class Workspace {
 
         this.size = 600;
 
-        if (this.canvas.parentElement.offsetWidth < this.size)
+        if (this.canvas.parentElement.offsetWidth < this.size) {
             this.size = this.canvas.parentElement.offsetWidth;
+        }
 
         this.ctx.canvas.width = this.size;
         this.ctx.canvas.height = this.size;
@@ -47,7 +47,8 @@ export class Workspace {
 
     bresenhamLine(x1, y1, x2, y2) {
         let d, dx, dy, ai, bi, xi, yi;
-        let x = x1, y = y1;
+        let x = x1;
+        let y = y1;
 
         if (x1 < x2) {
             xi = 1;
@@ -75,13 +76,12 @@ export class Workspace {
             ai = (dy - dx) * 2;
             bi = dy * 2;
             d = bi - dx;
-            while (x != x2) {
+            while (x !== x2) {
                 if (d >= 0) {
                     x += xi;
                     y += yi;
                     d += ai;
-                }
-                else {
+                } else {
                     d += bi;
                     x += xi;
                 }
@@ -97,8 +97,7 @@ export class Workspace {
             bi = dx * 2;
             d = bi - dy;
 
-            while (y != y2) {
-
+            while (y !== y2) {
                 if (d >= 0) {
                     x += xi;
                     y += yi;
@@ -128,12 +127,12 @@ export class Workspace {
     }
 
     updateLine(x, y) {
-        let index = (y * this.width + x) * 4;
+        const index = (y * this.width + x) * 4;
         let toolX = 0;
         let toolIndex = 0;
 
         if (this.toolSize > 1) {
-            for (let tx = 0; tx < this.toolSize * 4; tx += 4)
+            for (let tx = 0; tx < this.toolSize * 4; tx += 4) {
                 for (let ty = 0; ty < this.toolSize; ty++) {
                     toolX = tx - (Math.floor(this.toolSize / 2) * 4);
                     toolIndex = index + ((ty - Math.floor(this.toolSize / 2)) * this.width * 4) + toolX;
@@ -141,13 +140,14 @@ export class Workspace {
                         this.toolLayer[toolIndex + 3] = this.lineColor.a;
                     }
                 }
+            }
         } else {
             this.toolLayer[index + 3] = this.lineColor.a;
         }
     }
 
     getMousePos(evt) {
-        let rect = this.canvas.getBoundingClientRect();
+        const rect = this.canvas.getBoundingClientRect();
         return {
             x: evt.clientX - rect.left,
             y: evt.clientY - rect.top
@@ -155,7 +155,7 @@ export class Workspace {
     }
 
     getTouchePos(evt) {
-        let rect = this.canvas.getBoundingClientRect();
+        const rect = this.canvas.getBoundingClientRect();
         return {
             x: evt.touches[0].clientX - rect.left,
             y: evt.touches[0].clientY - rect.top
@@ -252,7 +252,7 @@ export class Workspace {
     }
 
     putWorkspaceImage() {
-        const workspaceImage = this.canvas.toDataURL("image/png");
+        const workspaceImage = this.canvas.toDataURL('image/png');
 
         window.location.href = workspaceImage;
     }

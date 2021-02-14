@@ -1,9 +1,4 @@
 export class Utils {
-    static componentToHex(c) {
-        let hex = c.toString(16);
-        return hex.length === 1 ? "0" + hex : hex;
-    }
-
     static getRandomInt(min, max) {
         min = Math.ceil(min);
         max = Math.floor(max);
@@ -16,35 +11,33 @@ export class Utils {
 
     static getUrlParam(pos) {
         pos = (typeof pos !== 'undefined') ? pos : 0;
-        let url_string = window.location.href,
-            url = new URL(url_string),
-            path = url.pathname,
-            parts = path.substr(1).split('/');
+        const urlString = window.location.href;
+        const url = new URL(urlString);
+        const path = url.pathname;
+        const parts = path.substr(1).split('/');
 
         return parts[pos];
     }
 
     static showLoadingOverlay() {
-        let body = document.body;
-        body.classList.add("is-loading-overlay-visible");
+        const body = document.body;
+        body.classList.add('is-loading-overlay-visible');
     }
 
     static hideLoadingOverlay() {
-        let body = document.body;
-        body.classList.remove("is-loading-overlay-visible");
+        const body = document.body;
+        body.classList.remove('is-loading-overlay-visible');
     }
 
     static iOS() {
         return [
-                'iPad Simulator',
-                'iPhone Simulator',
-                'iPod Simulator',
-                'iPad',
-                'iPhone',
-                'iPod'
-            ].includes(navigator.platform)
-            // iPad on iOS 13 detection
-            || (navigator.userAgent.includes("Mac") && "ontouchend" in document)
+            'iPad Simulator',
+            'iPhone Simulator',
+            'iPod Simulator',
+            'iPad',
+            'iPhone',
+            'iPod'
+        ].includes(navigator.platform) || (navigator.userAgent.includes('Mac') && 'ontouchend' in document);
     }
 
     static ready(callbackFunc) {
@@ -70,16 +63,16 @@ export class Utils {
         if (list.length > 0) {
             html = '<ol>';
             for (let i = 0; i < list.length; i++) {
-                html += '<li>' + list[i] + '</li>';
+                html += `<li>${list[i]}</li>`;
             }
             html += '</ol>';
         }
 
         return html;
     }
-    
+
     static createElementFromHTML(htmlString) {
-        var div = document.createElement('div');
+        const div = document.createElement('div');
         div.innerHTML = htmlString.trim();
 
         // Change this to div.childNodes to support multiple top-level nodes
