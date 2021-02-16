@@ -2,6 +2,8 @@ import {Point2D} from './Point2D';
 import {RGBA} from './RGBA';
 import {Utils} from '../Utils';
 import {ToolContext} from './tool/ToolContext';
+import {Eraser} from './tool/Eraser';
+import {Pencil} from './tool/Pencil';
 
 export class Workspace {
     constructor(canvas) {
@@ -239,8 +241,13 @@ export class Workspace {
     }
 
     setTool(tool) {
-        // ToDo: Factory pattern
-        this.toolContext.transitionTo(new this.toolContext.classMap[tool]());
+        switch (tool) {
+        case 'Eraser':
+            this.toolContext.transitionTo(new Eraser());
+            break;
+        default:
+            this.toolContext.transitionTo(new Pencil());
+        }
     }
 
     setToolSize(toolSize) {
