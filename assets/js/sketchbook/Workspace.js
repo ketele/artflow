@@ -1,9 +1,12 @@
-import {Utils} from '../utils';
+import {Point2D} from './Point2D';
+import {RGBA} from './RGBA';
+import {Utils} from '../Utils';
+import {ToolContext} from './tool/ToolContext';
 
 export class Workspace {
     constructor(canvas) {
-        this.mousePos1 = {x: 0, y: 0};
-        this.mousePos2 = {x: 0, y: 0};
+        this.mousePos1 = new Point2D(0, 0);
+        this.mousePos2 = new Point2D(0, 0);
         this.draw = false;
         this.canvas = canvas;
         this.isIOS = Utils.iOS();
@@ -29,8 +32,9 @@ export class Workspace {
         this.toolLayer = new Array(this.width * this.height * 4).fill(0);
 
         this.toolSize = 1;
-        this.lineColor = {r: 0, g: 0, b: 0, a: 255};
+        this.lineColor = new RGBA(0, 0, 0, 255);
         this.tool = 'pencil';
+        this.toolContext = new ToolContext();
     }
 
     /**
@@ -38,96 +42,89 @@ export class Workspace {
      * imageData.data[i + 1] = $g;      // G value
      * imageData.data[i + 2] = $b;      // B value
      * imageData.data[i + 3] = $a;      // A value
-     * @param x1
-     * @param y1
-     * @param x2
-     * @param y2
+     * @param startPoint
+     * @param endPoint
      * @constructor
      */
 
-    bresenhamLine(x1, y1, x2, y2) {
-        let d, dx, dy, ai, bi, xi, yi;
-        let x = x1;
-        let y = y1;
+    drawBLine(startPoint = new Point2D(), endPoint = new Point2D()) {
+        let d, ai, bi;
+        const dPoint = new Point2D();
+        const iPoint = new Point2D();
+        const point = {...startPoint};
 
-        if (x1 < x2) {
-            xi = 1;
-            dx = x2 - x1;
+        if (startPoint.x < endPoint.x) {
+            iPoint.x = 1;
+            dPoint.x = endPoint.x - startPoint.x;
         } else {
-            xi = -1;
-            dx = x1 - x2;
+            iPoint.x = -1;
+            dPoint.x = startPoint.x - endPoint.x;
         }
         // checking the direction of drawing
-        if (y1 < y2) {
-            yi = 1;
-            dy = y2 - y1;
+        if (startPoint.y < endPoint.y) {
+            iPoint.y = 1;
+            dPoint.y = endPoint.y - startPoint.y;
         } else {
-            yi = -1;
-            dy = y1 - y2;
+            iPoint.y = -1;
+            dPoint.y = startPoint.y - endPoint.y;
         }
 
-        if (x < 0 || x >= this.width) {
+        if (point.x < 0 || point.x >= this.width) {
             return null;
         }
 
-        this.updateLine(x, y);
+        this.drawPoint(point);
 
-        if (dx > dy) {
-            ai = (dy - dx) * 2;
-            bi = dy * 2;
-            d = bi - dx;
-            while (x !== x2) {
+        if (dPoint.x > dPoint.y) {
+            ai = (dPoint.y - dPoint.x) * 2;
+            bi = dPoint.y * 2;
+            d = bi - dPoint.x;
+            while (point.x !== endPoint.x) {
                 if (d >= 0) {
-                    x += xi;
-                    y += yi;
+                    point.x += iPoint.x;
+                    point.y += iPoint.y;
                     d += ai;
                 } else {
                     d += bi;
-                    x += xi;
+                    point.x += iPoint.x;
                 }
 
-                if (x < 0 || x >= this.width) {
+                if (point.x < 0 || point.x >= this.width) {
                     return null;
                 }
 
-                this.updateLine(x, y);
+                this.drawPoint(point);
             }
         } else {
-            ai = (dx - dy) * 2;
-            bi = dx * 2;
-            d = bi - dy;
+            ai = (dPoint.x - dPoint.y) * 2;
+            bi = dPoint.x * 2;
+            d = bi - dPoint.y;
 
-            while (y !== y2) {
+            while (point.y !== endPoint.y) {
                 if (d >= 0) {
-                    x += xi;
-                    y += yi;
+                    point.x += iPoint.x;
+                    point.y += iPoint.y;
                     d += ai;
                 } else {
                     d += bi;
-                    y += yi;
+                    point.y += iPoint.y;
                 }
 
-                if (x < 0 || x >= this.width) {
+                if (point.x < 0 || point.x >= this.width) {
                     return null;
                 }
 
-                this.updateLine(x, y);
+                this.drawPoint(point);
             }
         }
 
-        if (this.tool === 'pencil') {
-            this.imageLayer.forEach((data, i) => {
-                this.data[i] = data + this.toolLayer[i];
-            });
-        } else {
-            this.imageLayer.forEach((data, i) => {
-                this.data[i] = data - this.toolLayer[i];
-            });
-        }
+        this.imageLayer.forEach((data, i) => {
+            this.data[i] = this.toolContext.use(data, this.toolLayer[i]);
+        });
     }
 
-    updateLine(x, y) {
-        const index = (y * this.width + x) * 4;
+    drawPoint(point) {
+        const index = (point.y * this.width + point.x) * 4;
         let toolX = 0;
         let toolIndex = 0;
 
@@ -136,7 +133,7 @@ export class Workspace {
                 for (let ty = 0; ty < this.toolSize; ty++) {
                     toolX = tx - (Math.floor(this.toolSize / 2) * 4);
                     toolIndex = index + ((ty - Math.floor(this.toolSize / 2)) * this.width * 4) + toolX;
-                    if (x + toolX > 0 && x + toolX < this.width) {
+                    if (point.x + toolX > 0 && point.x + toolX < this.width) {
                         this.toolLayer[toolIndex + 3] = this.lineColor.a;
                     }
                 }
@@ -148,18 +145,18 @@ export class Workspace {
 
     getMousePos(evt) {
         const rect = this.canvas.getBoundingClientRect();
-        return {
-            x: evt.clientX - rect.left,
-            y: evt.clientY - rect.top
-        };
+        return new Point2D(
+            evt.clientX - rect.left,
+            evt.clientY - rect.top
+        );
     }
 
     getTouchePos(evt) {
         const rect = this.canvas.getBoundingClientRect();
-        return {
-            x: evt.touches[0].clientX - rect.left,
-            y: evt.touches[0].clientY - rect.top
-        };
+        return new Point2D(
+            evt.touches[0].clientX - rect.left,
+            evt.touches[0].clientY - rect.top
+        );
     }
 
     drag(evt) {
@@ -194,7 +191,6 @@ export class Workspace {
         evt.stopPropagation();
         evt.stopImmediatePropagation();
         this.draw = false;
-
         this.imageLayer = [...this.imageData.data];
         this.toolLayer.fill(0);
     }
@@ -224,7 +220,10 @@ export class Workspace {
 
     loop() {
         if (this.draw) {
-            this.bresenhamLine(parseInt(this.mousePos2.x), parseInt(this.mousePos2.y), parseInt(this.mousePos1.x), parseInt(this.mousePos1.y));
+            this.drawBLine(
+                new Point2D(parseInt(this.mousePos2.x), parseInt(this.mousePos2.y)),
+                new Point2D(parseInt(this.mousePos1.x), parseInt(this.mousePos1.y))
+            );
             this.ctx.putImageData(this.imageData, 0, 0);
         }
 
@@ -240,7 +239,8 @@ export class Workspace {
     }
 
     setTool(tool) {
-        this.tool = tool;
+        // ToDo: Factory pattern
+        this.toolContext.transitionTo(new this.toolContext.classMap[tool]());
     }
 
     setToolSize(toolSize) {

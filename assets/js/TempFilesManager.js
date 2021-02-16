@@ -1,5 +1,5 @@
 import 'bootstrap/js/src/modal.js';
-import {Utils} from './utils';
+import {Utils} from './Utils';
 
 export class TempFileManager {
     bindUIEvents() {

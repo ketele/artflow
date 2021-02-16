@@ -1,6 +1,7 @@
-import {Doodle} from './doodle/doodle';
-import {Workspace} from './sketchbook/workspace';
-import {Utils} from './utils';
+import {Doodle} from './doodle/Doodle';
+import {Point2D} from './sketchbook/Point2D';
+import {Utils} from './Utils';
+import {Workspace} from './sketchbook/Workspace';
 
 // ToDo: Think about Doodle js refactoring
 class DoodleSketchbook {
@@ -25,9 +26,9 @@ class DoodleSketchbook {
         this.ctx.canvas.width = this.size;
         this.ctx.canvas.height = this.size;
 
-        this.doodle = new Doodle(this.canvas.offsetWidth / 2, this.canvas.offsetHeight / 2, this.canvas.offsetHeight / 4);
-        this.doodle.setwWidth(this.size);
-        this.doodle.setwHeight(this.size);
+        this.doodle = new Doodle(new Point2D(this.canvas.offsetWidth / 2, this.canvas.offsetHeight / 2), this.canvas.offsetHeight / 4);
+        this.doodle.width = this.size;
+        this.doodle.height = this.size;
 
         // ToDo: define canvas size holding in mind that after diving shape canvas, and sb canvas have to be the same
         this.imageData = this.ctx.getImageData(0, 0, this.canvas.offsetWidth / 2 * 2, this.canvas.offsetHeight / 2 * 2);
@@ -178,11 +179,11 @@ Utils.ready(() => {
     });
 
     document.getElementById('pencil').addEventListener('click', e => {
-        doodleSketchbook.workspace.setTool('pencil');
+        doodleSketchbook.workspace.setTool('Pencil');
     });
 
     document.getElementById('eraser').addEventListener('click', e => {
-        doodleSketchbook.workspace.setTool('eraser');
+        doodleSketchbook.workspace.setTool('Eraser');
     });
 
     document.getElementById('opacity').addEventListener('change', e => {

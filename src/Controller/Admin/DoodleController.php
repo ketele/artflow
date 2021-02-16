@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Repository\DoodleRepository;
 use App\Repository\DoodleStatusRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\FrameworkBundle\Controller\RedirectController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -122,5 +123,41 @@ class DoodleController extends AbstractController
         }
 
         return new JsonResponse(['error' => $error]);
+    }
+
+    /**
+     * @Route("admin/updatedoodlecoordinates", name="admin_update_doodle_coordinates")
+     * @param DoodleRepository $doodleRepository
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+
+    public function updateDoodleCoordinates(DoodleRepository $doodleRepository) {
+        $doodles = $doodleRepository->findAll();
+        $update = false;
+
+        foreach($doodles as $doodle) {
+            if($doodle->getCoordinates()['doodle']) {
+                foreach($doodle->getCoordinates()['doodle'] as $dKey => $d) {
+                    if(isset($d['cp1X']) && !isset($d['cp1'])) {
+                        $dCoord = $doodle->getCoordinates();
+                        $update = true;
+                        $dCoord['doodle'][$dKey]['cp1']['x'] = $d['cp1X'];
+                        $dCoord['doodle'][$dKey]['cp1']['y'] = $d['cp1Y'];
+                        $dCoord['doodle'][$dKey]['cp2']['x'] = $d['cp2X'];
+                        $dCoord['doodle'][$dKey]['cp2']['y'] = $d['cp2Y'];
+                        $dCoord['doodle'][$dKey]['end']['x'] = $d['x'];
+                        $dCoord['doodle'][$dKey]['end']['y'] = $d['y'];
+                    }
+                }
+            }
+
+            if($update) {
+                $doodle->setCoordinates($dCoord);
+                $doodleRepository->save($doodle);
+                $update = false;
+            }
+        }
+
+        return $this->redirectToRoute('admin_doodle_gallery');
     }
 }

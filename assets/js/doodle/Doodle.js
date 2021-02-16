@@ -1,10 +1,10 @@
-import {Curve} from './curve';
-import {Utils} from '../utils';
+import {Curve} from '../sketchbook/Curve';
+import {Point2D} from '../sketchbook/Point2D';
+import {Utils} from '../Utils';
 
 export class Doodle {
-    constructor(centerX = 200, centerY = 250, radius = 100) {
-        this.centerX = centerX;
-        this.centerY = centerY;
+    constructor(center = new Point2D(250, 250), radius = 100) {
+        this.center = center;
         this.angleMin = 0.1;
         this.angleMax = 2.9;
         this.angle = Utils.getRandomFloat(this.angleMin, this.angleMax);
@@ -15,33 +15,22 @@ export class Doodle {
         this.height = 0;
     }
 
-    setwWidth(width) {
-        this.width = width;
-    }
-
-    setwHeight(height) {
-        this.height = height;
-    }
-
     generateNodes(angleMax = 2 * Math.PI) {
         this.resetCurves();
-        let x, y;
-        const startX = this.centerX + Utils.getRandomInt(-this.radius, this.radius);
-        const startY = this.centerY + Utils.getRandomInt(-this.radius, this.radius);
-        let newX = startX;
-        let newY = startY;
+        const point = new Point2D(
+            this.center.x + Utils.getRandomInt(-this.radius, this.radius),
+            this.center.y + Utils.getRandomInt(-this.radius, this.radius)
+        );
 
-        this.curves.push(new Curve(newX, newY, newX, newY, newX, newY, this.angle));
+        this.curves.push(new Curve({...point}, {...point}, {...point}, this.angle));
         this.length = 1;
 
         while (this.angle <= angleMax) {
             // calculate x, y from a vector with known length and angle
-            x = this.radius * Math.cos(this.angle);
-            y = this.radius * Math.sin(this.angle);
-            newX = this.centerX + x;
-            newY = this.centerY + y;
+            point.x = this.center.x + (this.radius * Math.cos(this.angle));
+            point.y = this.center.y + (this.radius * Math.sin(this.angle));
 
-            this.curves.push(new Curve(newX, newY, newX, newY, newX, newY, this.angle));
+            this.curves.push(new Curve({...point}, {...point}, {...point}, this.angle));
             this.angle += Utils.getRandomFloat(this.angleMin, this.angleMax);
             this.length++;
         }
@@ -59,12 +48,9 @@ export class Doodle {
         for (let i = 0; i < coordinates.doodle.length; i++) {
             this.curves.push(
                 new Curve(
-                    coordinates.doodle[i].cp1X * transformationFactorX,
-                    coordinates.doodle[i].cp1Y * transformationFactorY,
-                    coordinates.doodle[i].cp2X * transformationFactorX,
-                    coordinates.doodle[i].cp2Y * transformationFactorY,
-                    coordinates.doodle[i].x * transformationFactorX,
-                    coordinates.doodle[i].y * transformationFactorY,
+                    new Point2D(coordinates.doodle[i].cp1.x * transformationFactorX, coordinates.doodle[i].cp1.y * transformationFactorY),
+                    new Point2D(coordinates.doodle[i].cp2.x * transformationFactorX, coordinates.doodle[i].cp2.y * transformationFactorY),
+                    new Point2D(coordinates.doodle[i].end.x * transformationFactorX, coordinates.doodle[i].end.y * transformationFactorY),
                     coordinates.doodle[i].angle
                 )
             );
@@ -77,40 +63,34 @@ export class Doodle {
         this.generateCoordinates();
         this.updateCoordinates();
 
-        let cp1X;
-        let cp1Y;
-        let cp2X;
-        let cp2Y;
-        let x;
-        let y;
+        let cp1 = new Point2D();
+        let cp2 = new Point2D();
+        const endPoint = new Point2D();
         let angle;
 
-        let tempCp1X;
-        let tempCp1Y;
-        let tempCp2X;
-        let tempCp2Y;
+        let tempCp1 = new Point2D();
+        const tempCp2 = new Point2D();
 
         let addedNodes = false;
         let isFirstRound = true;
 
         let i = 0;
         while (i < this.curves.length) {
-            if (typeof this.curves[i] === 'undefined' || this.curves[i].x <= this.centerX || !isFirstRound) {
+            if (typeof this.curves[i] === 'undefined' || this.curves[i].end.x <= this.center.x || !isFirstRound) {
                 if (addedNodes && typeof this.curves[i] !== 'undefined') {
                     isFirstRound = false;
 
-                    tempCp1X = this.curves[i].cp1X;
-                    tempCp1Y = this.curves[i].cp1Y;
-                    tempCp2X = this.centerX - (this.curves[i].cp1X - this.centerX);
-                    tempCp2Y = tempCp1Y;
+                    tempCp1 = {...this.curves[i].cp1};
+                    tempCp2.x = this.center.x - (this.curves[i].cp1.x - this.center.x);
+                    tempCp2.y = tempCp1.y;
                 }
 
                 this.curves.splice(i, 1);
                 this.length--;
             } else {
                 if (addedNodes === false) {
-                    this.curves[i].cp1X = this.centerX - (this.curves[i].cp2X - this.centerX);
-                    this.curves[i].cp1Y = this.curves[i].cp2Y;
+                    this.curves[i].cp1.x = this.center.x - (this.curves[i].cp2.x - this.center.x);
+                    this.curves[i].cp1.y = this.curves[i].cp2.y;
                 }
 
                 addedNodes = true;
@@ -120,31 +100,28 @@ export class Doodle {
 
         const length = this.curves.length;
 
-        if (isFirstRound && typeof tempCp1X === 'undefined' && this.curves.length > 0) {
-            tempCp1X = this.curves[length - 1].cp1X;
-            tempCp1Y = this.curves[length - 1].cp1Y;
-            tempCp2X = this.centerX - (this.curves[length - 1].cp1X - this.centerX);
-            tempCp2Y = tempCp1Y;
+        if (isFirstRound && tempCp1.x === null && this.curves.length > 0) {
+            tempCp1 = {...this.curves[length - 1].cp1};
+            tempCp2.x = this.center.x - (this.curves[length - 1].cp1.x - this.center.x);
+            tempCp2.y = tempCp1.y;
         }
 
         for (let i = 0; i < length; i++) {
             const opposedI = length - i - 1;
-            x = this.centerX - (this.curves[opposedI].x - this.centerX);
-            y = this.curves[opposedI].y;
+            endPoint.x = this.center.x - (this.curves[opposedI].end.x - this.center.x);
+            endPoint.y = this.curves[opposedI].end.y;
             if (i === 0) {
-                cp1X = tempCp1X;
-                cp1Y = tempCp1Y;
-                cp2X = tempCp2X;
-                cp2Y = tempCp2Y;
+                cp1 = {...tempCp1};
+                cp2 = {...tempCp2};
             } else {
-                cp2X = this.centerX - (this.curves[opposedI + 1].cp1X - this.centerX);
-                cp2Y = this.curves[opposedI + 1].cp1Y;
-                cp1X = this.centerX - (this.curves[opposedI + 1].cp2X - this.centerX);
-                cp1Y = this.curves[opposedI + 1].cp2Y;
+                cp2.x = this.center.x - (this.curves[opposedI + 1].cp1.x - this.center.x);
+                cp2.y = this.curves[opposedI + 1].cp1.y;
+                cp1.x = this.center.x - (this.curves[opposedI + 1].cp2.x - this.center.x);
+                cp1.y = this.curves[opposedI + 1].cp2.y;
             }
             angle = this.curves[opposedI].angle;
 
-            this.curves.push(new Curve(cp1X, cp1Y, cp2X, cp2Y, x, y, angle));
+            this.curves.push(new Curve({...cp1}, {...cp2}, {...endPoint}, angle));
 
             this.length++;
         }
@@ -172,7 +149,7 @@ export class Doodle {
         }
     }
 
-    updateCoordinates(ctx) {
+    updateCoordinates() {
         for (let i = 0; i < this.curves.length; i++) {
             this.curves[i].checkLineIntersection(this.curves[(i + this.curves.length - 1) % this.curves.length]);
         }
@@ -186,16 +163,16 @@ export class Doodle {
 
     draw(ctx) {
         ctx.beginPath();
-        ctx.moveTo(this.curves[this.length - 1].x, this.curves[this.length - 1].y);
+        ctx.moveTo(this.curves[this.length - 1].end.x, this.curves[this.length - 1].end.y);
 
         for (let i = 0; i < this.length; i++) {
             ctx.bezierCurveTo(
-                this.curves[i].cp1X,
-                this.curves[i].cp1Y,
-                this.curves[i].cp2X,
-                this.curves[i].cp2Y,
-                this.curves[i].x,
-                this.curves[i].y
+                this.curves[i].cp1.x,
+                this.curves[i].cp1.y,
+                this.curves[i].cp2.x,
+                this.curves[i].cp2.y,
+                this.curves[i].end.x,
+                this.curves[i].end.y
             );
         }
 

@@ -25,11 +25,11 @@ Encore
      * Each entry will result in one JavaScript file (e.g. app.js)
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
-    .addEntry('app', './assets/js/app.js')
-    .addEntry('doodle_sketchbook', './assets/js/doodle_sketchbook.js')
-    .addEntry('temp_files', './assets/js/pages/temp_files.js')
-    .addEntry('gallery', './assets/js/pages/gallery.js')
-    .addEntry('doodle_view', './assets/js/pages/doodle_view.js')
+    .addEntry('app', './assets/js/App.js')
+    .addEntry('doodle_sketchbook', './assets/js/DoodleSketchbook.js')
+    .addEntry('temp_files', './assets/js/pages/TempFiles.js')
+    .addEntry('gallery', './assets/js/pages/Gallery.js')
+    .addEntry('doodle_view', './assets/js/pages/DoodleView.js')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()
